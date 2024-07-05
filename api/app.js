@@ -1,8 +1,11 @@
 // Requiring module
 const express = require("express");
+const logger = require('morgan');
+
 const axios = require("axios");
 // Creating express object
 const app = express();
+app.use(logger('dev'));
 
 app.get("/AsyncAwait", async (req, res) => {
   try {
