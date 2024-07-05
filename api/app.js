@@ -136,14 +136,10 @@ app.get("/posts", async (req, res) => {
         if (sortOption.startsWith("-")) {
           // Descending Order Sorting
           sortOption = sortOption.slice(1);
-          posts.sort((a, b) =>
-            b[sortOption].localeCompare(a[sortOption])
-          );
+          posts.sort((a, b) => b[sortOption].localeCompare(a[sortOption]));
         } else {
           // Ascending Order Sorting
-          posts.sort((a, b) =>
-            a[sortOption].localeCompare(b[sortOption])
-          );
+          posts.sort((a, b) => a[sortOption].localeCompare(b[sortOption]));
         }
       }
     }
@@ -246,27 +242,31 @@ app.get("/posts/:id/comments", async (req, res) => {
 
 app.get("/embeddedPosts", async (req, res) => {
   try {
-    const response = await axios.get(
+    const postsResponse = await axios.get(
       "https://jsonplaceholder.typicode.com/posts",
       {
         timeout: 5000,
       }
     );
 
-    const posts = response.data;
+    const posts = postsResponse.data;
 
-    const postPromises = posts.map(async (post) => {
-      const response = await axios.get(
-        `https://jsonplaceholder.typicode.com/posts/${post.id}/comments`,
-        {
-          timeout: 5000,
-        }
+    const commentsResponse = await axios.get(
+      "https://jsonplaceholder.typicode.com/comments",
+      {
+        timeout: 5000,
+      }
+    );
+
+    const comments = commentsResponse.data;
+
+    const postsWithComments = posts.map((post) => {
+      const postComments = comments.filter(
+        (comment) => comment.postId === post.id
       );
-      post.comments = [...response.data];
+      post.comments = [...postComments];
       return post;
     });
-
-    const postsWithComments = await Promise.all(postPromises);
 
     res.status(200).json({
       status: "success",
@@ -280,31 +280,32 @@ app.get("/embeddedPosts", async (req, res) => {
 
 app.get("/embeddedUsers", async (req, res) => {
   try {
-    const response = await axios.get(
+    const usersResponse = await axios.get(
       "https://jsonplaceholder.typicode.com/users",
       {
         timeout: 5000,
       }
     );
-    const users = response.data;
+    const users = usersResponse.data;
 
-    const userPromises = users.map(async (user) => {
-      const response = await axios.get(
-        `https://jsonplaceholder.typicode.com/users/${user.id}/posts`,
-        {
-          timeout: 5000,
-        }
-      );
+    const postsResponse = await axios.get(
+      "https://jsonplaceholder.typicode.com/posts",
+      {
+        timeout: 5000,
+      }
+    );
 
-      user.posts = [...response.data];
+    const posts = postsResponse.data;
+
+    const usersWithPosts = users.map((user) => {
+      const userPosts = posts.filter((post) => post.userId === user.id);
+      user.posts = [...userPosts];
       return user;
     });
 
-    const userWithPosts = await Promise.all(userPromises);
-
     res.status(200).json({
       status: "success",
-      data: userWithPosts,
+      data: usersWithPosts,
     });
   } catch (error) {
     console.error(error);
