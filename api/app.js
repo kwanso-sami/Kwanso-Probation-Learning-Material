@@ -337,49 +337,6 @@ app.delete("/posts", async (req, res) => {
   }
 });
 
-app.get("/sortPosts", async (req, res) => {
-  try {
-    const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
-      signal: AbortSignal.timeout(5000),
-    });
-    if (!response.ok) {
-      res.send(`HTTP error! Status: ${response.status}`);
-    }
-
-    let posts = await response.json();
-
-    const { sort } = req.query;
-
-    if (sort) {
-      const sortOptions = sort.split(",");
-
-      for (let i in sortOptions) {
-        let sortOption = sortOptions[i].trim();
-
-        if (sortOption.startsWith("-")) {
-          // Descending Order Sorting
-          sortOption = sortOption.slice(1);
-          posts = posts.sort((a, b) =>
-            b[sortOption].localeCompare(a[sortOption])
-          );
-        } else {
-          // Ascending Order Sorting
-          posts = posts.sort((a, b) =>
-            a[sortOption].localeCompare(b[sortOption])
-          );
-        }
-      }
-    }
-
-    res.status(200).json({
-      status: "success",
-      data: posts,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
 
 // Port Number
 const PORT = process.env.PORT || 3000;
