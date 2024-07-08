@@ -3,11 +3,9 @@ const express = require("express");
 const axios = require("axios");
 // Creating express object
 const app = express();
-const logger = require('morgan');
+const logger = require("morgan");
 
-
-app.use(logger('dev'));
-
+app.use(logger("dev"));
 
 app.get("/AsyncAwait", async (req, res) => {
   try {
@@ -17,6 +15,12 @@ app.get("/AsyncAwait", async (req, res) => {
 
     const users = await response.json();
     const phoneNumbers = users.map((user) => user.phone);
+
+    console.log("phoneNumbers", phoneNumbers);
+    console.log("users", users);
+    console.log("users1", users);
+    console.log("users1", users);
+    console.log("users1", users);
 
     res.status(200).json({
       status: "success",
