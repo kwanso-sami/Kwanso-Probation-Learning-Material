@@ -3,15 +3,17 @@ const express = require("express");
 const axios = require("axios");
 // Creating express object
 const app = express();
+const logger = require('morgan');
+
+
+app.use(logger('dev'));
+
 
 app.get("/AsyncAwait", async (req, res) => {
   try {
     const response = await fetch("https://jsonplaceholder.typicode.com/users", {
       signal: AbortSignal.timeout(5000),
     });
-    if (!response.ok) {
-      res.send(`HTTP error! Status: ${response.status}`);
-    }
 
     const users = await response.json();
     const phoneNumbers = users.map((user) => user.phone);
@@ -63,20 +65,17 @@ app.get("/callback", (req, res) => {
   });
 });
 
-async function fetchUsers(url, fetchContacts) {
+const fetchUsers = async (url, fetchContacts) => {
   try {
     const response = await fetch(url, {
       signal: AbortSignal.timeout(5000),
     });
-    if (!response.ok) {
-      return fetchContacts(`HTTP error! status: ${response.status}`);
-    }
     const users = await response.json();
     return fetchContacts(null, users);
   } catch (error) {
     return fetchContacts(error);
   }
-}
+};
 
 app.get("/photos", async (req, res) => {
   try {
@@ -86,9 +85,6 @@ app.get("/photos", async (req, res) => {
         signal: AbortSignal.timeout(5000),
       }
     );
-    if (!photosResponse.ok) {
-      res.send(`HTTP error! Status: ${photosResponse.status}`);
-    }
 
     const photos = await photosResponse.json();
 
@@ -110,13 +106,12 @@ app.get("/posts", async (req, res) => {
         signal: AbortSignal.timeout(5000),
       }
     );
-    if (!postsResponse.ok) {
-      res.send(`HTTP error! Status: ${postsResponse.status}`);
-    }
 
     let posts = await postsResponse.json();
 
     const { title, body, sort } = req.query;
+
+    const embeddedComments = req.query.embeddedComments || false;
 
     if (title) {
       posts = posts.filter((post) => post.title.includes(title.trim()));
@@ -147,6 +142,25 @@ app.get("/posts", async (req, res) => {
       }
     }
 
+    if (JSON.parse(embeddedComments)) {
+      const commentsResponse = await axios.get(
+        "https://jsonplaceholder.typicode.com/comments",
+        {
+          timeout: 5000,
+        }
+      );
+
+      const comments = commentsResponse.data;
+
+      posts = posts.map((post) => {
+        const postComments = comments.filter(
+          (comment) => comment.postId === post.id
+        );
+        post.comments = [...postComments];
+        return post;
+      });
+    }
+
     res.status(200).json({
       status: "success",
       data: posts,
@@ -165,17 +179,15 @@ app.get("/users", async (req, res) => {
         signal: AbortSignal.timeout(5000),
       }
     );
-    if (!usersResponse.ok) {
-      res.send(`HTTP error! Status: ${usersResponse.status}`);
-    }
 
     let users = await usersResponse.json();
 
     const { zip } = req.query;
+    const embeddedPosts = req.query.embeddedPosts || false;
 
     if (zip) {
       users = users
-        .filter((user) => user.address.zipcode === zip)
+        .filter((user) => user.address.zipcode === zip.trim())
         .map((user) => {
           return {
             id: user.id,
@@ -185,6 +197,23 @@ app.get("/users", async (req, res) => {
             },
           };
         });
+    }
+
+    if (JSON.parse(embeddedPosts)) {
+      const postsResponse = await axios.get(
+        "https://jsonplaceholder.typicode.com/posts",
+        {
+          timeout: 5000,
+        }
+      );
+
+      const posts = postsResponse.data;
+
+      users = users.map((user) => {
+        const userPosts = posts.filter((post) => post.userId === user.id);
+        user.posts = [...userPosts];
+        return user;
+      });
     }
 
     res.status(200).json({
@@ -205,9 +234,6 @@ app.get("/comments", async (req, res) => {
         signal: AbortSignal.timeout(5000),
       }
     );
-    if (!commentsResponse.ok) {
-      res.send(`HTTP error! Status: ${commentsResponse.status}`);
-    }
 
     const comments = await commentsResponse.json();
 
@@ -223,16 +249,18 @@ app.get("/comments", async (req, res) => {
 
 app.get("/posts/:id/comments", async (req, res) => {
   try {
-    const { id } = req.params;
+    const postId = parseInt(req.params.id);
+
+    if (!Number.isInteger(postId) || postId <= 0) {
+      return res.status(400).send("Invalid Post ID");
+    }
+
     const commentsResponse = await fetch(
-      `https://jsonplaceholder.typicode.com/posts/${id}/comments`,
+      `https://jsonplaceholder.typicode.com/posts/${postId}/comments`,
       {
         signal: AbortSignal.timeout(5000),
       }
     );
-    if (!commentsResponse.ok) {
-      res.send(`HTTP error! Status: ${commentsResponse.status}`);
-    }
 
     const commentsOfPost = await commentsResponse.json();
 
@@ -255,10 +283,6 @@ app.get("/embeddedPosts", async (req, res) => {
       }
     );
 
-    if (postsResponse.status !== 200) {
-      res.send(`HTTP error! Status: ${postsResponse.status}`);
-    }
-
     const posts = postsResponse.data;
 
     const commentsResponse = await axios.get(
@@ -267,10 +291,6 @@ app.get("/embeddedPosts", async (req, res) => {
         timeout: 5000,
       }
     );
-
-    if (commentsResponse.status !== 200) {
-      res.send(`HTTP error! Status: ${commentsResponse.status}`);
-    }
 
     const comments = commentsResponse.data;
 
@@ -301,10 +321,6 @@ app.get("/embeddedUsers", async (req, res) => {
       }
     );
 
-    if (usersResponse.status !== 200) {
-      res.send(`HTTP error! Status: ${usersResponse.status}`);
-    }
-
     const users = usersResponse.data;
 
     const postsResponse = await axios.get(
@@ -313,10 +329,6 @@ app.get("/embeddedUsers", async (req, res) => {
         timeout: 5000,
       }
     );
-
-    if (postsResponse.status !== 200) {
-      res.send(`HTTP error! Status: ${postsResponse.status}`);
-    }
 
     const posts = postsResponse.data;
 
@@ -344,15 +356,16 @@ app.delete("/posts", async (req, res) => {
         signal: AbortSignal.timeout(5000),
       }
     );
-    if (!postsResponse.ok) {
-      res.send(`HTTP error! Status: ${postsResponse.status}`);
-    }
 
     const posts = await postsResponse.json();
 
-    const { user } = req.query;
+    const userId = parseInt(req.query.user);
 
-    const updatedPosts = posts.filter((post) => post.userId !== parseInt(user));
+    if (!Number.isInteger(userId) || userId <= 0) {
+      return res.status(400).send("Invalid User ID");
+    }
+
+    const updatedPosts = posts.filter((post) => post.userId !== userId);
     res.status(200).json({
       status: "success",
       data: updatedPosts,
