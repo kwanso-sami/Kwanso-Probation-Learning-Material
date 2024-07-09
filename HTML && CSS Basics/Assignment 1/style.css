@@ -1,0 +1,89 @@
+body {
+  margin: 80px;
+  padding: 0px;
+  background-color: #222244;
+  font-family: system-ui;
+}
+
+.main {
+  height: 780px;
+  width: 900px;
+  background-color: white;
+  margin: 20px auto;
+}
+
+.header-section {
+  display: flex;
+  align-items: center;
+  gap: 1vw;
+  background-color: #444466;
+  padding: 15px;
+}
+
+.website-logo {
+  max-height: 100%;
+  max-width: 100%;
+  width: 150px;
+  margin: 25px;
+}
+
+.website-title {
+  color: white;
+  font-size: 85px;
+  font-weight: bold;
+  font-style: italic;
+  margin: 0px;
+  margin-top: 10px;
+}
+
+.left-content {
+  float: left;
+  padding-left: 40px;
+}
+
+.right-content {
+  width: 62%;
+  float: left;
+  padding: 30px;
+  margin: auto;
+}
+
+.dashboard {
+  margin-left: -65px;
+  margin-bottom: 0px;
+}
+
+.dashboard ul {
+  list-style-type: none;
+}
+
+.dashboard ul li {
+  padding: 5px;
+  color: #664444;
+  margin-left: 25px;
+}
+
+.content-section {
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.footer-section {
+  display: flex;
+  justify-content: center;
+  background-color: #664444;
+  padding: 5px;
+}
+
+.dotted-line {
+  border-top: 1px dotted #664444;
+}
+
+.dashboard-summary {
+  margin-top: 25px;
+  width: 200px;
+}
+
+.footer-section p {
+  color: white;
+}
