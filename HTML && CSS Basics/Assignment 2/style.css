@@ -1,0 +1,251 @@
+body {
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 1.7;
+  color: gray;
+  background: url(../assets/body-bg.png);
+  margin: 0;
+  padding: 0;
+}
+
+#page {
+  position: relative;
+  overflow-x: hidden;
+  width: 100%;
+  height: 100%;
+  transition: 0.5s;
+}
+
+.container-main {
+  width: 1060px;
+  margin: 0 auto;
+  margin-bottom: 1em;
+  background: #fff;
+}
+
+@media screen and (max-width: 768px) {
+  .container-main {
+    width: 100%;
+  }
+}
+
+.nav {
+  margin: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .nav {
+    margin: 0;
+  }
+}
+
+.nav .top-menu {
+  padding: 0 0;
+}
+
+@media screen and (max-width: 768px) {
+  .nav .top-menu {
+    padding: 28px 1em;
+  }
+}
+
+.nav #nav-logo {
+  font-size: 45px;
+  margin: 0;
+  padding: 1em 0;
+  font-family: "Libre Baskerville", serif;
+  display: block;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.09);
+  background: inherit;
+}
+
+@media screen and (max-width: 768px) {
+  .nav #nav-logo {
+    border-bottom: none;
+    padding: 0.1em 0;
+  }
+}
+
+.nav #nav-logo a {
+  color: #658361;
+  text-decoration: none;
+}
+
+.nav a {
+  padding: 5px 10px;
+  color: #000;
+  text-decoration: none;
+}
+
+@media screen and (max-width: 768px) {
+  .nav .nav-menu {
+    display: none;
+  }
+}
+
+.nav ul li.active > a {
+  color: #000;
+  position: relative;
+}
+
+.nav ul li a.donate {
+  color: #658361;
+}
+
+.nav ul {
+  padding: 20px 0;
+  margin: 0;
+}
+.nav ul li {
+  font-family: "Source Sans Pro", sans-serif;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: inline;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 600;
+}
+.nav ul li a {
+  position: relative;
+  font-size: 13px;
+  padding: 30px 20px;
+  color: rgba(0, 0, 0, 0.8);
+  transition: 0.5s;
+}
+
+.nav ul li.active > a::after {
+  position: absolute;
+  top: 6px;
+  left: 0;
+  right: 0;
+  content: "";
+  width: 50%;
+  height: 2px;
+  background: #658361;
+  margin: 0 auto;
+  opacity: 1;
+}
+
+.nav-toggle {
+  position: absolute;
+  right: 0px;
+  top: 50px;
+  z-index: 21;
+  padding: 6px 0 0 0;
+  display: block;
+  margin: 0 auto;
+  display: none;
+  height: 44px;
+  width: 44px;
+  z-index: 2001;
+  border-bottom: none !important;
+}
+.nav-toggle i {
+  position: relative;
+  display: inline-block;
+  width: 25px;
+  height: 2px;
+  color: #252525;
+  font: bold 14px/0.4 Helvetica;
+  text-transform: uppercase;
+  text-indent: -55px;
+  background: #252525;
+  transition: all 0.2s ease-out;
+}
+
+.nav-toggle i::before,
+.nav-toggle i::after {
+  content: "";
+  width: 25px;
+  height: 2px;
+  background: #252525;
+  position: absolute;
+  left: 0;
+  transition: all 0.2s ease-out;
+}
+
+.nav-toggle i::before {
+  top: -7px;
+}
+
+.nav-toggle i::after {
+  bottom: -7px;
+}
+
+@media screen and (max-width: 768px) {
+  .nav-toggle {
+    display: block;
+  }
+}
+
+#footer {
+  margin-top: 20px;
+  background: #586e72;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 5em 3em;
+  display: block;
+  box-sizing: border-box;
+  font-family: "Libre Baskerville", serif;
+}
+
+#footer .content-1 {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+@media screen and (max-width: 768px) {
+  #footer .content-1 {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+#footer a {
+  color: white;
+  text-decoration: none;
+  font: 30px;
+  font-weight: solid;
+}
+
+.content-1 .footer-social-icons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+}
+
+@media screen and (max-width: 768px) {
+  .footer-social-icons {
+    flex-direction: column;
+  }
+}
+
+#footer h2,
+#footer h3 {
+  color: white !important;
+}
+#footer h3 {
+  font-size: 18px;
+  line-height: auto;
+}
+#footer h2 {
+  font-style: 28px;
+}
+#footer p .footer-social-icons {
+  border: 1px solid red;
+  margin: 0;
+}
+#footer .copyright {
+  display: block;
+  margin-top: 3em;
+}
+#footer .copyright .block {
+  display: block;
+}
