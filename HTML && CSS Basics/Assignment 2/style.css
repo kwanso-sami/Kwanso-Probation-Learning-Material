@@ -4,7 +4,7 @@ body {
   font-size: 14px;
   line-height: 1.7;
   color: gray;
-  background: url(../assets/body-bg.png);
+  background: url(assets/body-bg.png);
   margin: 0;
   padding: 0;
 }
@@ -568,6 +568,11 @@ h3 {
     gap: 0px;
     padding-left: 0px;
     padding-right: 0px;
+  }
+
+  .sermon-entry,
+  .services .desc {
+    margin-bottom: 40px;
   }
 }
 
