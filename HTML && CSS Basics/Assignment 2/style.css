@@ -33,6 +33,7 @@ body {
 a {
   text-decoration: none;
 }
+
 /* nav */
 
 .nav {
@@ -251,8 +252,8 @@ a {
   display: block;
 }
 
-/* content */
-/* content1 */
+/* body */
+
 #content-1 {
   position: relative;
   height: 500px;
@@ -361,8 +362,6 @@ a {
   }
 }
 
-/* content2 */
-
 #content-2 {
   padding: 3em 3em;
 }
@@ -378,8 +377,6 @@ hr {
   margin-top: 20px;
   margin-bottom: 20px;
 }
-
-/*content3*/
 
 .content-3,
 #content-5,
@@ -427,8 +424,6 @@ hr {
     flex-direction: column;
   }
 }
-
-/* content4 */
 
 #content-4,
 #content-8 {
@@ -529,8 +524,6 @@ h3 {
   padding-right: 28px;
 }
 
-/* content8 */
-
 .news,
 .events {
   margin-bottom: 40px;
@@ -572,13 +565,11 @@ h3 {
   .events-content,
   .news-content {
     flex-direction: column;
-    gap: 0x;
+    gap: 0px;
     padding-left: 0px;
     padding-right: 0px;
   }
 }
-
-/* content5 */
 
 .sermon-entry h3 {
   color: #000;
@@ -586,8 +577,6 @@ h3 {
   font-size: 18px;
   margin-bottom: 10px;
 }
-
-/*content6*/
 
 #content-6 {
   background: #658361;
