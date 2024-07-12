@@ -247,13 +247,13 @@ a {
 
 /* body */
 
-#content-1 {
+#slider-section {
   position: relative;
   height: 500px;
   width: 100%;
 }
 
-#content-1 img {
+#slider-section img {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: bottom center;
@@ -266,7 +266,7 @@ a {
   width: inherit;
 }
 
-.container-main #content-1 .overlay-content {
+.container-main #slider-section .overlay-content {
   position: absolute;
   top: 0;
   left: 0;
@@ -355,10 +355,10 @@ a {
   }
 }
 
-#content-2 {
+#intro-section {
   padding: 3em 3em;
 }
-#content-2 h2 {
+#intro-section h2 {
   font-style: italic;
   font-family: "Libre Baskerville", serif;
   color: #000;
@@ -371,14 +371,14 @@ hr {
   margin-bottom: 20px;
 }
 
-#content-3,
-#content-5,
-#content-6,
-#content-7 {
+#counter-section,
+#sermons-section,
+#bible-verse-section,
+#events-section {
   padding: 5em 3em;
 }
 
-#content-3 .counter {
+#counter-section .counter {
   font-size: 40px;
   display: block;
   color: black;
@@ -387,7 +387,7 @@ hr {
   margin-bottom: 0.3em;
   font-family: "Libre Baskerville", serif;
 }
-#content-3 .counter-label {
+#counter-section .counter-label {
   font-size: 12px;
   margin-bottom: 2em;
   display: block;
@@ -409,7 +409,7 @@ hr {
 }
 
 @media screen and (max-width: 768px) {
-  #content-3 {
+  #counter-section {
     padding: 42px 14px;
   }
 
@@ -418,16 +418,16 @@ hr {
   }
 }
 
-#content-4,
-#content-8 {
+#services-section,
+#news-section {
   padding: 5em 3em;
   background: #fafafa;
 }
 
-#content-4 .services-heading,
-#content-5 .sermon-heading,
-#content-8 .news-heading,
-#content-7 .events-heading {
+#services-section .services-heading,
+#sermons-section .sermon-heading,
+#news-section .news-heading,
+#events-section .events-heading {
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -436,10 +436,10 @@ hr {
   margin-bottom: 5em;
 }
 
-#content-4 .services-heading h2,
-#content-5 .sermon-heading h2,
-#content-8 .news-heading h2,
-#content-7 .events-heading h2 {
+#services-section .services-heading h2,
+#sermons-section .sermon-heading h2,
+#news-section .news-heading h2,
+#events-section .events-heading h2 {
   font-size: 30px;
   margin-bottom: 20px;
   line-height: auto;
@@ -447,10 +447,10 @@ hr {
   color: #000;
 }
 
-#content-4 .services-heading p,
-#content-5 .sermon-heading p,
-#content-8 .news-heading p,
-#content-7 .events-heading p {
+#services-section .services-heading p,
+#sermons-section .sermon-heading p,
+#news-section .news-heading p,
+#events-section .events-heading p {
   max-width: 500px;
 }
 
@@ -545,11 +545,11 @@ h3 {
 }
 
 @media screen and (max-width: 768px) {
-  #content-4,
-  #content-5,
-  #content-6,
-  #content-8,
-  #content-7 {
+  #services-section,
+  #sermons-section,
+  #bible-verse-section,
+  #news-section,
+  #events-section {
     padding: 3em 1em;
   }
 
@@ -576,7 +576,7 @@ h3 {
   margin-bottom: 10px;
 }
 
-#content-6 {
+#bible-verse-section {
   background: #658361;
   position: relative;
 }
