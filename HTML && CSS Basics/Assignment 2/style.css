@@ -371,14 +371,14 @@ hr {
   margin-bottom: 20px;
 }
 
-.content-3,
+#content-3,
 #content-5,
 #content-6,
 #content-7 {
   padding: 5em 3em;
 }
 
-.content-3 .counter {
+#content-3 .counter {
   font-size: 40px;
   display: block;
   color: black;
@@ -387,7 +387,7 @@ hr {
   margin-bottom: 0.3em;
   font-family: "Libre Baskerville", serif;
 }
-.content-3 .counter-label {
+#content-3 .counter-label {
   font-size: 12px;
   margin-bottom: 2em;
   display: block;
@@ -409,7 +409,7 @@ hr {
 }
 
 @media screen and (max-width: 768px) {
-  .content-3 {
+  #content-3 {
     padding: 42px 14px;
   }
 
