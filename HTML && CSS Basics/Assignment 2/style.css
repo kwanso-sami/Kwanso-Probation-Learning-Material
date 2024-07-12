@@ -369,14 +369,14 @@ hr {
   margin-bottom: 20px;
 }
 
-#counter-section,
+#fun-facts-section,
 #sermons-section,
 #bible-verse-section,
 #events-section {
   padding: 5em 3em;
 }
 
-#counter-section .counter {
+#fun-facts-section .counter {
   font-size: 40px;
   display: block;
   color: black;
@@ -385,7 +385,7 @@ hr {
   margin-bottom: 0.3em;
   font-family: "Libre Baskerville", serif;
 }
-#counter-section .counter-label {
+#fun-facts-section .counter-label {
   font-size: 12px;
   margin-bottom: 2em;
   display: block;
@@ -396,22 +396,22 @@ hr {
   color: gray;
 }
 
-.counter-inner-text {
+.fun-facts-inner-content {
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
 }
-.counter-inner-text p {
+.fun-facts-inner-content p {
   max-width: 425px;
 }
 
 @media screen and (max-width: 768px) {
-  #counter-section {
+  #fun-facts-section {
     padding: 42px 14px;
   }
 
-  .counter-inner-text {
+  .fun-facts-inner-content {
     flex-direction: column;
   }
 }
