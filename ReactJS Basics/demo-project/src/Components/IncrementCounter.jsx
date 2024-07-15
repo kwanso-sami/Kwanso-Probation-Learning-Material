@@ -13,6 +13,24 @@ class IncrementCounter extends React.Component {
     };
   }
 
+
+
+  
+    componentDidMount() {
+      console.log("Component mounted");
+    }
+  
+   
+    componentDidUpdate(prevProps, prevState) {
+      if (prevState.count !== this.state.count) {
+        console.log("Counter updated:", this.state.count);
+      }
+    }
+  
+   
+    componentWillUnmount() {
+      console.log("Component will unmount");
+    }
   
 
   incrementCount = () => {
@@ -26,7 +44,7 @@ class IncrementCounter extends React.Component {
       <>
         <h2>
 
-        I am Class Component (IncrementCounter.jsx)
+        I am Class Component (IncrementCounter.jsx), the first child of App.jsx
         </h2>
         <br />
         <p>Count: {this.state.count}</p>

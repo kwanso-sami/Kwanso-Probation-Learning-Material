@@ -1,8 +1,8 @@
 import React from "react";
 import "./App.css";
 
-import IncrementCounter from "./IncrementCounter";
-import DecrementCounter from "./DecrementCounter";
+import IncrementCounter from "./Components/IncrementCounter";
+import DecrementCounter from "./Components/DecrementCounter";
 
 const App = () => {
   return (

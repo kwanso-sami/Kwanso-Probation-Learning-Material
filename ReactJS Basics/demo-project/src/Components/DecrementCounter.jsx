@@ -23,7 +23,7 @@ class DecrementCounter extends React.Component {
     return (
       <>
         <h2>
-        I am Class Component (DecrementCounter.jsx)
+        I am Class Component (DecrementCounter.jsx), the second child of App.jsx
         </h2>
         <br />
         <p>Count: {this.state.count}</p>
