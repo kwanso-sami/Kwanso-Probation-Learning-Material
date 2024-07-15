@@ -35,8 +35,12 @@
   <body>
     <!-- main page -->
     <div id="page">
+      <!-- nav-toggle-button -->
       <a href="#" class="nav-toggle">
-        <i></i>
+        <input type="checkbox" id="click" />
+        <label for="click" class="menu-button">
+          <i class="fas fa-bars"></i>
+        </label>
       </a>
       <!-- nav -->
       <nav class="nav">
@@ -45,30 +49,30 @@
             <!-- nav-logo-section-->
             <div class="col-md-12 col-offset-0 text-center">
               <div id="nav-logo">
-                <a href="#">Church</a>
+                <a href="index.html">Church</a>
               </div>
             </div>
 
             <!-- nav-menu-section -->
             <div class="col-md-12 col-md-offset-0 text-center nav-menu">
               <ul>
-                <li class="active">
-                  <a href="index.html">Home</a>
+                <li>
+                  <a href="#" class="active">Home</a>
                 </li>
                 <li>
-                  <a href="#">Sermons</a>
+                  <a href="#sermons-section">Sermons</a>
                 </li>
                 <li>
-                  <a href="#">News</a>
+                  <a href="#news-section">News</a>
                 </li>
                 <li>
-                  <a href="#">Events</a>
+                  <a href="#events-section">Events</a>
                 </li>
                 <li>
-                  <a href="#">About</a>
+                  <a href="#services-section">Services</a>
                 </li>
                 <li>
-                  <a href="#">Contact</a>
+                  <a href="#footer">Contact</a>
                 </li>
                 <li>
                   <a href="#" class="donate">Donate</a>
@@ -79,8 +83,35 @@
         </div>
       </nav>
 
+      <!-- mobile-nav-menu -->
+      <div class="mobile-nav">
+        <ul>
+          <li>
+            <a href="#">Home</a>
+          </li>
+          <li>
+            <a href="#sermons-section">Sermons</a>
+          </li>
+          <li>
+            <a href="#news-section">News</a>
+          </li>
+          <li>
+            <a href="#events-section">Events</a>
+          </li>
+          <li>
+            <a href="#services-section">Services</a>
+          </li>
+          <li>
+            <a href="#footer">Contact</a>
+          </li>
+          <li>
+            <a href="#" class="donate">Donate</a>
+          </li>
+        </ul>
+      </div>
+
       <!-- main content -->
-      <div class="container-main">
+      <div class="container-main aside">
         <!-- slider-section -->
         <aside id="slider-section">
           <img src="assets/img_bg_1.jpg" alt="slider_img" />
@@ -91,15 +122,21 @@
                 Free html5 templates Made by
                 <a href="#" target="_blank">freehtml5.co</a>
               </h2>
-              <p class="content-1-btns">
-                <a class="btn btn-primary btn-demo" href="#"><i class="fa fa-play"></i> Watch Video</a>
-                <a class="btn btn-primary btn-learn">Join us here! </a>
-              </p>
+
+              <div class="slider-buttons">
+                <a class="btn btn-primary demo-button" href="#"
+                  ><i class="fa fa-play"></i> Watch Video</a
+                >
+
+                <a class="btn btn-primary learn-button" href="#"
+                  >Join us here! <i class="fa fa-arrow-right"></i
+                ></a>
+              </div>
             </div>
           </div>
         </aside>
-        <!-- intro-section -->
-        <div id="intro-section">
+        <!-- introduction-section -->
+        <div id="introduction-section">
           <div class="col-md-12 col-md-offset-0 text-center">
             <h2>Living in God's Amazing Grace!</h2>
             <span>We are open Sunday to Monday</span>
@@ -150,7 +187,7 @@
                 <a href="#" class="img-holder">
                   <img src="assets/img-1.jpg" alt="img-1" />
                 </a>
-                <div class="desc">
+                <div class="description">
                   <h3>
                     <a href="#">Live Events</a>
                   </h3>
@@ -170,7 +207,7 @@
                 <a href="#" class="img-holder">
                   <img src="assets/img-3.jpg" alt="img-3" />
                 </a>
-                <div class="desc">
+                <div class="description">
                   <h3>
                     <a href="#">Biblical Counseling</a>
                   </h3>
@@ -190,7 +227,7 @@
                 <a href="#" class="img-holder">
                   <img src="assets/img-2.jpg" alt="img-2" />
                 </a>
-                <div class="desc">
+                <div class="description">
                   <h3>
                     <a href="#">Helping Children</a>
                   </h3>
@@ -221,7 +258,9 @@
             <div class="col-md-4 text-center">
               <div class="sermon-entry">
                 <div href="#" class="img-holder">
-                  <img src="assets/sermon-1.jpg" alt="sermon-1" />
+                  <a href="#"
+                    ><img src="assets/sermon-1.jpg" alt="sermon-3"
+                  /></a>
                 </div>
                 <h3>Message From God</h3>
                 <span>Pstr. John Doe</span>
@@ -230,7 +269,9 @@
             <div class="col-md-4 text-center">
               <div class="sermon-entry">
                 <div href="#" class="img-holder">
-                  <img src="assets/sermon-2.jpg" alt="sermon-2" />
+                  <a href="#"
+                    ><img src="assets/sermon-2.jpg" alt="sermon-3"
+                  /></a>
                 </div>
                 <h3>Soul Winning</h3>
                 <span>Pstr. John Doe</span>
@@ -239,7 +280,9 @@
             <div class="col-md-4 text-center">
               <div class="sermon-entry">
                 <div href="#" class="img-holder">
-                  <img src="assets/sermon-3.jpg" alt="sermon-3" />
+                  <a href="#"
+                    ><img src="assets/sermon-3.jpg" alt="sermon-3"
+                  /></a>
                 </div>
                 <h3>Our World Today</h3>
                 <span>Pstr. John Doe</span>
@@ -274,7 +317,7 @@
           <div class="events-content">
             <div class="col-md-4">
               <div class="events">
-                <div class="desc">
+                <div class="description">
                   <span class="date">March 30, 2017</span>
                   <h3>
                     <a href="#">Message From God</a>
@@ -284,14 +327,15 @@
                     reprehenderit. Eos cumque dicta adipisci architecto culpa
                     amet.
                   </p>
-                  <a href="#">Read More  <span
-                    class="arrow-icon">&#8594;</span></a>
+                  <a href="#"
+                    >Read More <span class="arrow-icon">&#8594;</span></a
+                  >
                 </div>
               </div>
             </div>
             <div class="col-md-4">
               <div class="events">
-                <div class="desc">
+                <div class="description">
                   <span class="date">March 30, 2017</span>
                   <h3>
                     <a href="#">Message From God</a>
@@ -301,14 +345,15 @@
                     reprehenderit. Eos cumque dicta adipisci architecto culpa
                     amet.
                   </p>
-                  <a href="#">Read More  <span
-                    class="arrow-icon">&#8594;</span></a>
+                  <a href="#"
+                    >Read More <span class="arrow-icon">&#8594;</span></a
+                  >
                 </div>
               </div>
             </div>
             <div class="col-md-4">
               <div class="events">
-                <div class="desc">
+                <div class="description">
                   <span class="date">March 30, 2017</span>
                   <h3>
                     <a href="#">Message From God</a>
@@ -318,8 +363,9 @@
                     reprehenderit. Eos cumque dicta adipisci architecto culpa
                     amet.
                   </p>
-                  <a href="#">Read More  <span
-                    class="arrow-icon">&#8594;</span></a>
+                  <a href="#"
+                    >Read More <span class="arrow-icon">&#8594;</span></a
+                  >
                 </div>
               </div>
             </div>
@@ -343,7 +389,7 @@
                     alt="Free HTML5 Website Template by freehtml5.co"
                   />
                 </a>
-                <div class="desc">
+                <div class="description">
                   <span class="date">March 30, 2017</span>
                   <h3>
                     <a href="#">Live News</a>
@@ -353,8 +399,9 @@
                     molestias accusamus alias autem provident. Odit ab aliquam
                     dolor eius.
                   </p>
-                  <a href="#">Read More  <span
-                    class="arrow-icon">&#8594;</span></a>
+                  <a href="#"
+                    >Read More <span class="arrow-icon">&#8594;</span></a
+                  >
                 </div>
               </div>
             </div>
@@ -366,7 +413,7 @@
                     alt="Free HTML5 Website Template by freehtml5.co"
                   />
                 </a>
-                <div class="desc">
+                <div class="description">
                   <span class="date">March 30, 2017</span>
                   <h3>
                     <a href="#">Biblical Counseling</a>
@@ -376,8 +423,9 @@
                     molestias accusamus alias autem provident. Odit ab aliquam
                     dolor eius.
                   </p>
-                  <a href="#">Read More  <span
-                    class="arrow-icon">&#8594;</span></a>
+                  <a href="#"
+                    >Read More <span class="arrow-icon">&#8594;</span></a
+                  >
                 </div>
               </div>
             </div>
@@ -390,7 +438,7 @@
                     alt="Free HTML5 Website Template by freehtml5.co"
                   />
                 </a>
-                <div class="desc">
+                <div class="description">
                   <span class="date">March 30, 2017</span>
                   <h3>
                     <a href="#">Helping Children</a>
@@ -400,8 +448,9 @@
                     molestias accusamus alias autem provident. Odit ab aliquam
                     dolor eius.
                   </p>
-                  <a href="#">Read More  <span
-                    class="arrow-icon">&#8594;</span></a>
+                  <a href="#"
+                    >Read More <span class="arrow-icon">&#8594;</span></a
+                  >
                 </div>
               </div>
             </div>
@@ -414,7 +463,7 @@
                     alt="Free HTML5 Website Template by freehtml5.co"
                   />
                 </a>
-                <div class="desc">
+                <div class="description">
                   <span class="date">March 30, 2017</span>
                   <h3>
                     <a href="#">Helping Children</a>
@@ -424,8 +473,9 @@
                     molestias accusamus alias autem provident. Odit ab aliquam
                     dolor eius.
                   </p>
-                  <a href="#">Read More  <span
-                    class="arrow-icon">&#8594;</span></a>
+                  <a href="#"
+                    >Read More <span class="arrow-icon">&#8594;</span></a
+                  >
                 </div>
               </div>
             </div>
@@ -472,5 +522,44 @@
         </footer>
       </div>
     </div>
+
+    <!-- js -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        //active nav link handling
+        const navLinks = document.querySelectorAll(".nav-menu a");
+
+        navLinks.forEach((link) => {
+          link.addEventListener("click", function (event) {
+            navLinks.forEach((link) => link.classList.remove("active"));
+
+            event.target.classList.add("active");
+          });
+        });
+        const navToggle = document.querySelector(
+          '.nav-toggle input[type="checkbox"]'
+        );
+
+        // mobile nav menu handling
+        const navMenu = document.querySelector(".nav-menu");
+        const mobileMenu = document.querySelector(".mobile-nav");
+
+        navToggle.addEventListener("change", function () {
+          if (this.checked) {
+            mobileMenu.classList.add("open");
+          } else {
+            mobileMenu.classList.remove("open");
+          }
+        });
+
+        const mobileNavLinks = document.querySelectorAll(".mobile-nav a");
+        mobileNavLinks.forEach((link) => {
+          link.addEventListener("click", function () {
+            navToggle.checked = false;
+            mobileMenu.classList.remove("open");
+          });
+        });
+      });
+    </script>
   </body>
 </html>

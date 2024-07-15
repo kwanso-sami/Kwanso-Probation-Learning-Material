@@ -27,9 +27,17 @@ body {
   background: #fff;
 }
 
+.aside {
+  margin-top: -20px;
+}
+
 @media screen and (max-width: 768px) {
   .container-main {
     width: 100%;
+  }
+
+  .aside {
+    margin-top: -35px;
   }
 }
 
@@ -37,141 +45,11 @@ a {
   text-decoration: none;
 }
 
-.arrow-icon{
+.arrow-icon {
   font-size: 1.5rem;
 }
+
 /* nav */
-/* 
-.nav {
-  margin: 0;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: inherit;
-  z-index: 1000; 
-}
-
-.nav .top-menu {
-  padding: 0 0;
-}
-
-@media screen and (max-width: 768px) {
-  .nav .top-menu {
-    padding: 28px 1em;
-  }
-}
-
-.nav #nav-logo {
-  font-size: 45px;
-  margin: 0;
-  padding: 1em 0;
-  font-family: "Libre Baskerville", serif;
-  display: block;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.09);
-  background: inherit;
-}
-
-@media screen and (max-width: 768px) {
-  .nav #nav-logo {
-    border-bottom: none;
-    padding: 0.1em 0;
-  }
-}
-
-.nav #nav-logo a {
-  color: #658361;
-}
-
-.nav a {
-  padding: 5px 10px;
-  color: #000;
-}
-
-@media screen and (max-width: 768px) {
-  .nav .nav-menu {
-    display: none;
-  }
-}
-
-
-.nav ul li a.donate {
-  color: #658361;
-}
-
-.nav ul {
-  padding: 20px 0;
-  margin: 0;
-}
-.nav ul li {
-  font-family: "Source Sans Pro", sans-serif;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  display: inline;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  font-weight: 600;
-}
-.nav ul li a {
-  position: relative;
-  font-size: 13px;
-  padding: 30px 20px;
-  color: rgba(0, 0, 0, 0.8);
-  transition: 0.5s;
-}
-
-
-.nav-toggle {
-  position: fixed;
-  right: 0px;
-  top: 50px;
-  z-index: 21;
-  padding: 6px 0 0 0;
-  display: block;
-  margin: 0 auto;
-  display: none;
-  height: 44px;
-  width: 44px;
-  z-index: 2001;
-  border-bottom: none;
-}
-.nav-toggle i {
-  position: relative;
-  display: inline-block;
-  width: 25px;
-  height: 2px;
-  color: #252525;
-  font: bold 14px/0.4 Helvetica;
-  text-transform: uppercase;
-  text-indent: -55px;
-  background: #252525;
-}
-
-.nav-toggle i::before,
-.nav-toggle i::after {
-  content: "";
-  width: 25px;
-  height: 2px;
-  background: #252525;
-  position: absolute;
-  left: 0;
-}
-
-.nav-toggle i::before {
-  top: -7px;
-}
-
-.nav-toggle i::after {
-  bottom: -7px;
-}
-
-@media screen and (max-width: 768px) {
-  .nav-toggle {
-    display: block;
-    
-  }
-
-} */
 .nav {
   margin: 0;
   position: fixed;
@@ -181,28 +59,21 @@ a {
   z-index: 1000;
 }
 
-.nav .top-menu {
-  padding: 0 0;
-}
-
-
- 
 .nav ul li.active > a {
   color: #000;
   position: relative;
-} 
-
+}
 
 @media screen and (max-width: 768px) {
   .nav .top-menu {
-    padding: 28px 1em;
+    padding: 10px;
   }
 }
 
 .nav #nav-logo {
   font-size: 45px;
   margin: 0;
-  padding: 1em 0;
+  padding: 35px 0;
   font-family: "Libre Baskerville", serif;
   display: block;
   border-bottom: 1px solid rgba(0, 0, 0, 0.09);
@@ -234,14 +105,18 @@ a {
 .nav ul li > a {
   color: rgba(0, 0, 0, 0.8);
   position: relative;
-  font-size: 13px;
+  font-size: 14px;
   padding: 30px 20px;
   transition: 0.5s;
 }
 
+.nav ul li.active > a {
+  color: #000;
+  position: relative;
+}
 
-.nav ul li.active > a::after,
-.nav ul li a:focus::after {
+.nav ul li a.active::after,
+.nav ul li a:hover::after {
   position: absolute;
   top: 6px;
   left: 0;
@@ -264,7 +139,6 @@ a {
 }
 
 .nav ul li {
-  font-family: "Source Sans Pro", sans-serif;
   padding: 0;
   margin: 0;
   list-style: none;
@@ -275,56 +149,78 @@ a {
 }
 
 .nav-toggle {
+  display: none;
   position: fixed;
   right: 0px;
-  top: 50px;
-  z-index: 21;
-  padding: 6px 0 0 0;
-  display: block;
+  top: 30px;
   margin: 0 auto;
-  display: none;
-  height: 44px;
   width: 44px;
   z-index: 2001;
-  border-bottom: none;
+  font-size: 28px;
+  cursor: pointer;
 }
 
-.nav-toggle i {
-  position: relative;
-  display: inline-block;
-  width: 25px;
-  height: 2px;
-  color: #252525;
-  font: bold 14px/0.4 Helvetica;
-  text-transform: uppercase;
-  text-indent: -55px;
-  background: #252525;
+input[type="checkbox"] {
+  display: none;
 }
 
-.nav-toggle i::before,
-.nav-toggle i::after {
-  content: "";
-  width: 25px;
-  height: 2px;
-  background: #252525;
-  position: absolute;
-  left: 0;
+/* mobile-nav */
+
+.mobile-nav {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 250px;
+  height: 100%;
+  background: #000;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  transition: transform 0.3s ease-in-out;
+  padding: 75px 40px 40px 40px;
+  transform: translateX(100%);
 }
 
-.nav-toggle i::before {
-  top: -7px;
+.mobile-nav ul {
+  padding: 20px 0;
 }
 
-.nav-toggle i::after {
-  bottom: -7px;
+.mobile-nav.open {
+  display: block;
+  transform: translateX(0);
+}
+
+.mobile-nav ul li {
+  list-style: none;
+  margin-bottom: 5px;
+}
+
+.mobile-nav ul li a {
+  text-decoration: none;
+  color: #ffffffbe;
+  font-size: 18px;
+}
+
+.mobile-nav ul li a.donate {
+  color: #658361;
+}
+
+#click:checked ~ .mobile-nav {
+  display: block;
+  transform: translateX(0);
 }
 
 @media screen and (max-width: 768px) {
   .nav-toggle {
     display: block;
+    color: #000;
+  }
+
+  #click:checked ~ .menu-button i:before {
+    content: "\f00d";
+    color: #ffffffbe;
   }
 }
-
 
 /* footer */
 
@@ -404,10 +300,6 @@ a {
 }
 
 #slider-section img {
-  
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: bottom center;
   height: 500px;
   margin-bottom: 0;
   border: none;
@@ -415,6 +307,7 @@ a {
   overflow: hidden;
   z-index: 1;
   width: inherit;
+  object-fit: cover;
 }
 
 .container-main #slider-section .overlay-content {
@@ -465,7 +358,7 @@ a {
   margin-bottom: 20px;
 }
 
-.content-1-btns {
+.slider-buttons {
   display: flex;
   justify-content: center;
   width: 100%;
@@ -473,19 +366,19 @@ a {
 }
 
 @media screen and (max-width: 768px) {
-  .content-1-btns {
+  .slider-buttons {
     flex-direction: column;
     max-width: 90%;
     gap: 4px;
   }
 
-  #slider-section{
+  #slider-section {
     margin-top: 160px;
   }
 }
 
 .overlay-content a.btn {
-  font-size: 12px;
+  font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 2px;
   color: #fff;
@@ -494,14 +387,19 @@ a {
   border-radius: 0px;
 }
 
-.overlay-content a.btn.btn-learn {
+.overlay-content a.btn.learn-button {
   background: #fff;
   color: #000;
 }
 
-.overlay-content a.btn.btn-demo {
+.overlay-content a.btn.demo-button {
   background: #658361;
   color: #fff;
+}
+
+.overlay-content .fa-arrow-right {
+  font-size: 14px;
+  color: #658361;
 }
 
 @media screen and (max-width: 768px) {
@@ -510,10 +408,10 @@ a {
   }
 }
 
-#intro-section {
+#introduction-section {
   padding: 3em 3em;
 }
-#intro-section h2 {
+#introduction-section h2 {
   font-style: italic;
   font-family: "Libre Baskerville", serif;
   color: #000;
@@ -543,12 +441,11 @@ hr {
   font-family: "Libre Baskerville", serif;
 }
 #fun-facts-section .counter-label {
-  font-size: 12px;
+  font-size: 14px;
   margin-bottom: 2em;
   display: block;
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-family: "Source Sans Pro", sans-serif;
   font-weight: 600;
   color: gray;
 }
@@ -654,9 +551,10 @@ h3 {
   max-width: 100%;
   z-index: -1;
   position: relative;
+  object-fit: cover;
 }
 
-.desc a {
+.description a {
   color: #658361;
 }
 
@@ -683,12 +581,12 @@ h3 {
   margin-bottom: 40px;
 }
 
-.news .desc .date {
+.news .description .date {
   display: block;
   margin-bottom: 10px;
 }
 
-.events .desc .date {
+.events .description .date {
   display: block;
   margin-bottom: 10px;
   font-family: "Libre Baskerville", serif;
@@ -715,7 +613,7 @@ h3 {
   }
 
   .sermon-entry,
-  .services .desc {
+  .services .description {
     margin-bottom: 40px;
   }
 }
@@ -752,5 +650,23 @@ h3 {
 @media screen and (max-width: 768px) {
   .bible-verse blockquote {
     width: 85%;
+  }
+}
+
+#sermons-section,
+#news-section,
+#events-section,
+#services-section,
+#footer {
+  scroll-margin-top: 230px;
+}
+
+@media screen and (max-width: 768px) {
+  #sermons-section,
+  #news-section,
+  #events-section,
+  #services-section,
+  #footer {
+    scroll-margin-top: 120px;
   }
 }
