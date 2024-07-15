@@ -5,8 +5,15 @@ class UserProfile extends React.Component {
     super(props);
 
     this.state = {
-      message: "I am a Class Component (UserProfile.jsx)",
+      message: "I am a Class Component (UserProfile.jsx), child of Form.jsx",
     };
+  }
+
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.name !== this.props.name || prevProps.city !== this.props.city || prevProps.country !== this.props.country) {
+      console.log("Props updated in UserProfile component:", this.props);
+    }
   }
 
   render() {

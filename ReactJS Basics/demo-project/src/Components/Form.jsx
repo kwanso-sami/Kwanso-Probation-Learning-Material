@@ -15,9 +15,20 @@ const Form = (props) => {
     console.log(formData);
   }
 
+
+  const [name, setName] = useState("Sami");
+  const [city, setCity] = useState("Lahore");
+  const [country, setCountry] = useState("Pakistan");
+
+  const updateUserProfile = () => {
+    setName("Jane Smith");
+    setCity("London");
+    setCountry("UK");
+  };
+
   return (
     <>
-      <h2>I am Functional Component (Form.jsx)</h2>
+      <h2>I am Functional Component (Form.jsx), the child of IncrementCounter.jsx</h2>
       <br />
       <p>I receive following props:</p>
 
@@ -49,8 +60,11 @@ const Form = (props) => {
         <br />
         <input type="submit" value="Submit" />
       </form>
+      
 
-      <UserProfile name="Sami" city="Lahore" country="Pakistan"/>
+      <button onClick={updateUserProfile}>Update Profile</button>
+      <UserProfile name={name} city={city} country={country} />
+      
     </>
   );
 };
