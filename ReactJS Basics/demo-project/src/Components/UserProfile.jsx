@@ -5,14 +5,21 @@ class UserProfile extends React.Component {
     super(props);
 
     this.state = {
-      message: "I am a Class Component (UserProfile.jsx), child of Form.jsx",
+      message:
+        "I am a Class Component (UserProfile.jsx), the child of Form.jsx",
     };
   }
 
-
   componentDidUpdate(prevProps) {
-    if (prevProps.name !== this.props.name || prevProps.city !== this.props.city || prevProps.country !== this.props.country) {
-      console.log("Props updated in UserProfile component:", this.props);
+    if (
+      prevProps.name !== this.props.name ||
+      prevProps.email !== this.props.email
+    ) {
+      console.log(
+        "Props updated in UserProfile component:",
+        this.props.name,
+        this.props.email
+      );
     }
   }
 
@@ -27,10 +34,7 @@ class UserProfile extends React.Component {
           <strong>Name:</strong> {this.props.name}
         </p>
         <p>
-          <strong>City:</strong> {this.props.city}
-        </p>
-        <p>
-          <strong>Country:</strong> {this.props.country}
+          <strong>Email:</strong> {this.props.email}
         </p>
       </>
     );
