@@ -38,12 +38,15 @@ class IncrementCounter extends React.Component {
           I am Class Component (IncrementCounter.jsx), the first child of
           App.jsx
         </h2>
-        <br />
+        
         <p>Count: {this.state.count}</p>
         <button onClick={this.incrementCount}>Increment</button>
 
-
-        <Form prop1={{ msg: "hello" }} prop2="world" />
+        <Form
+          prop1={{ msg: "hello world" }} //passing object as a prop
+          prop2={["react", "angular", "vue"]} //passing array as a prop
+          prop3={"helloworld 2"} //passing string as a prop
+        />
       </>
     );
   }

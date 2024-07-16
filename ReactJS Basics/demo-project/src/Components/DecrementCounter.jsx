@@ -22,7 +22,7 @@ class DecrementCounter extends React.Component {
           I am Class Component (DecrementCounter.jsx), the second child of
           App.jsx
         </h2>
-        <br />
+      
         <p>Count: {this.state.count}</p>
 
         <button onClick={this.decrementCount}>Decrement</button>

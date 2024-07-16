@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ChildComponent from "./ChildComponent";
 
 const ParentComponent = () => {
-  const [message, setMessage] = useState("Waiting");
+  const [message, setMessage] = useState("Waiting...");
 
   const handleMessageChange = (newMessage) => {
     setMessage(newMessage);
@@ -16,6 +16,7 @@ const ParentComponent = () => {
       </h2>
       <p>Message from child: {message}</p>
       <ChildComponent onMessageChange={handleMessageChange} />
+      
     </div>
   );
 };

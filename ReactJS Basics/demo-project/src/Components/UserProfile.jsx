@@ -27,7 +27,7 @@ class UserProfile extends React.Component {
     return (
       <>
         <h2>{this.state.message}</h2>
-        <br />
+    
 
         <h3>User Profile:</h3>
         <p>

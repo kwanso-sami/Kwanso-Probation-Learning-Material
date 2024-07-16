@@ -8,7 +8,10 @@ const ChildComponent = ({ onMessageChange }) => {
 
   return (
     <div>
-      <h2>I am a functional Component (ChildComponent.jsx), the child of ParentComponent.jsx</h2>
+      <h2>
+        I am a functional Component (ChildComponent.jsx), the child of
+        ParentComponent.jsx
+      </h2>
       <button onClick={sendMessageToParent}>Send Message to Parent</button>
     </div>
   );

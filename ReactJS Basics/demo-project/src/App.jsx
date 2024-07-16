@@ -1,9 +1,13 @@
 import React from "react";
-import "./App.css";
 
 import IncrementCounter from "./Components/IncrementCounter";
 import DecrementCounter from "./Components/DecrementCounter";
 import ParentComponent from "./Components/ParentComponent";
+
+import Component7 from "./Components/Component7";
+import Component8 from "./Components/Component8";
+import Component9 from "./Components/Component9";
+
 
 const App = () => {
   return (
@@ -15,11 +19,31 @@ const App = () => {
 
       <h4>
         An example where the parent component has a callback function that is
-        passed as a prop to the child component. The child component calls this
+        passed as a prop to the child component (i-e, Render Prop). The child component calls this
         callback function in response to a button click.
       </h4>
 
       <ParentComponent />
+
+      <hr />
+
+      <h4>
+        This is an example of parent component passing components as props to
+        its child component
+      </h4>
+      <Component7 />
+
+      <hr />
+
+      <h4>This is an example of "props.children" </h4>
+      <Component8 />
+
+      <hr />
+
+      <h4>This is an example of HOC </h4>
+      <Component9 />
+
+
     </>
   );
 };
