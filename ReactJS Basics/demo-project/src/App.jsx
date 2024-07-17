@@ -3,7 +3,6 @@ import React from "react";
 import IncrementCounter from "./Components/IncrementCounter";
 import DecrementCounter from "./Components/DecrementCounter";
 import ParentComponent from "./Components/ParentComponent";
-
 import Component7 from "./Components/Component7";
 import Component8 from "./Components/Component8";
 import Component9 from "./Components/Component9";
@@ -24,7 +23,6 @@ const App = () => {
       </h4>
 
       <ParentComponent />
-
       <hr />
 
       <h4>
