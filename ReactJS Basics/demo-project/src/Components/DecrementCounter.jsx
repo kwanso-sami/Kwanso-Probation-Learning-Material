@@ -1,17 +1,13 @@
 import React from "react";
 
-
-
 class DecrementCounter extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-     count:15
+      count: 15,
     };
   }
-
-  
 
   decrementCount = () => {
     this.setState((prevState) => ({
@@ -23,13 +19,13 @@ class DecrementCounter extends React.Component {
     return (
       <>
         <h2>
-        I am Class Component (DecrementCounter.jsx), the second child of App.jsx
+          I am Class Component (DecrementCounter.jsx), the second child of
+          App.jsx
         </h2>
-        <br />
-        <p>Count: {this.state.count}</p>
       
+        <p>Count: {this.state.count}</p>
+
         <button onClick={this.decrementCount}>Decrement</button>
-       
       </>
     );
   }

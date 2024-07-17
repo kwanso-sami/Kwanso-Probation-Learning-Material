@@ -2,8 +2,7 @@ import React, { useState } from "react";
 
 import UserProfile from "./UserProfile";
 
-
-const Form = (props) => {
+const Form = ({ prop1, prop2,prop3 }) => {
   const [formData, setFormData] = useState({ name: "", email: "" });
 
   function handleChange(e) {
@@ -13,28 +12,26 @@ const Form = (props) => {
   function handleSubmit(e) {
     e.preventDefault();
     console.log(formData);
+
+    setNameProp(formData.name);
+    setEmailProp(formData.email);
   }
 
-
-  const [name, setName] = useState("Sami");
-  const [city, setCity] = useState("Lahore");
-  const [country, setCountry] = useState("Pakistan");
-
-  const updateUserProfile = () => {
-    setName("Jane Smith");
-    setCity("London");
-    setCountry("UK");
-  };
+  const [nameProp, setNameProp] = useState("Sami");
+  const [emailProp, setEmailProp] = useState("samishakoor787@gmail.com");
 
   return (
     <>
-      <h2>I am Functional Component (Form.jsx), the child of IncrementCounter.jsx</h2>
-      <br />
+      <h2>
+        I am Functional Component (Form.jsx), the child of IncrementCounter.jsx
+      </h2>
+      
       <p>I receive following props:</p>
 
       <ul>
-        <li>Prop1: {props.prop1}</li>
-        <li>Prop2: {props.prop2}</li>
+        <li>Object Prop: {prop1.msg}</li>
+        <li>List Prop: {prop2[0]}, {prop2[1]}, {prop2[2]}</li>
+        <li>String Prop: {prop3}</li>
       </ul>
       <br />
       <form onSubmit={handleSubmit}>
@@ -60,11 +57,8 @@ const Form = (props) => {
         <br />
         <input type="submit" value="Submit" />
       </form>
-      
 
-      <button onClick={updateUserProfile}>Update Profile</button>
-      <UserProfile name={name} city={city} country={country} />
-      
+      <UserProfile name={nameProp} email={emailProp} />
     </>
   );
 };
