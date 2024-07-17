@@ -3,7 +3,6 @@ import React from "react";
 import IncrementCounter from "./Components/IncrementCounter";
 import DecrementCounter from "./Components/DecrementCounter";
 import ParentComponent from "./Components/ParentComponent";
-
 import Component7 from "./Components/Component7";
 import Component8 from "./Components/Component8";
 import Component9 from "./Components/Component9";
@@ -14,6 +13,7 @@ const App = () => {
     <>
       <IncrementCounter />
       <hr />
+      
       <DecrementCounter />
       <hr />
 
@@ -22,9 +22,7 @@ const App = () => {
         passed as a prop to the child component (i-e, Render Prop). The child
         component calls this callback function in response to a button click.
       </h4>
-
       <ParentComponent />
-
       <hr />
 
       <h4>
@@ -32,17 +30,14 @@ const App = () => {
         its child component
       </h4>
       <Component7 />
-
       <hr />
 
       <h4>This is an example of "props.children" </h4>
       <Component8 />
-
       <hr />
 
       <h4>This is an example of HOC </h4>
       <Component9 />
-
       <hr />
 
       <h4>
