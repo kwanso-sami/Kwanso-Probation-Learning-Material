@@ -7,6 +7,7 @@ import Component7 from "./Components/Component7";
 import Component8 from "./Components/Component8";
 import Component9 from "./Components/Component9";
 import ComponentX from "./Components/ComponentX";
+import HighlightInput from "./Components/HighlightInput";
 
 const App = () => {
   return (
@@ -45,6 +46,11 @@ const App = () => {
         other through a shared common parent component (via Lifting State Up){" "}
       </h4>
       <ComponentX />
+      <hr />
+
+      <h4>This is an example of useRef Hook </h4>
+      <HighlightInput/>
+
     </>
   );
 };
