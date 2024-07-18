@@ -1,10 +1,20 @@
-import React from 'react'
-import {useParams} from "react-router-dom"
+import React,{useContext} from 'react'
+import UserContext from "../../context/UserContext";
+
+
 
 function User() {
-  const {userid} = useParams()
+  const { user} = useContext(UserContext);
   return (
-    <div className='py-5 text-3xl text-center text-black bg-orange-500'>User: {userid}</div>
+    <div className='py-5 text-3xl text-center text-black bg-orange-500'
+    
+    >
+      
+      User Name: {user.name}
+      <br/>
+      User Email: {user.email}
+    
+    </div>
   )
 }
 
