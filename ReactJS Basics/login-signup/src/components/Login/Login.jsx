@@ -23,7 +23,7 @@ function LogIn() {
 
     if (email === user.email && password === user.password) {
       setIsLoggedIn(true);
-      navigate("/user", { replace: true });
+       navigate("/user", { replace: true });
     } else {
       alert("Invalid email or password!");
     }
