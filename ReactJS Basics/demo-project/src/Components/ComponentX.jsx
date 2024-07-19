@@ -37,7 +37,7 @@ const ComponentX = () => {
       </h2>
 
       <ChildComponent1 onChange={handleChange} />
-      
+
       <ChildComponent2 value={sharedState} />
     </div>
   );

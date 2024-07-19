@@ -33,7 +33,7 @@ function LogIn() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-gray-100 to-white">
       <div className="w-full max-w-sm px-6 py-10 bg-white rounded-lg shadow-md">
         <h1 className="mb-8 text-2xl font-bold text-center">Welcome Back!</h1>
-      
+
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
