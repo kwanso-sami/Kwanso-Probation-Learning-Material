@@ -1,6 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import UserContextProvider from "./context/UserContextProvider";
+import { ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import theme from "./theme";
 
 import "./index.css";
 import {
@@ -30,8 +33,11 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <UserContextProvider>
-      <RouterProvider router={router} />
-    </UserContextProvider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <UserContextProvider>
+        <RouterProvider router={router} />
+      </UserContextProvider>
+    </ThemeProvider>
   </React.StrictMode>
 );
