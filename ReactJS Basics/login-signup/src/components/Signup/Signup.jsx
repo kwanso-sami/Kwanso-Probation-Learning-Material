@@ -1,111 +1,145 @@
-import React, { useState, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, Typography, Avatar, Grid, Box, Container } from "@mui/material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import UserContext from "../../context/UserContext";
+import SnackbarContext from "../../context/SnackbarContext";
+import FormCheckbox from "../FormComponent/FormCheckbox";
+import FormInputText from "../FormComponent/FormInputText";
+import FormButton from "../FormComponent/FormButton";
 
-function SignUp() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Invalid email format")
+    .required("Email is required"),
+  password: yup
+    .string()
+    .min(4, "Password must be at least 4 characters")
+    .required("Password is required"),
 
-  const navigate = useNavigate();
+  firstName: yup.string().required("First Name is required"),
+
+  lastName: yup.string().required("Last Name is required"),
+});
+
+const SignUp = () => {
+  const { handleSubmit, control } = useForm({
+    resolver: yupResolver(schema),
+  });
+
   const { setUser } = useContext(UserContext);
+  const { showSnackbar } = useContext(SnackbarContext);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    console.log(name, email, password);
-    setUser({ name, email, password });
+  const onSubmit = ({ firstName, lastName, email, password }) => {
+    console.log(firstName, lastName, email, password);
+    setUser({ firstName, lastName, email, password });
+    showSnackbar({ message: "User registered successfully!", type: "success" });
     navigate("/login", { replace: true });
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-gray-100 to-white">
-      <div className="w-full max-w-sm px-6 py-10 bg-white rounded-lg shadow-md">
-        <h1 className="mb-8 text-2xl font-bold text-center">
-         Join us today!
-        </h1>
-      
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label
-              htmlFor="name"
-              className="block mb-1 text-sm font-medium text-gray-800"
-            >
-              Name{" "}
-              <span className="text-red-600">*</span>
-            </label>
-            <input
-              id="name"
-              type="text"
-              className="w-full px-4 py-2 text-gray-800 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-              placeholder="Enter your name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="email"
-              className="block mb-1 text-sm font-medium text-gray-800"
-            >
-              Email{" "}
-              <span className="text-red-600">*</span>
-            </label>
-            <input
-              id="email"
-              type="email"
-              className="w-full px-4 py-2 text-gray-800 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-              placeholder="Enter your email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="password"
-              className="block mb-1 text-sm font-medium text-gray-800"
-            >
-              Password{" "}
-              <span className="text-red-600">*</span>
-            </label>
-            <input
-              id="password"
-              type="password"
-              className="w-full px-4 py-2 text-gray-800 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <button
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 8,
+          marginBottom: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign up
+        </Typography>
+        <Box
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
+          sx={{ mt: 3 }}
+        >
+          <Grid container spacing={{ xs: 0, sm: 2 }}>
+            <Grid item xs={12} sm={6}>
+              <FormInputText
+                name="firstName"
+                control={control}
+                required={true}
+                label="First Name"
+                type="text"
+                autoFocus={true}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <FormInputText
+                name="lastName"
+                control={control}
+                required={true}
+                label="Last Name"
+                type="text"
+              />
+            </Grid>
+          </Grid>
+
+          <FormInputText
+            name="email"
+            control={control}
+            required={true}
+            label="Email Address"
+            type="email"
+            autoComplete="email"
+          />
+
+          <FormInputText
+            name="password"
+            required={true}
+            control={control}
+            label="Password"
+            type="password"
+            autoComplete="new-password"
+          />
+
+          <FormCheckbox
+            name="allowExtraEmails"
+            control={control}
+            label="I want to receive inspiration, marketing promotions and updates via email."
+            style={{ mt: 1 }}
+          />
+
+          <FormButton
             type="submit"
-            className="w-full py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none"
-          >
-            Sign up
-          </button>
-        </form>
+            fullWidth={true}
+            text="SIGN UP"
+            style={{ mt: 3, mb: 2, fontWeight: "bold" }}
+          />
 
-        <div className="flex items-center my-6">
-          <div className="flex-grow mr-3 border-t border-gray-300" aria-hidden="true"></div>
-          <div className="italic text-gray-600">Or</div>
-          <div className="flex-grow ml-3 border-t border-gray-300" aria-hidden="true"></div>
-        </div>
-
-        <div className="mt-6 text-center text-gray-600">
-          Already have an account?{" "}
-          <Link
-            to="/login"
-            className="text-blue-600 transition duration-150 ease-in-out hover:underline"
-          >
-            Log in
-          </Link>
-        </div>
-      </div>
-    </div>
+          <Grid container justifyContent="center">
+            <Grid item>
+              <Typography variant="body2" component="span">
+                Already have an account?{" "}
+              </Typography>
+              <Link
+                component={RouterLink}
+                to="/login"
+                variant="body2"
+                color="primary"
+                underline="none"
+              >
+                Sign In
+              </Link>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+    </Container>
   );
-}
+};
 
 export default SignUp;

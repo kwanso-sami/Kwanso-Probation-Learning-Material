@@ -2,12 +2,12 @@ import React, { useContext } from "react";
 import UserContext from "../../context/UserContext";
 
 function User() {
-  const { user } = useContext(UserContext);
+  const { firstName,lastName,email } = useContext(UserContext);
   return (
     <div className="py-5 text-3xl text-center text-black bg-orange-500">
-      User Name: {user.name}
+      User Name: {firstName} {lastName}
       <br />
-      User Email: {user.email}
+      User Email: {email}
     </div>
   );
 }

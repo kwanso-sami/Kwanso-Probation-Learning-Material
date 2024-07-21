@@ -12,8 +12,7 @@ const SnackbarProvider = ({ children }) => {
   const showSnackbar = ({message, type}) => {
     setSnackbar({ open: true, message, type });
   };
-
-  return (
+return (
     <SnackbarContext.Provider value={{ showSnackbar }}>
       {children}
       <MySnackbar
@@ -21,9 +20,11 @@ const SnackbarProvider = ({ children }) => {
         message={snackbar.message}
         type={snackbar.type}
         onClose={() => setSnackbar({ ...snackbar, open: false })}
+
+
       />
     </SnackbarContext.Provider>
   );
 };
 
-export default SnackbarProvider;
+export default SnackbarProvider

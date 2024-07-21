@@ -1,18 +1,5 @@
 import React, { useContext } from "react";
-import {
-  Link,
-  Typography,
-  Avatar,
-  Button,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Grid,
-  Box,
-  Container,
-  Snackbar,
-  Alert,
-} from "@mui/material";
+import { Link, Typography, Avatar, Grid, Box, Container } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -20,6 +7,9 @@ import * as yup from "yup";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import UserContext from "../../context/UserContext";
 import SnackbarContext from "../../context/SnackbarContext";
+import FormCheckbox from "../FormComponent/FormCheckbox";
+import FormInputText from "../FormComponent/FormInputText";
+import FormButton from "../FormComponent/FormButton";
 
 const schema = yup.object().shape({
   email: yup
@@ -33,17 +23,12 @@ const schema = yup.object().shape({
 });
 
 const SignIn = () => {
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm({
+  const { handleSubmit, control } = useForm({
     resolver: yupResolver(schema),
   });
 
   const { user, setIsLoggedIn } = useContext(UserContext);
   const { showSnackbar } = useContext(SnackbarContext);
-
   const navigate = useNavigate();
 
   const onSubmit = ({
@@ -51,12 +36,11 @@ const SignIn = () => {
     password: userPassword,
     remember: keepLoggedIn,
   }) => {
-    console.log(user);
+    console.log(userEmail, userPassword, keepLoggedIn);
 
     if (!user) {
-      console.log("hello");
       showSnackbar({ message: "Please SignUp first!", type: "warning" });
-      navigate("/signup", { replace: true });
+      return;
     }
 
     if (userEmail === user.email && userPassword === user.password) {
@@ -68,17 +52,9 @@ const SignIn = () => {
       navigate("/user", { replace: true });
     } else {
       showSnackbar({ message: "Invalid Email or Password!", type: "error" });
+      return;
     }
   };
-
-  React.useEffect(() => {
-    if (Object.keys(errors).length > 0) {
-      showSnackbar({
-        message: errors[Object.keys(errors)[0]].message,
-        type: "error",
-      });
-    }
-  }, [errors]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -95,7 +71,7 @@ const SignIn = () => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Log in
+          Sign in
         </Typography>
         <Box
           component="form"
@@ -103,65 +79,33 @@ const SignIn = () => {
           noValidate
           sx={{ mt: 1 }}
         >
-          <Controller
+          <FormInputText
             name="email"
             control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <TextField
-                {...field}
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                autoComplete="email"
-                autoFocus
-                error={!!errors.email}
-                helperText={errors.email ? errors.email.message : null}
-              />
-            )}
+            required={true}
+            label="Email Address"
+            type="email"
+            autoFocus={true}
+            autoComplete="email"
           />
 
-          <Controller
+          <FormInputText
             name="password"
+            required={true}
             control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <TextField
-                {...field}
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                error={!!errors.password}
-                helperText={errors.password ? errors.password.message : null}
-              />
-            )}
+            label="Password"
+            type="password"
+            autoComplete="current-password"
           />
-          <Controller
-            name="remember"
-            control={control}
-            defaultValue={false}
-            render={({ field }) => (
-              <FormControlLabel
-                control={<Checkbox {...field} color="primary" />}
-                label="Remember me"
-              />
-            )}
-          />
-          <Button
+
+          <FormCheckbox name="remember" control={control} label="Remember Me" />
+
+          <FormButton
             type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Sign In
-          </Button>
+            fullWidth={true}
+            text="SIGN IN"
+            style={{ mt: 3, mb: 2, fontWeight: "bold" }}
+          />
 
           <Grid container>
             <Grid item xs>
