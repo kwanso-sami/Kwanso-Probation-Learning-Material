@@ -1,6 +1,16 @@
 import React, { useContext } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
-
+import { Link as RouterLink, NavLink, useNavigate } from "react-router-dom";
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Button,
+  Link,
+  Box,
+  MenuItem,
+  Container,
+} from "@mui/material";
 import UserContext from "../../context/UserContext";
 
 export default function Header() {
@@ -10,95 +20,115 @@ export default function Header() {
   const signOut = () => {
     setUser(null);
     setIsLoggedIn(false);
-
-    navigate("/home", { replace: true });
+    navigate("/", { replace: true });
   };
 
   return (
-    <header className="sticky top-0 z-50 shadow">
-      <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5">
-        <div className="flex flex-wrap items-center justify-between max-w-screen-xl mx-auto">
-          <Link to="/" className="flex items-center">
-            <img
-              src="https://alexharkness.com/wp-content/uploads/2020/06/logo-2.png"
-              className="h-12 mr-3"
-              alt="Logo"
-            />
-          </Link>
-
-          {isLoggedIn ? (
-            <div className="flex items-center lg:order-2">
-              <Link
-                className="text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
-                onClick={signOut}
-              >
-                SignOut
-              </Link>
-            </div>
-          ) : (
-            <div className="flex items-center lg:order-2">
-              <NavLink
-                to="/login"
-                className={({ isActive }) =>
-                  `block py-2 pr-4 pl-3 duration-200 border-b border-gray-100 
-                            ${isActive ? "text-orange-700" : "text-gray-700"
-                  } text-gray-800 hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
-                }
-              >
-                LogIn
-              </NavLink>
-
-              <Link
-                to="/signup"
-                className="text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
-              >
-                SignUp
-              </Link>
-            </div>
-          )}
-
-          <div
-            className="items-center justify-between hidden w-full lg:flex lg:w-auto lg:order-1"
-            id="mobile-menu-2"
+    <AppBar
+      position="sticky"
+      sx={{ bgcolor: "white", borderBottom: "1px gray" }}
+    >
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              ml: "-18px",
+              px: 0,
+            }}
           >
-            <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
-              <li>
-                <NavLink
-                  to="/"
-                  replace
-                  className={({ isActive }) =>
-                    `block py-2 pr-4 pl-3 duration-200 border-b border-gray-100 
-                                        ${isActive
-                      ? "text-orange-700"
-                      : "text-gray-700"
-                    } lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
-                  }
-                >
-                  Home
-                </NavLink>
-              </li>
+            <IconButton component={RouterLink} to="/">
+              <img
+                src="https://alexharkness.com/wp-content/uploads/2020/06/logo-2.png"
+                alt="Logo"
+                style={{ height: 48 }}
+              />
+            </IconButton>
+
+            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+              <Link
+                component={NavLink}
+                to="/"
+                underline="none"
+                sx={{
+                  py: "6px",
+                  px: "12px",
+                  color: "black",
+                  "&.active": {
+                    color: "#C2410C",
+                  },
+                }}
+              >
+                <Typography variant="body2">Home</Typography>
+              </Link>
 
               {isLoggedIn && (
-                <li>
-                  <NavLink
-                    to="/user"
-                    replace
-                    className={({ isActive }) =>
-                      `block py-2 pr-4 pl-3 duration-200 border-b border-gray-100 
-                                        ${isActive
-                        ? "text-orange-700"
-                        : "text-gray-700"
-                      } lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
-                    }
-                  >
-                    Profile
-                  </NavLink>
-                </li>
+                <Link
+                  component={NavLink}
+                  to="/user"
+                  underline="none"
+                  sx={{
+                    py: "6px",
+                    px: "12px",
+                    color: "black",
+                    "&.active": {
+                      color: "#C2410C",
+                    },
+                  }}
+                >
+                  <Typography variant="body2">Profile</Typography>
+                </Link>
               )}
-            </ul>
-          </div>
-        </div>
-      </nav>
-    </header>
+            </Box>
+
+            <Box>
+              {isLoggedIn ? (
+                <Button
+                  variant="contained"
+                  size="small"
+                  sx={{
+                    bgcolor: "#C2410C",
+                    "&:hover": { bgcolor: "#C2410C" },
+                  }}
+                  onClick={signOut}
+                >
+                  Sign Out
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    component={NavLink}
+                    to="/login"
+                    size="small"
+                    sx={{
+                      color: "black",
+                      "&.active": { color: "#C2410C" },
+                    }}
+                  >
+                    Sign In
+                  </Button>
+
+                  <Button
+                    component={RouterLink}
+                    to="/signup"
+                    size="small"
+                    variant="contained"
+                    sx={{
+                      bgcolor: "#C2410C",
+                      "&:hover": { bgcolor: "#C2410C" },
+                    }}
+                  >
+                    Sign Up
+                  </Button>
+                </>
+              )}
+            </Box>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 }

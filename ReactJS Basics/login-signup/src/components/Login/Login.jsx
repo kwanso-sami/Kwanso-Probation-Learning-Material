@@ -1,101 +1,142 @@
-import React, { useState, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, Typography, Avatar, Grid, Box, Container } from "@mui/material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import UserContext from "../../context/UserContext";
+import SnackbarContext from "../../context/SnackbarContext";
+import FormCheckbox from "../FormComponent/FormCheckbox";
+import FormInputText from "../FormComponent/FormInputText";
+import FormButton from "../FormComponent/FormButton";
 
-function LogIn() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [keepLoggedIn, setKeepLoggedIn] = useState(false);
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Invalid email format")
+    .required("Email is required"),
+  password: yup
+    .string()
+    .min(4, "Password must be at least 4 characters")
+    .required("Password is required"),
+});
+
+const SignIn = () => {
+  const { handleSubmit, control } = useForm({
+    resolver: yupResolver(schema),
+  });
 
   const { user, setIsLoggedIn } = useContext(UserContext);
+  const { showSnackbar } = useContext(SnackbarContext);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    console.log(email, password);
+  const onSubmit = ({
+    email: userEmail,
+    password: userPassword,
+    remember: keepLoggedIn,
+  }) => {
+    console.log(userEmail, userPassword, keepLoggedIn);
 
     if (!user) {
-      alert("Please SignUp first!");
-      navigate("/signup", { replace: true });
+      showSnackbar({ message: "Please SignUp first!", type: "warning" });
       return;
     }
 
-    if (email === user.email && password === user.password) {
+    if (userEmail === user.email && userPassword === user.password) {
       setIsLoggedIn(true);
+      showSnackbar({
+        message: "You have logged in successfully!",
+        type: "success",
+      });
       navigate("/user", { replace: true });
     } else {
-      alert("Invalid email or password!");
+      showSnackbar({ message: "Invalid Email or Password!", type: "error" });
+      return;
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-gray-100 to-white">
-      <div className="w-full max-w-sm px-6 py-10 bg-white rounded-lg shadow-md">
-        <h1 className="mb-8 text-2xl font-bold text-center">Welcome Back!</h1>
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 8,
+          marginBottom: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign in
+        </Typography>
+        <Box
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
+          sx={{ mt: 1 }}
+        >
+          <FormInputText
+            name="email"
+            control={control}
+            required={true}
+            label="Email Address"
+            type="email"
+            autoFocus={true}
+            autoComplete="email"
+          />
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label
-              htmlFor="email"
-              className="block mb-1 text-sm font-medium text-gray-800"
-            >
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              className="w-full px-4 py-2 text-gray-800 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-              placeholder="Enter your email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="password"
-              className="block mb-1 text-sm font-medium text-gray-800"
-            >
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              className="w-full px-4 py-2 text-gray-800 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <div className="flex items-center justify-between mb-4">
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                className="form-checkbox"
-                checked={keepLoggedIn}
-                onChange={(e) => setKeepLoggedIn(e.target.checked)}
-              />
-              <span className="ml-2 text-gray-600">Keep me signed in</span>
-            </label>
-            <Link
-              to="/reset-password"
-              className="text-sm font-medium text-blue-600 hover:underline"
-            >
-              Forgot Password?
-            </Link>
-          </div>
-          <button
+          <FormInputText
+            name="password"
+            required={true}
+            control={control}
+            label="Password"
+            type="password"
+            autoComplete="current-password"
+          />
+
+          <FormCheckbox name="remember" control={control} label="Remember Me" />
+
+          <FormButton
             type="submit"
-            className="w-full py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none"
-          >
-            Log in
-          </button>
-        </form>
-      </div>
-    </div>
-  );
-}
+            fullWidth={true}
+            text="SIGN IN"
+            style={{ mt: 3, mb: 2, fontWeight: "bold" }}
+          />
 
-export default LogIn;
+          <Grid container>
+            <Grid item xs>
+              <Link
+                component={RouterLink}
+                to="/reset-password"
+                color="primary"
+                underline="none"
+              >
+                <Typography variant="body2">Forgot password</Typography>
+              </Link>
+            </Grid>
+            <Grid item>
+              <Typography variant="body2" component="span">
+                Don't have an account?{" "}
+              </Typography>
+              <Link
+                component={RouterLink}
+                to="/signup"
+                variant="body2"
+                color="primary"
+                underline="none"
+              >
+                Sign Up
+              </Link>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+    </Container>
+  );
+};
+
+export default SignIn;

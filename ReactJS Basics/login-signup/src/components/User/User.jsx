@@ -1,15 +1,29 @@
 import React, { useContext } from "react";
 import UserContext from "../../context/UserContext";
+import { Box, Typography } from "@mui/material";
 
-function User() {
+const User = () => {
   const { user } = useContext(UserContext);
   return (
-    <div className="py-5 text-3xl text-center text-black bg-orange-500">
-      User Name: {user.name}
-      <br />
-      User Email: {user.email}
-    </div>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh",
+        backgroundColor: "orange",
+        color: "black",
+        textAlign: "center",
+        padding: "5rem",
+      }}
+    >
+      <Typography variant="h3" gutterBottom>
+        {user.firstName} {user.lastName}
+      </Typography>
+      <Typography variant="h5">{user.email}</Typography>
+    </Box>
   );
-}
+};
 
 export default User;
