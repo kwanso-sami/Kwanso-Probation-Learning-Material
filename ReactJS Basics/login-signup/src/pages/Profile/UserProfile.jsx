@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import UserContext from "../../context/UserContext";
+import UserContext from "../../context/User/UserContext";
 import { Box, Typography } from "@mui/material";
 
-const User = () => {
+const UserProfile = () => {
   const { user } = useContext(UserContext);
   return (
     <Box
@@ -26,4 +26,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default UserProfile;

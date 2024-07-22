@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import MySnackbar from "../utils/Feedback/MySnackbar";
+import MySnackbar from "../../components/Snackbar/MySnackbar";
 import SnackbarContext from "./SnackbarContext";
 
 const SnackbarProvider = ({ children }) => {
@@ -9,10 +9,10 @@ const SnackbarProvider = ({ children }) => {
     type: "info",
   });
 
-  const showSnackbar = ({message, type}) => {
+  const showSnackbar = ({ message, type }) => {
     setSnackbar({ open: true, message, type });
   };
-return (
+  return (
     <SnackbarContext.Provider value={{ showSnackbar }}>
       {children}
       <MySnackbar
@@ -20,11 +20,9 @@ return (
         message={snackbar.message}
         type={snackbar.type}
         onClose={() => setSnackbar({ ...snackbar, open: false })}
-
-
       />
     </SnackbarContext.Provider>
   );
 };
 
-export default SnackbarProvider
+export default SnackbarProvider;

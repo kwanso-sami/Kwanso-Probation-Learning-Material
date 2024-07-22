@@ -2,7 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
-import SnackbarContextProvider from "./context/SnackbarContextProvider";
+import SnackbarContextProvider from "./context/Snackbar/SnackbarContextProvider";
 
 function Layout() {
   return (

@@ -1,30 +1,19 @@
 import React, { useContext } from "react";
 import { Link, Typography, Avatar, Grid, Box, Container } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import UserContext from "../../context/UserContext";
-import SnackbarContext from "../../context/SnackbarContext";
-import FormCheckbox from "../FormComponent/FormCheckbox";
-import FormInputText from "../FormComponent/FormInputText";
-import FormButton from "../FormComponent/FormButton";
-
-const schema = yup.object().shape({
-  email: yup
-    .string()
-    .email("Invalid email format")
-    .required("Email is required"),
-  password: yup
-    .string()
-    .min(4, "Password must be at least 4 characters")
-    .required("Password is required"),
-});
+import UserContext from "../../context/User/UserContext";
+import SnackbarContext from "../../context/Snackbar/SnackbarContext";
+import FormCheckbox from "../../components/Form/FormCheckbox";
+import FormInputText from "../../components/Form/FormInputText";
+import FormButton from "../../components/Form/FormButton";
+import { loginSchema } from "../../Validations/UserValidation";
 
 const SignIn = () => {
   const { handleSubmit, control } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(loginSchema),
   });
 
   const { user, setIsLoggedIn } = useContext(UserContext);
@@ -60,8 +49,8 @@ const SignIn = () => {
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
-          marginTop: 8,
-          marginBottom: 8,
+          marginTop: 18,
+          marginBottom: 18,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -115,7 +104,7 @@ const SignIn = () => {
                 color="primary"
                 underline="none"
               >
-                <Typography variant="body2">Forgot password</Typography>
+                <Typography variant="body2">Forgot password?</Typography>
               </Link>
             </Grid>
             <Grid item>
