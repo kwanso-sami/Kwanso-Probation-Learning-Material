@@ -8,10 +8,9 @@ import {
   Button,
   Link,
   Box,
-  MenuItem,
   Container,
 } from "@mui/material";
-import UserContext from "../../context/UserContext";
+import UserContext from "../../context/User/UserContext";
 
 export default function Header() {
   const { isLoggedIn, setUser, setIsLoggedIn } = useContext(UserContext);
@@ -36,8 +35,6 @@ export default function Header() {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              ml: "-18px",
-              px: 0,
             }}
           >
             <IconButton component={RouterLink} to="/">
@@ -57,6 +54,7 @@ export default function Header() {
                   py: "6px",
                   px: "12px",
                   color: "black",
+
                   "&.active": {
                     color: "#C2410C",
                   },
@@ -102,7 +100,7 @@ export default function Header() {
                   <Button
                     component={NavLink}
                     to="/login"
-                    size="small"
+                    size="medium"
                     sx={{
                       color: "black",
                       "&.active": { color: "#C2410C" },
@@ -114,7 +112,7 @@ export default function Header() {
                   <Button
                     component={RouterLink}
                     to="/signup"
-                    size="small"
+                    size="medium"
                     variant="contained"
                     sx={{
                       bgcolor: "#C2410C",
