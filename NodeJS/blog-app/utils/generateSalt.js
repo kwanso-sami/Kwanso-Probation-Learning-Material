@@ -1,5 +1,4 @@
 const bcrypt = require("bcryptjs");
-const logger = require("./loggers/appLogger");
 module.exports = async () => {
   try{
   const saltRounds = 10;

@@ -1,10 +1,7 @@
 const AuthService = require("../services/authService");
 const catchAsync = require("../utils/catchAsync");
 const logger = require("../utils/loggers/appLogger");
-const {
-  APIError,
-  STATUS_CODES,
-} = require("../utils/appError").default.default;
+const { APIError, STATUS_CODES } = require("../utils/appError");
 const { signupSchema, loginSchema } = require("../validations/authValidator");
 
 const service = new AuthService();
@@ -19,10 +16,15 @@ exports.signup = catchAsync(async (req, res, next) => {
     );
     return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
   }
-  const { name, email, password } = req.body;
-  await service.SignUp({ name, email, password });
+  const user = req.body;
+  const { accessToken } = await service.SignUp(user);
   res.status(201).json({
     status: "success",
+    data: {
+      token: {
+        accessToken,
+      },
+    },
   });
 });
 
@@ -34,12 +36,18 @@ exports.login = catchAsync(async (req, res, next) => {
     );
     return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
   }
-  const { email, password } = req.body;
-  const { token } = await service.SignIn({ email, password });
+  const user = req.body;
+  const { accessToken, name, email } = await service.SignIn(user);
   res.status(200).json({
     status: "success",
     data: {
-      token,
+      token: {
+        accessToken,
+      },
+      user: {
+        name,
+        email,
+      },
     },
   });
 });

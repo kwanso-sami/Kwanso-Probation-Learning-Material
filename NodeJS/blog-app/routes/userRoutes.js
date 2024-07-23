@@ -8,6 +8,7 @@ router.post("/signup", authController.signup);
 
 router.post("/login", authController.login);
 
-router.route("/updateUser").patch(authenticateUser, userController.updateUser);
+router.route("/update-user").patch(authenticateUser, userController.updateUser);
+
 
 module.exports = router;
