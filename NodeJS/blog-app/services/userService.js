@@ -2,17 +2,16 @@ const UserRepository = require("../repositories/userRepository");
 const {
   APIError,
   STATUS_CODES,
-} = require("../utils/appError").default.default;
+} = require("../utils/appError");
 
 class UserService {
   constructor() {
     this.repository = new UserRepository();
   }
 
-  async FindUser(userId) {
+  async FindUser({userId}) {
     try {
-      const { _id } = userId;
-      const user = await this.repository.FindUserById(_id);
+      const user = await this.repository.FindUserById(userId);
       if (!user) {
         throw new APIError("User Not Found", STATUS_CODES.NOT_FOUND);
       }

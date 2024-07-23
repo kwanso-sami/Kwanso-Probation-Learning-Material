@@ -1,11 +1,11 @@
 const jwt = require("jsonwebtoken");
-const { APIError, STATUS_CODES } = require("./appError").default.default;
-const { JWT_SECRET } = require("../../config");
+const { APIError, STATUS_CODES } = require("./appError");
+const { JWT_SECRET } = require("../config");
 module.exports = (token) => {
   try {
     return jwt.verify(token, JWT_SECRET, (err, res) => {
       if (err) {
-        return "expired";
+        return null;
       }
       return res;
     });

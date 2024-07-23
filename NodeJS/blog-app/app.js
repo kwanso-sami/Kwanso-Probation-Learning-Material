@@ -7,7 +7,7 @@ const express = require("express");
 const {
   APIError,
   STATUS_CODES,
-} = require("./utils/appError").default.default;
+} = require("./utils/appError");
 const httpLogger = require("./utils/loggers/httpLogger");
 const { errorHandler } = require("./utils/errorHandler");
 require("express-validator");

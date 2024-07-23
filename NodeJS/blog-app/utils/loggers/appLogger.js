@@ -1,6 +1,6 @@
 const { createLogger, format, transports, config } = require("winston");
 const { combine, label, timestamp, json } = format;
-const { LOG_LEVEL } = require("../../../config");
+const { LOG_LEVEL } = require("../../config");
 
 const logFormat = format.printf(({ timestamp, label, level, message }) => {
   const formattedTimestamp = new Date(timestamp).toLocaleString("en-US", {

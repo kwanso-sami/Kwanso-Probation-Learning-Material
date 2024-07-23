@@ -1,4 +1,4 @@
-const { AppError, STATUS_CODES } = require("./appError").default.default;
+const { AppError, STATUS_CODES } = require("./appError");
 const logger = require("./loggers/appLogger");
 
 function errorHandler(err, req, res, next) {
