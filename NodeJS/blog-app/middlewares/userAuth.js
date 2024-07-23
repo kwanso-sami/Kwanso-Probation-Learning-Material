@@ -18,9 +18,10 @@ module.exports = catchAsync(async (req, res, next) => {
   const tokenPayload = verifyToken(token);
 
   if (tokenPayload) {
-    const rootUser = await new UserService().FindUser({
-      userId: tokenPayload.id,
-    });
+
+
+    const {id:userId}=tokenPayload;
+    const rootUser = await new UserService().FindUser(userId);
     req.user = rootUser;
   } else {
     return next(new APIError("Token Expired", STATUS_CODES.UNAUTHORIZED));

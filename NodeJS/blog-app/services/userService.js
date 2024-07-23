@@ -9,9 +9,11 @@ class UserService {
     this.repository = new UserRepository();
   }
 
-  async FindUser({userId}) {
+  async FindUser(userID) {
     try {
-      const user = await this.repository.FindUserById(userId);
+
+     
+      const user = await this.repository.FindUserById(userID);
       if (!user) {
         throw new APIError("User Not Found", STATUS_CODES.NOT_FOUND);
       }
