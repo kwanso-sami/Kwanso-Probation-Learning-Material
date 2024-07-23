@@ -37,7 +37,7 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
   }
   const user = req.body;
-  const { accessToken, name, email } = await service.SignIn(user);
+  const { accessToken, name, email,id } = await service.SignIn(user);
   res.status(200).json({
     status: "success",
     data: {
@@ -45,6 +45,7 @@ exports.login = catchAsync(async (req, res, next) => {
         accessToken,
       },
       user: {
+        id,
         name,
         email,
       },

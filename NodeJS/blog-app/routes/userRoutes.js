@@ -10,5 +10,6 @@ router.post("/login", authController.login);
 
 router.route("/update-user").patch(authenticateUser, userController.updateUser);
 
+router.route("/:id").get(authenticateUser, userController.getUser);
 
 module.exports = router;

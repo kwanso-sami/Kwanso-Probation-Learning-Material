@@ -55,7 +55,7 @@ class AuthService {
         throw new APIError("Invalid Password", STATUS_CODES.NOT_FOUND);
       }
       const token = auth.signToken({ id: user.id });
-      return { accessToken: token, name: user.name,email: user.email};
+      return { accessToken: token, name: user.name,email: user.email,id: user.id};
     } catch (err) {
       throw new APIError(`AUTH API ERROR : ${err.message}`, err.statusCode);
     }
