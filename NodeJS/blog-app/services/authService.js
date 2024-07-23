@@ -1,4 +1,5 @@
 const UserRepository = require("../repositories/userRepository");
+const SaltRepository = require("../repositories/saltRepository");
 const { APIError, STATUS_CODES } = require("../utils/appError");
 const auth = require("../utils/signToken");
 const genSalt = require("../utils/generateSalt");
@@ -6,25 +7,26 @@ const bcrypt = require("bcryptjs");
 
 class AuthService {
   constructor() {
-    this.repository = new UserRepository();
+    this.UserRepository = new UserRepository();
+    this.SaltRepository = new SaltRepository();
   }
 
   async SignUp({ name, email, password }) {
     try {
-      const oldUser = await this.repository.FindUserByEmail(email);
+      const oldUser = await this.UserRepository.FindUserByEmail(email);
       if (oldUser) {
         throw new APIError("User Already Exists.", STATUS_CODES.NOT_FOUND);
       }
 
       const salt = await genSalt();
       const encryptedPassword = await bcrypt.hash(password, salt);
-      const user = await this.repository.CreateUser({
+      const user = await this.UserRepository.CreateUser({
         name,
         email,
         password: encryptedPassword,
       });
 
-      await this.repository.CreateSalt({
+      await this.SaltRepository.CreateSalt({
         userId: user.id,
         salt: salt,
       });
@@ -38,13 +40,13 @@ class AuthService {
 
   async SignIn({ email, password }) {
     try {
-      const user = await this.repository.FindUserByEmail(email);
+      const user = await this.UserRepository.FindUserByEmail(email);
 
       if (!user) {
         throw new APIError("User Not Found", STATUS_CODES.NOT_FOUND);
       }
 
-      const salt = await this.repository.FindSaltByUserId(user.id);
+      const salt = await this.SaltRepository.FindSaltByUserId(user.id);
       if (!salt) {
         throw new APIError("Salt Not Found", STATUS_CODES.NOT_FOUND);
       }
@@ -55,7 +57,12 @@ class AuthService {
         throw new APIError("Invalid Password", STATUS_CODES.NOT_FOUND);
       }
       const token = auth.signToken({ id: user.id });
-      return { accessToken: token, name: user.name,email: user.email,id: user.id};
+      return {
+        accessToken: token,
+        name: user.name,
+        email: user.email,
+        id: user.id,
+      };
     } catch (err) {
       throw new APIError(`AUTH API ERROR : ${err.message}`, err.statusCode);
     }
