@@ -21,8 +21,7 @@ module.exports = catchAsync(async (req, res, next) => {
     return next(
       new APIError("Access Token Expired", STATUS_CODES.UNAUTHORIZED)
     );
-  }
-
+  } 
   const { id: userId } = tokenPayload;
   const rootUser = await new UserService().FindUser(userId);
 
@@ -32,5 +31,6 @@ module.exports = catchAsync(async (req, res, next) => {
     );
   }
   req.user = rootUser;
+
   next();
 });

@@ -141,28 +141,31 @@ class AuthService {
     try {
       const tokenPayload = await verifyToken(currentRefreshToken);
 
-      if (!tokenPayload) {
+      if (tokenPayload) {
+        const { id: userId } = tokenPayload;
+
+        const user = await this.UserRepository.FindUserById(userId);
+
+        if (!user) {
+          throw new APIError(
+            "Invalid Refresh Token",
+            STATUS_CODES.UNAUTHORIZED
+          );
+        }
+
+        const newAccessToken = await signAccessToken({ id: user.id });
+        const newRefreshToken = await signRefreshToken({ id: user.id });
+
+        return {
+          newAccessToken,
+          newRefreshToken,
+        };
+      } else {
         throw new APIError(
           "Current Refresh Token Expired",
           STATUS_CODES.UNAUTHORIZED
         );
       }
-
-      const { id: userId } = tokenPayload;
-
-      const user = await this.UserRepository.FindUserById(userId);
-
-      if (!user) {
-        throw new APIError("Invalid Refresh Token", STATUS_CODES.UNAUTHORIZED);
-      }
-
-      const newAccessToken = await signAccessToken({ id: user.id });
-      const newRefreshToken = await signRefreshToken({ id: user.id });
-
-      return {
-        newAccessToken,
-        newRefreshToken,
-      };
     } catch (err) {
       throw new APIError(`USERS API ERROR : ${err.message}`, err.statusCode);
     }

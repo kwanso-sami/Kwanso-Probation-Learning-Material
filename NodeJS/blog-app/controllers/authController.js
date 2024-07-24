@@ -51,7 +51,7 @@ exports.login = catchAsync(async (req, res, next) => {
   res
     .status(200)
     .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options);
+    .cookie("refreshToken", refreshToken, options).
   json({
     status: "success",
     data: {
@@ -142,6 +142,7 @@ exports.refreshAccessToken = catchAsync(async (req, res, next) => {
     );
     return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
   }
+
 
   const { newAccessToken, newRefreshToken } = await service.GenerateNewToken({
     currentRefreshToken: refreshToken,
