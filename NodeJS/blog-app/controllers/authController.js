@@ -8,6 +8,7 @@ const {
   forgotPasswordSchema,
   resetPasswordSchema,
   changePasswordSchema,
+  refreshTokenSchema,
 } = require("../validations/authValidator");
 
 const service = new AuthService();
@@ -23,15 +24,9 @@ exports.signup = catchAsync(async (req, res, next) => {
     return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
   }
   const user = req.body;
-  const { accessToken, refreshToken } = await service.SignUp(user);
+  await service.SignUp(user);
   res.status(201).json({
     status: "success",
-    data: {
-      tokens: {
-        accessToken,
-        refreshToken,
-      },
-    },
   });
 });
 
@@ -47,7 +42,17 @@ exports.login = catchAsync(async (req, res, next) => {
   const { accessToken, refreshToken, name, email, id } = await service.SignIn(
     user
   );
-  res.status(200).json({
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options).
+  json({
     status: "success",
     data: {
       tokens: {
@@ -121,4 +126,54 @@ exports.changeCurrentPassword = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
   });
+});
+
+exports.refreshAccessToken = catchAsync(async (req, res, next) => {
+  const { refreshToken } = req.cookies || req.body;
+  const { error } = refreshTokenSchema.validate(
+    { refreshToken },
+    {
+      abortEarly: false,
+    }
+  );
+  if (error) {
+    logger.error(
+      `Unable to validate arguments in [ENDPOINT] 'REFRESH_ACCESS_TOKEN'. Error details: ${error.message}`
+    );
+    return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
+  }
+
+
+  const { newAccessToken, newRefreshToken } = await service.GenerateNewToken({
+    currentRefreshToken: refreshToken,
+  });
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+  res
+    .status(200)
+    .cookie("accessToken", newAccessToken, options)
+    .cookie("refreshToken", newRefreshToken, options)
+    .json({
+      status: "success",
+      data: {
+        tokens: {
+          accessToken: newAccessToken,
+          refreshToken: newRefreshToken,
+        },
+      },
+    });
+});
+
+exports.logoutUser = catchAsync(async (req, res, next) => {
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+  return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json({ status: "success" });
 });

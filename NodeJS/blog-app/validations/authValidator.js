@@ -37,6 +37,9 @@ const changePasswordSchema = Joi.object().keys({
   newPassword: Joi.string().required(),
 });
 
+const refreshTokenSchema = Joi.object().keys({
+  refreshToken: Joi.string().required(),
+});
 
 module.exports = {
   signupSchema,
@@ -44,5 +47,6 @@ module.exports = {
   updateUserSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
-  changePasswordSchema
+  changePasswordSchema,
+  refreshTokenSchema
 };
