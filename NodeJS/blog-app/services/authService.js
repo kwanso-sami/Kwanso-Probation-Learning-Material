@@ -7,6 +7,7 @@ const {
   signAccessToken,
   signRefreshToken,
   signPasswordResetToken,
+  verifyToken,
 } = require("../utils/jwtHelper");
 
 const genSalt = require("../utils/generateSalt");
@@ -37,10 +38,6 @@ class AuthService {
         userId: user.id,
         salt: salt,
       });
-
-      const accessToken = await signAccessToken({ id: user.id });
-      const refreshToken = await signRefreshToken({ id: user.id });
-      return { accessToken, refreshToken };
     } catch (err) {
       throw new APIError(`AUTH API ERROR : ${err.message}`, err.statusCode);
     }
@@ -135,6 +132,37 @@ class AuthService {
         throw new APIError("Invalid Old Password", STATUS_CODES.BAD_REQUEST);
       }
       await this.ResetPassword(userId, newPassword);
+    } catch (err) {
+      throw new APIError(`USERS API ERROR : ${err.message}`, err.statusCode);
+    }
+  }
+
+  async GenerateNewToken({ currentRefreshToken }) {
+    try {
+      const tokenPayload = await verifyToken(currentRefreshToken);
+
+      if (!tokenPayload) {
+        throw new APIError(
+          "Current Refresh Token Expired",
+          STATUS_CODES.UNAUTHORIZED
+        );
+      }
+
+      const { id: userId } = tokenPayload;
+
+      const user = await this.UserRepository.FindUserById(userId);
+
+      if (!user) {
+        throw new APIError("Invalid Refresh Token", STATUS_CODES.UNAUTHORIZED);
+      }
+
+      const newAccessToken = await signAccessToken({ id: user.id });
+      const newRefreshToken = await signRefreshToken({ id: user.id });
+
+      return {
+        newAccessToken,
+        newRefreshToken,
+      };
     } catch (err) {
       throw new APIError(`USERS API ERROR : ${err.message}`, err.statusCode);
     }

@@ -4,21 +4,26 @@ const xss = require("xss-clean");
 const cors = require("cors");
 const morgan = require("morgan");
 const express = require("express");
-const {
-  APIError,
-  STATUS_CODES,
-} = require("./utils/appError");
+const cookieParser = require("cookie-parser");
+const { APIError, STATUS_CODES } = require("./utils/appError");
 const httpLogger = require("./utils/loggers/httpLogger");
 const { errorHandler } = require("./utils/errorHandler");
 require("express-validator");
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+    allowedHeaders: ["Accept", "Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 app.use(express.urlencoded({ extended: false }));
-app.use(express.json({ limit: "5mb" }));
-app.use(express.urlencoded({ extended: true, limit: "5mb" }));
+app.use(express.json({ limit: "16kb" }));
+app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(helmet());
 app.use(xss());
+app.use(cookieParser());
 
 if (process.env.NODE_ENV !== "prod") {
   app.use(morgan("dev"));
