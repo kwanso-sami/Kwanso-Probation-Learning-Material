@@ -2,7 +2,7 @@ const AuthService = require("../services/authService");
 const catchAsync = require("../utils/catchAsync");
 const logger = require("../utils/loggers/appLogger");
 const { APIError, STATUS_CODES } = require("../utils/appError");
-const { signupSchema, loginSchema } = require("../validations/authValidator");
+const { signupSchema, loginSchema,forgotPasswordSchema,resetPasswordSchema } = require("../validations/authValidator");
 
 const service = new AuthService();
 
@@ -54,3 +54,30 @@ exports.login = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+
+
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  const { error } = forgotPasswordSchema.validate(req.body, {
+    abortEarly: false,
+  });
+  if (error) {
+    logger.error(
+      `Unable to validate arguments in [ENDPOINT] 'FORGOT_PASSWORD'. Error details: ${
+        error.message
+      }`
+    );
+    return next(
+      new APIError(
+        error.message,
+        STATUS_CODES.BAD_REQUEST
+      )
+    );
+  }
+  const { email } = req.body;
+  await service.ForgotPassword(email);
+  res.status(200).json({
+    status: "success",
+  });
+});
+

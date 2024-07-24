@@ -16,7 +16,6 @@ class UserRepository {
       });
       return user;
     } catch (err) {
-      console.error("Error creating user:", err);
       throw new APIError("Unable to Create User", STATUS_CODES.INTERNAL_ERROR);
     }
   }

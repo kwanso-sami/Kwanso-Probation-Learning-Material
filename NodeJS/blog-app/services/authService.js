@@ -1,7 +1,8 @@
 const UserRepository = require("../repositories/userRepository");
 const SaltRepository = require("../repositories/saltRepository");
+const { CLIENT_URL } = require("../config");
 const { APIError, STATUS_CODES } = require("../utils/appError");
-
+const sendPasswordResetEmail = require("../utils/sendPasswordResetEmail");
 const {
   signAccessToken,
   signRefreshToken,
@@ -19,8 +20,6 @@ class AuthService {
 
   async SignUp({ name, email, password }) {
     try {
-
-     
       const oldUser = await this.UserRepository.FindUserByEmail(email);
       if (oldUser) {
         throw new APIError("User Already Exists.", STATUS_CODES.NOT_FOUND);
@@ -28,8 +27,6 @@ class AuthService {
       const salt = await genSalt();
       const encryptedPassword = await bcrypt.hash(password, salt);
 
-
-     
       const user = await this.UserRepository.CreateUser({
         name,
         email,
@@ -77,6 +74,30 @@ class AuthService {
         email: user.email,
         id: user.id,
       };
+    } catch (err) {
+      throw new APIError(`AUTH API ERROR : ${err.message}`, err.statusCode);
+    }
+  }
+
+  async ForgotPassword(email) {
+    try {
+      const oldUser = await this.UserRepository.FindUserByEmail(email);
+      if (!oldUser) {
+        throw new APIError("User Not Exists.", STATUS_CODES.NOT_FOUND);
+      }
+      const { id: userId, email: userEmail } = oldUser;
+      const resetToken = await signPasswordResetToken({ id: userId });
+
+      const link = `${CLIENT_URL}/password-reset?token=${resetToken}&id=${userId}`;
+
+      const emailSent = await sendPasswordResetEmail(link, userEmail);
+      if (!emailSent) {
+        throw new APIError(
+          "Unable to Send Password Reset Email",
+          STATUS_CODES.INTERNAL_SERVER_ERROR
+        );
+      }
+      return link;
     } catch (err) {
       throw new APIError(`AUTH API ERROR : ${err.message}`, err.statusCode);
     }
