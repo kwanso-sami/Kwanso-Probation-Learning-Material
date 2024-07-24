@@ -8,6 +8,7 @@ class UserRepository {
 
   async CreateUser({ name, email, password }) {
     try {
+    
       const user = await this.Model.create({
         name,
         email,
@@ -15,6 +16,7 @@ class UserRepository {
       });
       return user;
     } catch (err) {
+      console.error("Error creating user:", err);
       throw new APIError("Unable to Create User", STATUS_CODES.INTERNAL_ERROR);
     }
   }

@@ -10,7 +10,11 @@ if (process.env.NODE_ENV !== "prod") {
 module.exports = {
   PORT: process.env.PORT,
   JWT_SECRET: process.env.JWT_SECRET,
-  JWT_EXPIRE_TIME: process.env.JWT_EXPIRE_TIME,
+
+  JWT_ACCESS_TOKEN_EXPIRE_TIME: process.env.JWT_ACCESS_TOKEN_EXPIRE_TIME,
+  JWT_REFRESH_TOKEN_EXPIRE_TIME: process.env.JWT_REFRESH_TOKEN_EXPIRE_TIME,
+  JWT_PASSWORD_RESET_TOKEN_EXPIRE_TIME:
+    process.env.JWT_PASSWORD_RESET_TOKEN_EXPIRE_TIME,
   LOG_LEVEL: process.env.LOG_LEVEL,
   dbConfig: {
     username: process.env.DB_USERNAME,

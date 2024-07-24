@@ -1,6 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
-
+const { v4: uuidv4 } = require('uuid');
 module.exports = (sequelize, DataTypes) => {
   class Post extends Model {
     static associate(models) {
@@ -10,6 +10,12 @@ module.exports = (sequelize, DataTypes) => {
 
   Post.init(
     {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: uuidv4(),
+        primaryKey: true,
+        allowNull: false,
+      },
       userID: {
         type: DataTypes.UUID,
         references: {
@@ -19,12 +25,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
         allowNull: false,
       },
-      id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUID,
-        primaryKey: true,
-        allowNull: false,
-      },
+
       body: {
         type: DataTypes.TEXT,
         allowNull: false,

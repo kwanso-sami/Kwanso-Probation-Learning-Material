@@ -17,12 +17,13 @@ exports.signup = catchAsync(async (req, res, next) => {
     return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
   }
   const user = req.body;
-  const { accessToken } = await service.SignUp(user);
+  const { accessToken,refreshToken } = await service.SignUp(user);
   res.status(201).json({
     status: "success",
     data: {
-      token: {
+      tokens: {
         accessToken,
+        refreshToken
       },
     },
   });
@@ -37,12 +38,13 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
   }
   const user = req.body;
-  const { accessToken, name, email,id } = await service.SignIn(user);
+  const { accessToken,refreshToken, name, email,id } = await service.SignIn(user);
   res.status(200).json({
     status: "success",
     data: {
-      token: {
+      tokens: {
         accessToken,
+        refreshToken
       },
       user: {
         id,

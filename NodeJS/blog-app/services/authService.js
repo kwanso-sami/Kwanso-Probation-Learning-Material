@@ -1,7 +1,13 @@
 const UserRepository = require("../repositories/userRepository");
 const SaltRepository = require("../repositories/saltRepository");
 const { APIError, STATUS_CODES } = require("../utils/appError");
-const auth = require("../utils/signToken");
+
+const {
+  signAccessToken,
+  signRefreshToken,
+  signPasswordResetToken,
+} = require("../utils/jwtHelper");
+
 const genSalt = require("../utils/generateSalt");
 const bcrypt = require("bcryptjs");
 
@@ -13,13 +19,17 @@ class AuthService {
 
   async SignUp({ name, email, password }) {
     try {
+
+     
       const oldUser = await this.UserRepository.FindUserByEmail(email);
       if (oldUser) {
         throw new APIError("User Already Exists.", STATUS_CODES.NOT_FOUND);
       }
-
       const salt = await genSalt();
       const encryptedPassword = await bcrypt.hash(password, salt);
+
+
+     
       const user = await this.UserRepository.CreateUser({
         name,
         email,
@@ -31,8 +41,9 @@ class AuthService {
         salt: salt,
       });
 
-      const token = auth.signToken({ id: user.id });
-      return { accessToken: token };
+      const accessToken = await signAccessToken({ id: user.id });
+      const refreshToken = await signRefreshToken({ id: user.id });
+      return { accessToken, refreshToken };
     } catch (err) {
       throw new APIError(`AUTH API ERROR : ${err.message}`, err.statusCode);
     }
@@ -56,9 +67,12 @@ class AuthService {
       if (enteredEncryptedPassword !== storedEncryptedPassword) {
         throw new APIError("Invalid Password", STATUS_CODES.NOT_FOUND);
       }
-      const token = auth.signToken({ id: user.id });
+
+      const accessToken = await signAccessToken({ id: user.id });
+      const refreshToken = await signRefreshToken({ id: user.id });
       return {
-        accessToken: token,
+        accessToken,
+        refreshToken,
         name: user.name,
         email: user.email,
         id: user.id,
