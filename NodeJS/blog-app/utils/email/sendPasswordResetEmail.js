@@ -1,13 +1,13 @@
 const nodemailer = require("nodemailer");
-const logger = require("./loggers/appLogger");
-const { APIError, STATUS_CODES } = require("./appError");
+const logger = require("../loggers/appLogger");
+const { APIError, STATUS_CODES } = require("../appError");
 const {
   EMAIL_USER,
   EMAIL_PASSWORD,
   EMAIL_HOST,
   EMAIL_SERVICE,
   EMAIL_PORT,
-} = require("../config");
+} = require("../../config");
 
 module.exports = async function sendEmail(link, recipientEmail) {
     try {
@@ -28,7 +28,7 @@ module.exports = async function sendEmail(link, recipientEmail) {
     html: `
       <p>Hello,</p>
       <p>We received a request to reset your password. Click the button below to reset it.</p>
-      <a href="http://${link}">
+      <a href="${link}">
         <button style="padding: 10px 20px; background-color: #007BFF; color: #ffffff; border: none; border-radius: 5px; text-decoration: none; cursor: pointer; font-weight: bold; font-size: 16px; transition: background-color 0.3s;">
           Reset Password
         </button>
@@ -45,7 +45,7 @@ module.exports = async function sendEmail(link, recipientEmail) {
            return false;
         } 
         else{
-            logger.info(`Email sent successfully to ${recipientEmail}`);
+            logger.info(`Password Reset Email sent successfully to ${recipientEmail}`);
         }
       });
      return true;

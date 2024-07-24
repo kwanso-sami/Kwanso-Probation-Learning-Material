@@ -23,6 +23,7 @@ class UserService {
     }
   }
 
+
   async UpdateUser(user) {
     try {
       const { name, userId } = user;

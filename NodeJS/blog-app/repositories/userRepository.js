@@ -8,7 +8,6 @@ class UserRepository {
 
   async CreateUser({ name, email, password }) {
     try {
-    
       const user = await this.Model.create({
         name,
         email,
@@ -44,11 +43,11 @@ class UserRepository {
 
   async UpdateUser(toUpdate, userId) {
     try {
-      const [updated] = await this.Model.update(toUpdate, {
+      const [updatedUser] = await this.Model.update(toUpdate, {
         where: { id: userId },
         returning: true,
       });
-      return updated[0];
+      return updatedUser[0];
     } catch (err) {
       throw new APIError("Unable to Update User", STATUS_CODES.INTERNAL_ERROR);
     }

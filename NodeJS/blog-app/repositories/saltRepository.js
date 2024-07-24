@@ -35,6 +35,26 @@ class SaltRepository {
     }
   }
 
+  async UpdateSalt(userID, salt) {
+    try {
+      const [updatedSalt] = await this.Model.update(
+        {
+          salt,
+        },
+        {
+          where: { userID },
+          returning: true,
+        }
+      );
+      return updatedSalt[0];
+    } catch (err) {
+      console.log(err);
+      throw new APIError(
+        "Unable to Update Password Salt",
+        STATUS_CODES.INTERNAL_ERROR
+      );
+    }
+  }
 }
 
 module.exports = SaltRepository;

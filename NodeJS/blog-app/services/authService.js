@@ -2,7 +2,7 @@ const UserRepository = require("../repositories/userRepository");
 const SaltRepository = require("../repositories/saltRepository");
 const { CLIENT_URL } = require("../config");
 const { APIError, STATUS_CODES } = require("../utils/appError");
-const sendPasswordResetEmail = require("../utils/sendPasswordResetEmail");
+const sendPasswordResetEmail = require("../utils/email/sendPasswordResetEmail");
 const {
   signAccessToken,
   signRefreshToken,
@@ -54,14 +54,16 @@ class AuthService {
         throw new APIError("User Not Found", STATUS_CODES.NOT_FOUND);
       }
 
-      const salt = await this.SaltRepository.FindSaltByUserId(user.id);
+      const { salt } = await this.SaltRepository.FindSaltByUserId(user.id);
       if (!salt) {
         throw new APIError("Salt Not Found", STATUS_CODES.NOT_FOUND);
       }
 
-      const enteredEncryptedPassword = await bcrypt.hash(password, salt.salt);
-      const storedEncryptedPassword = user.password;
-      if (enteredEncryptedPassword !== storedEncryptedPassword) {
+      const inputPasswordHash = await bcrypt.hash(password, salt);
+
+      const { password: currentPasswordHash } = user;
+
+      if (inputPasswordHash !== currentPasswordHash) {
         throw new APIError("Invalid Password", STATUS_CODES.NOT_FOUND);
       }
 
@@ -88,7 +90,7 @@ class AuthService {
       const { id: userId, email: userEmail } = oldUser;
       const resetToken = await signPasswordResetToken({ id: userId });
 
-      const link = `${CLIENT_URL}/password-reset?token=${resetToken}&id=${userId}`;
+      const link = `${CLIENT_URL}/password-reset?token=${resetToken}`;
 
       const emailSent = await sendPasswordResetEmail(link, userEmail);
       if (!emailSent) {
@@ -100,6 +102,41 @@ class AuthService {
       return link;
     } catch (err) {
       throw new APIError(`AUTH API ERROR : ${err.message}`, err.statusCode);
+    }
+  }
+
+  async ResetPassword(userId, newPassword) {
+    try {
+      const salt = await genSalt();
+      const encryptedPassword = await bcrypt.hash(newPassword, salt);
+
+      await this.UserRepository.UpdateUser(
+        { password: encryptedPassword },
+        userId
+      );
+
+      await this.SaltRepository.UpdateSalt(userId, salt);
+    } catch (err) {
+      throw new APIError(`AUTH API ERROR : ${err.message}`, err.statusCode);
+    }
+  }
+
+  async ChangeCurrentPassword(user, oldPassword, newPassword) {
+    try {
+      const { id: userId, password: currentPasswordHash } = user;
+
+      const { salt } = await this.SaltRepository.FindSaltByUserId(userId);
+      if (!salt) {
+        throw new APIError("Salt Not Found", STATUS_CODES.NOT_FOUND);
+      }
+
+      const oldPasswordHash = await bcrypt.hash(oldPassword, salt);
+      if (oldPasswordHash !== currentPasswordHash) {
+        throw new APIError("Invalid Old Password", STATUS_CODES.BAD_REQUEST);
+      }
+      await this.ResetPassword(userId, newPassword);
+    } catch (err) {
+      throw new APIError(`USERS API ERROR : ${err.message}`, err.statusCode);
     }
   }
 }
