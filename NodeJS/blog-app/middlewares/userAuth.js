@@ -1,6 +1,8 @@
 const catchAsync = require("../utils/catchAsync");
 const { APIError, STATUS_CODES } = require("../utils/appError");
-const verifyToken = require("../utils/verifyToken");
+const {
+  verifyToken,
+} = require("../utils/jwtHelper");
 const UserService = require("../services/userService");
 
 module.exports = catchAsync(async (req, res, next) => {
@@ -15,7 +17,7 @@ module.exports = catchAsync(async (req, res, next) => {
     return next(new APIError("Token Not Found", STATUS_CODES.UNAUTHORIZED));
   }
 
-  const tokenPayload = verifyToken(token);
+  const tokenPayload = await verifyToken(token);
 
   if (tokenPayload) {
     const { id: userId } = tokenPayload;
