@@ -8,6 +8,9 @@ const signupSchema = Joi.object().keys({
   password: Joi.string()
     .min(4)
     .required(),
+  OTP: Joi.number()
+    .integer()
+    .required(),
 });
 
 const loginSchema = Joi.object().keys({
@@ -31,7 +34,6 @@ const resetPasswordSchema = Joi.object().keys({
     .required(),
 });
 
-
 const changePasswordSchema = Joi.object().keys({
   oldPassword: Joi.string().required(),
   newPassword: Joi.string().required(),
@@ -41,6 +43,12 @@ const refreshTokenSchema = Joi.object().keys({
   refreshToken: Joi.string().required(),
 });
 
+const otpSchema = Joi.object().keys({
+  email: Joi.string()
+    .email()
+    .required(),
+});
+
 module.exports = {
   signupSchema,
   loginSchema,
@@ -48,5 +56,6 @@ module.exports = {
   forgotPasswordSchema,
   resetPasswordSchema,
   changePasswordSchema,
-  refreshTokenSchema
+  refreshTokenSchema,
+  otpSchema,
 };

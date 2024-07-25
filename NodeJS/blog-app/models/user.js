@@ -1,13 +1,11 @@
 "use strict";
 const { Model } = require("sequelize");
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require("uuid");
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-
     static associate(models) {
-      User.hasOne(models.Salt, { foreignKey: 'userID' });
-      User.hasMany(models.Post, { foreignKey: 'userId' });
+      User.hasMany(models.Post, { foreignKey: "userId" });
     }
   }
   User.init(
@@ -29,6 +27,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      salt: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
     {
       sequelize,
@@ -39,7 +41,3 @@ module.exports = (sequelize, DataTypes) => {
   );
   return User;
 };
-
-
-
-
