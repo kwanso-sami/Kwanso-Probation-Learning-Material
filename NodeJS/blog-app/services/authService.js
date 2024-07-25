@@ -1,5 +1,5 @@
 const UserRepository = require("../repositories/userRepository");
-const SaltRepository = require("../repositories/saltRepository");
+const OtpRepository = require("../repositories/otpRepository");
 const { CLIENT_URL } = require("../config");
 const { APIError, STATUS_CODES } = require("../utils/appError");
 const sendPasswordResetEmail = require("../utils/email/sendPasswordResetEmail");
@@ -10,40 +10,79 @@ const {
   verifyToken,
 } = require("../utils/jwtHelper");
 
-const genSalt = require("../utils/generateSalt");
-const bcrypt = require("bcryptjs");
+const {
+  generateEncryptedPassword,
+  verifyHashedPassword,
+} = require("../utils/bycryptHelper");
+
+const { generateOTP, verifyOTP } = require("../utils/otpHelper");
 
 class AuthService {
   constructor() {
     this.UserRepository = new UserRepository();
-    this.SaltRepository = new SaltRepository();
+    this.OtpRepository = new OtpRepository();
   }
 
-  async SignUp({ name, email, password }) {
+  async sendOTP({ email }) {
     try {
       const oldUser = await this.UserRepository.FindUserByEmail(email);
       if (oldUser) {
-        throw new APIError("User Already Exists.", STATUS_CODES.NOT_FOUND);
+        throw new APIError("User Already Exists.", STATUS_CODES.CONFLICT);
       }
-      const salt = await genSalt();
-      const encryptedPassword = await bcrypt.hash(password, salt);
+      let OTP = await generateOTP();
+      let result = await this.OtpRepository.FindOTP(OTP);
 
-      const user = await this.UserRepository.CreateUser({
+      while (result) {
+        OTP = await generateOTP();
+        result = await this.OtpRepository.FindOTP(OTP);
+      }
+      await this.OtpRepository.CreateOTP(email, OTP);
+      return OTP;
+    } catch (err) {
+      throw new APIError(`AUTH API ERROR : ${err.message}`);
+    }
+  }
+
+  async SignUp({ name, email, password, OTP: inputOTP }) {
+    try {
+      const oldUser = await this.UserRepository.FindUserByEmail(email);
+      if (oldUser) {
+        throw new APIError("User Already Exists.", STATUS_CODES.CONFLICT);
+      }
+
+      const otp = await this.OtpRepository.GetOTPByEmail(email);
+
+      if (!otp) {
+        throw new APIError("OTP has been expired", STATUS_CODES.NOT_FOUND);
+      }
+
+      const { OTP: actualOTP } = otp;
+
+      const isOTPVerified = await verifyOTP(actualOTP, inputOTP);
+
+      if (!isOTPVerified) {
+        throw new APIError(
+          "OTP Verification Failed!",
+          STATUS_CODES.BAD_REQUEST
+        );
+      }
+
+      const { encryptedPassword, salt } = await generateEncryptedPassword(
+        password
+      );
+
+      await this.UserRepository.CreateUser({
         name,
         email,
         password: encryptedPassword,
-      });
-
-      await this.SaltRepository.CreateSalt({
-        userId: user.id,
-        salt: salt,
+        salt,
       });
     } catch (err) {
       throw new APIError(`AUTH API ERROR : ${err.message}`, err.statusCode);
     }
   }
 
-  async SignIn({ email, password }) {
+  async SignIn({ email, password: inputPassword }) {
     try {
       const user = await this.UserRepository.FindUserByEmail(email);
 
@@ -51,16 +90,15 @@ class AuthService {
         throw new APIError("User Not Found", STATUS_CODES.NOT_FOUND);
       }
 
-      const { salt } = await this.SaltRepository.FindSaltByUserId(user.id);
-      if (!salt) {
-        throw new APIError("Salt Not Found", STATUS_CODES.NOT_FOUND);
-      }
+      const { password: currentPasswordHash, salt: currentPasswordSalt } = user;
 
-      const inputPasswordHash = await bcrypt.hash(password, salt);
+      const isPasswordVerified = await verifyHashedPassword(
+        inputPassword,
+        currentPasswordHash,
+        currentPasswordSalt
+      );
 
-      const { password: currentPasswordHash } = user;
-
-      if (inputPasswordHash !== currentPasswordHash) {
+      if (!isPasswordVerified) {
         throw new APIError("Invalid Password", STATUS_CODES.NOT_FOUND);
       }
 
@@ -85,6 +123,7 @@ class AuthService {
         throw new APIError("User Not Exists.", STATUS_CODES.NOT_FOUND);
       }
       const { id: userId, email: userEmail } = oldUser;
+
       const resetToken = await signPasswordResetToken({ id: userId });
 
       const link = `${CLIENT_URL}/password-reset?token=${resetToken}`;
@@ -104,15 +143,14 @@ class AuthService {
 
   async ResetPassword(userId, newPassword) {
     try {
-      const salt = await genSalt();
-      const encryptedPassword = await bcrypt.hash(newPassword, salt);
-
-      await this.UserRepository.UpdateUser(
-        { password: encryptedPassword },
-        userId
+      const { encryptedPassword, salt } = await generateEncryptedPassword(
+        newPassword
       );
 
-      await this.SaltRepository.UpdateSalt(userId, salt);
+      await this.UserRepository.UpdateUser(
+        { password: encryptedPassword, salt },
+        userId
+      );
     } catch (err) {
       throw new APIError(`AUTH API ERROR : ${err.message}`, err.statusCode);
     }
@@ -120,16 +158,20 @@ class AuthService {
 
   async ChangeCurrentPassword(user, oldPassword, newPassword) {
     try {
-      const { id: userId, password: currentPasswordHash } = user;
+      const {
+        id: userId,
+        password: currentPasswordHash,
+        salt: currentPasswordSalt,
+      } = user;
 
-      const { salt } = await this.SaltRepository.FindSaltByUserId(userId);
-      if (!salt) {
-        throw new APIError("Salt Not Found", STATUS_CODES.NOT_FOUND);
-      }
+      const isOldPasswordVerified = await verifyHashedPassword(
+        oldPassword,
+        currentPasswordHash,
+        currentPasswordSalt
+      );
 
-      const oldPasswordHash = await bcrypt.hash(oldPassword, salt);
-      if (oldPasswordHash !== currentPasswordHash) {
-        throw new APIError("Invalid Old Password", STATUS_CODES.BAD_REQUEST);
+      if (!isOldPasswordVerified) {
+        throw new APIError("Invalid Old Password", STATUS_CODES.NOT_FOUND);
       }
       await this.ResetPassword(userId, newPassword);
     } catch (err) {

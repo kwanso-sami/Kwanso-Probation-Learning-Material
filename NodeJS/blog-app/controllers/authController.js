@@ -9,7 +9,9 @@ const {
   resetPasswordSchema,
   changePasswordSchema,
   refreshTokenSchema,
+  otpSchema,
 } = require("../validations/authValidator");
+const { cookieOptions } = require("../config");
 
 const service = new AuthService();
 
@@ -23,10 +25,32 @@ exports.signup = catchAsync(async (req, res, next) => {
     );
     return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
   }
+
   const user = req.body;
   await service.SignUp(user);
   res.status(201).json({
     status: "success",
+  });
+});
+
+exports.sendOTP = catchAsync(async (req, res, next) => {
+  const { error } = otpSchema.validate(req.body, {
+    abortEarly: false,
+  });
+  if (error) {
+    logger.error(
+      `Unable to validate arguments in [ENDPOINT] 'SEND_OTP'. Error details: ${error.message}`
+    );
+    return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
+  }
+
+  const { email } = req.body;
+  const otpCode = await service.sendOTP({ email });
+  res.status(200).json({
+    status: "success",
+    data: {
+      otpCode,
+    },
   });
 });
 
@@ -43,29 +67,24 @@ exports.login = catchAsync(async (req, res, next) => {
     user
   );
 
-  const options = {
-    httpOnly: true,
-    secure: true,
-  };
-
   res
     .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options).
-  json({
-    status: "success",
-    data: {
-      tokens: {
-        accessToken,
-        refreshToken,
+    .cookie("accessToken", accessToken, cookieOptions)
+    .cookie("refreshToken", refreshToken, cookieOptions)
+    .json({
+      status: "success",
+      data: {
+        tokens: {
+          accessToken,
+          refreshToken,
+        },
+        user: {
+          id,
+          name,
+          email,
+        },
       },
-      user: {
-        id,
-        name,
-        email,
-      },
-    },
-  });
+    });
 });
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
@@ -143,18 +162,14 @@ exports.refreshAccessToken = catchAsync(async (req, res, next) => {
     return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
   }
 
-
   const { newAccessToken, newRefreshToken } = await service.GenerateNewToken({
     currentRefreshToken: refreshToken,
   });
-  const options = {
-    httpOnly: true,
-    secure: true,
-  };
+
   res
     .status(200)
-    .cookie("accessToken", newAccessToken, options)
-    .cookie("refreshToken", newRefreshToken, options)
+    .cookie("accessToken", newAccessToken, cookieOptions)
+    .cookie("refreshToken", newRefreshToken, cookieOptions)
     .json({
       status: "success",
       data: {
@@ -167,13 +182,9 @@ exports.refreshAccessToken = catchAsync(async (req, res, next) => {
 });
 
 exports.logoutUser = catchAsync(async (req, res, next) => {
-  const options = {
-    httpOnly: true,
-    secure: true,
-  };
   return res
     .status(200)
-    .clearCookie("accessToken", options)
-    .clearCookie("refreshToken", options)
+    .clearCookie("accessToken", cookieOptions)
+    .clearCookie("refreshToken", cookieOptions)
     .json({ status: "success" });
 });

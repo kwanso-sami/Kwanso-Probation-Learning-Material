@@ -23,11 +23,20 @@ module.exports = {
   EMAIL_SERVICE: process.env.EMAIL_SERVICE,
   EMAIL_PORT: process.env.EMAIL_PORT,
 
+  OTP_EXPIRE_TIME:eval(process.env.OTP_EXPIRE_TIME),
+  OTP_LENGTH:process.env.OTP_LENGTH,
+
   dbConfig: {
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     host: process.env.DB_HOST,
     dialect: process.env.DB_DIALECT,
+  },
+
+  cookieOptions: {
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict",
   },
 };

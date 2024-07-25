@@ -8,7 +8,7 @@ const {
 const { APIError, STATUS_CODES } = require("./appError");
 
 module.exports = {
-  signAccessToken: (tokenEntity) => {
+  signAccessToken: async(tokenEntity) => {
     try {
       return jwt.sign(tokenEntity, JWT_SECRET, {
         expiresIn: JWT_ACCESS_TOKEN_EXPIRE_TIME,
@@ -21,7 +21,7 @@ module.exports = {
     }
   },
 
-  signRefreshToken: (tokenEntity) => {
+  signRefreshToken: async(tokenEntity) => {
     try {
       return jwt.sign(tokenEntity, JWT_SECRET, {
         expiresIn: JWT_REFRESH_TOKEN_EXPIRE_TIME,
@@ -34,7 +34,7 @@ module.exports = {
     }
   },
 
-  signPasswordResetToken: (tokenEntity) => {
+  signPasswordResetToken: async(tokenEntity) => {
     try {
       return jwt.sign(tokenEntity, JWT_SECRET, {
         expiresIn: JWT_PASSWORD_RESET_TOKEN_EXPIRE_TIME,
@@ -47,7 +47,7 @@ module.exports = {
     }
   },
 
-  verifyToken: (token) => {
+  verifyToken: async(token) => {
     try {
       return jwt.verify(token, JWT_SECRET, (err, res) => {
         if (err) {
