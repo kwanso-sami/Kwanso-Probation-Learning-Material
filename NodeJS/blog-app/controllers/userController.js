@@ -6,6 +6,8 @@ const {
   updateUserSchema,
   getUserSchema,
 } = require("../validations/userValidator");
+const { getPostSchema } = require("../validations/postsValidator");
+const { SORT, ORDER } = require("../utils/constants");
 
 const service = new UserService();
 
@@ -20,7 +22,7 @@ exports.getUser = catchAsync(async (req, res, next) => {
     return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
   }
 
-  const { id: userId } = req.params;
+  const { userId } = req.params;
   const { id, name, email } = await service.FindUser(userId);
 
   res.status(200).json({
@@ -49,5 +51,47 @@ exports.updateUser = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     data: data,
+  });
+});
+
+exports.getPostsOfUser = catchAsync(async (req, res, next) => {
+  const { error } = getPostSchema.validate(
+    {
+      ...req.query,
+      userId: req.params.userId,
+    },
+    {
+      abortEarly: false,
+    }
+  );
+
+  if (error) {
+    logger.error(
+      `Unable to validate arguments in [ENDPOINT] 'GET_POSTS_OF_USER'. Error details: ${error.message}`
+    );
+    return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
+  }
+
+  const { userId } = req.params;
+  const {
+    page = 1,
+    perPage = 10,
+    sortBy = SORT.CREATED_AT,
+    orderBy = ORDER.DESC,
+    searchBy,
+  } = req.query;
+
+  const posts = await service.getAllPostsOfUser({
+    page,
+    perPage,
+    sortBy,
+    orderBy,
+    searchBy,
+    userId,
+  });
+
+  res.status(200).json({
+    status: "success",
+    posts
   });
 });

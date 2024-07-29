@@ -43,7 +43,7 @@ class AuthService {
     }
   }
 
-  async SignUp({ name, email, password, OTP: inputOTP }) {
+  async SignUp({ firstName, lastName, email, password, OTP: inputOTP }) {
     try {
       const oldUser = await this.UserRepository.FindUserByEmail(email);
       if (oldUser) {
@@ -72,7 +72,8 @@ class AuthService {
       );
 
       await this.UserRepository.CreateUser({
-        name,
+        firstName,
+        lastName,
         email,
         password: encryptedPassword,
         salt,
