@@ -36,6 +36,7 @@ function errorHandler(err, req, res, next) {
   res.status(httpStatusCode).send({
     error: {
       message: message,
+      statusCode: httpStatusCode,
       timestamp: err.timestamp || undefined,
     },
   });

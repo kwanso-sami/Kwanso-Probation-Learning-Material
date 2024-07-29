@@ -23,7 +23,7 @@ exports.getUser = catchAsync(async (req, res, next) => {
   }
 
   const { userId } = req.params;
-  const { id, name, email } = await service.FindUser(userId);
+  const { id, name, email } = await service.FindUser({ userId :id});
 
   res.status(200).json({
     status: "success",
@@ -45,12 +45,12 @@ exports.updateUser = catchAsync(async (req, res, next) => {
     );
     return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
   }
-  const { name } = req.body;
-  const { id } = req.user;
-  const data = await service.UpdateUser({ name, userId: id });
+  const updateFields = req.body;
+  const { id:userId } = req.user;
+  const data = await service.UpdateUser(updateFields,userId);
   res.status(200).json({
     status: "success",
-    data: data,
+    data,
   });
 });
 

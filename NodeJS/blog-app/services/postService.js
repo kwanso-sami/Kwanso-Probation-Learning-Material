@@ -105,10 +105,10 @@ class PostService {
     }
   }
 
-  async CreteAPost(newPost) {
+  async CreateAPost(newPost) {
     try {
-      const post = await this.PostModel.create(newPost);
-      return post;
+  await this.PostModel.create(newPost);
+
     } catch (err) {
       throw new APIError(
         `POSTS API ERROR : ${err.message}`,

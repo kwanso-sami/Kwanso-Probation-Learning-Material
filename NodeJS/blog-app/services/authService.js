@@ -1,6 +1,5 @@
-const UserRepository = require("../repositories/userRepository");
-const OtpRepository = require("../repositories/otpRepository");
 const { CLIENT_URL } = require("../config");
+const { User, OTP } = require("../models");
 const { APIError, STATUS_CODES } = require("../utils/appError");
 const sendPasswordResetEmail = require("../utils/email/sendPasswordResetEmail");
 const {
@@ -19,24 +18,39 @@ const { generateOTP, verifyOTP } = require("../utils/otpHelper");
 
 class AuthService {
   constructor() {
-    this.UserRepository = new UserRepository();
-    this.OtpRepository = new OtpRepository();
+    this.UserModel = User
+    this.OtpModel = OTP
   }
 
-  async sendOTP({ email }) {
+  async sendOTP(email) {
     try {
-      const oldUser = await this.UserRepository.FindUserByEmail(email);
+
+      const oldUser = await this.UserModel.findOne({
+        where: { email },
+      });
+
       if (oldUser) {
         throw new APIError("User Already Exists.", STATUS_CODES.CONFLICT);
       }
-      let OTP = await generateOTP();
-      let result = await this.OtpRepository.FindOTP(OTP);
 
-      while (result) {
+      let OTP = await generateOTP();
+
+      const existingOTP = await this.OtpModel.findOne({
+        where: { OTP },
+      });
+
+      while (existingOTP) {
         OTP = await generateOTP();
-        result = await this.OtpRepository.FindOTP(OTP);
+        existingOTP = await this.OtpModel.findOne({
+          where: { OTP },
+        });
       }
-      await this.OtpRepository.CreateOTP(email, OTP);
+
+      await this.OtpModel.create({
+        email,
+        OTP,
+      });
+
       return OTP;
     } catch (err) {
       throw new APIError(`AUTH API ERROR : ${err.message}`);
@@ -45,12 +59,19 @@ class AuthService {
 
   async SignUp({ firstName, lastName, email, password, OTP: inputOTP }) {
     try {
-      const oldUser = await this.UserRepository.FindUserByEmail(email);
+
+      const oldUser = await this.UserModel.findOne({
+        where: { email },
+      });
+
       if (oldUser) {
         throw new APIError("User Already Exists.", STATUS_CODES.CONFLICT);
       }
 
-      const otp = await this.OtpRepository.GetOTPByEmail(email);
+      const otp = await this.OtpModel.findOne({
+        where: { email },
+        order: [["createdAt", "DESC"]],
+      });
 
       if (!otp) {
         throw new APIError("OTP has been expired", STATUS_CODES.NOT_FOUND);
@@ -71,21 +92,28 @@ class AuthService {
         password
       );
 
-      await this.UserRepository.CreateUser({
+      await this.UserModel.create({
         firstName,
         lastName,
         email,
         password: encryptedPassword,
         salt,
       });
+
     } catch (err) {
       throw new APIError(`AUTH API ERROR : ${err.message}`, err.statusCode);
     }
   }
 
+
+
+
   async SignIn({ email, password: inputPassword }) {
     try {
-      const user = await this.UserRepository.FindUserByEmail(email);
+
+      const user = await this.UserModel.findOne({
+        where: { email },
+      });
 
       if (!user) {
         throw new APIError("User Not Found", STATUS_CODES.NOT_FOUND);
@@ -119,10 +147,15 @@ class AuthService {
 
   async ForgotPassword(email) {
     try {
-      const oldUser = await this.UserRepository.FindUserByEmail(email);
+
+      const oldUser = await this.UserModel.findOne({
+        where: { email },
+      });
+
       if (!oldUser) {
         throw new APIError("User Not Exists.", STATUS_CODES.NOT_FOUND);
       }
+
       const { id: userId, email: userEmail } = oldUser;
 
       const resetToken = await signPasswordResetToken({ id: userId });
@@ -144,14 +177,16 @@ class AuthService {
 
   async ResetPassword(userId, newPassword) {
     try {
+
       const { encryptedPassword, salt } = await generateEncryptedPassword(
         newPassword
       );
 
-      await this.UserRepository.UpdateUser(
-        { password: encryptedPassword, salt },
-        userId
-      );
+      await this.UserModel.update({ password: encryptedPassword, salt }, {
+        where: { id: userId },
+        returning: true,
+      });
+
     } catch (err) {
       throw new APIError(`AUTH API ERROR : ${err.message}`, err.statusCode);
     }
@@ -185,9 +220,11 @@ class AuthService {
       const tokenPayload = await verifyToken(currentRefreshToken);
 
       if (tokenPayload) {
-        const { id: userId } = tokenPayload;
+        const userId  = tokenPayload.id;
 
-        const user = await this.UserRepository.FindUserById(userId);
+        const user = await this.UserModel.findOne({
+          where: { id:userId },
+        });
 
         if (!user) {
           throw new APIError(
