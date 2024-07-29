@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       User.hasMany(models.Post, { foreignKey: "userId" });
+      User.hasMany(models.Comment, { foreignKey: "userId" });
     }
   }
   User.init(
@@ -15,17 +16,28 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: uuidv4(),
         primaryKey: true,
       },
+      firstName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      lastName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       email: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
       },
-      name: {
-        type: DataTypes.STRING,
-      },
       password: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      profileImage: {
+        type: DataTypes.TEXT,
+      },
+      profileThumbnail: {
+        type: DataTypes.TEXT,
       },
       salt: {
         type: DataTypes.STRING,

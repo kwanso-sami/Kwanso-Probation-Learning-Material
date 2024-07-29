@@ -6,17 +6,11 @@ class UserRepository {
     this.Model = User;
   }
 
-  async CreateUser({ name, email, password,salt}) {
+  async CreateUser(newUser) {
     try {
-      const user = await this.Model.create({
-        name,
-        email,
-        password,
-        salt
-      });
+      const user = await this.Model.create(newUser);
       return user;
     } catch (err) {
-      
       throw new APIError("Unable to Create User", STATUS_CODES.INTERNAL_ERROR);
     }
   }
@@ -28,6 +22,7 @@ class UserRepository {
       });
       return user;
     } catch (err) {
+      console.log(err.message);
       throw new APIError("Unable to Find User", STATUS_CODES.INTERNAL_ERROR);
     }
   }

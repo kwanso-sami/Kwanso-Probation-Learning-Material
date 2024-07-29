@@ -1,18 +1,22 @@
 "use strict";
 const { Model } = require("sequelize");
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require("uuid");
 module.exports = (sequelize, DataTypes) => {
-
-
-
-
-
-
   class Post extends Model {
-
-    
     static associate(models) {
-      Post.belongsTo(models.User, { foreignKey: "userID" });
+      Post.hasMany(models.Comment, { foreignKey: "postId" });
+
+
+      Post.belongsTo(models.User, {
+        foreignKey: "userId",
+        as: "creator", 
+      });
+      Post.belongsTo(models.Category, {
+        foreignKey: "categoryId",
+        as: "category", 
+      });
+
+
     }
   }
 
@@ -22,15 +26,23 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         defaultValue: uuidv4(),
         primaryKey: true,
-        allowNull: false,
       },
-      userID: {
+      userId: {
         type: DataTypes.UUID,
         references: {
           model: "users",
           key: "id",
         },
         onDelete: "CASCADE",
+        allowNull: false,
+      },
+      categoryId: {
+        type: DataTypes.UUID,
+        references: {
+          model: "categories",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
         allowNull: false,
       },
 
@@ -40,6 +52,20 @@ module.exports = (sequelize, DataTypes) => {
       },
       title: {
         type: DataTypes.STRING,
+        allowNull: false,
+      },
+      readDuration: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+
+      coverImage: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+
+      coverThumbnail: {
+        type: DataTypes.TEXT,
         allowNull: false,
       },
     },

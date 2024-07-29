@@ -8,13 +8,21 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUID,
         primaryKey: true,
-        allowNull: false,
       },
 
-      postID: {
+      postId: {
         type: Sequelize.UUID,
         references: {
           model: "posts",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        allowNull: false,
+      },
+      userId: {
+        type: Sequelize.UUID,
+        references: {
+          model: "users",
           key: "id",
         },
         onDelete: "CASCADE",
@@ -31,14 +39,6 @@ module.exports = {
         onDelete: "CASCADE",
       },
 
-      name: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      email: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       body: {
         type: Sequelize.TEXT,
         allowNull: false,

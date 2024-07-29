@@ -4,7 +4,8 @@ const { v4: uuidv4 } = require("uuid");
 module.exports = (sequelize, DataTypes) => {
   class Comment extends Model {
     static associate(models) {
-      Comment.belongsTo(models.Post, { foreignKey: "postID" });
+      Comment.belongsTo(models.Post, { foreignKey: "postId" });
+      Comment.belongsTo(models.User, { foreignKey: "userId" });
 
       Comment.belongsTo(models.Comment, {
         as: "Parent",
@@ -23,12 +24,20 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         defaultValue: uuidv4(),
         primaryKey: true,
-        allowNull: false,
       },
-      postID: {
+      postId: {
         type: DataTypes.UUID,
         references: {
           model: "posts",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        allowNull: false,
+      },
+      userId: {
+        type: DataTypes.UUID,
+        references: {
+          model: "users",
           key: "id",
         },
         onDelete: "CASCADE",
@@ -43,14 +52,6 @@ module.exports = (sequelize, DataTypes) => {
           key: "id",
         },
         onDelete: "CASCADE",
-      },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      email: {
-        type: DataTypes.STRING,
-        allowNull: false,
       },
       body: {
         type: DataTypes.TEXT,
