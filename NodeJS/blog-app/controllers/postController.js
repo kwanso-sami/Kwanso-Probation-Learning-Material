@@ -81,12 +81,11 @@ exports.createAPost = catchAsync(async (req, res, next) => {
     const { title,readDuration,body,categoryId,coverImage,coverThumbnail } = req.body;
     const { userId } = req.user;
   
-    const newPost = await service.CreateAPost({
+    await service.CreateAPost({
         title,readDuration,body,categoryId,coverImage,coverThumbnail,userId
     });
   
-    res.status(200).json({
+    res.status(201).json({
       status: "success",
-      data: newPost,
     });
   });

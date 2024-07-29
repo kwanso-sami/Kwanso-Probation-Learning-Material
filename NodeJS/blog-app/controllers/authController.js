@@ -44,8 +44,8 @@ exports.sendOTP = catchAsync(async (req, res, next) => {
     return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
   }
 
-  const { email } = req.body;
-  const otpCode = await service.sendOTP({ email });
+  const { email:userEmail } = req.body;
+  const otpCode = await service.sendOTP(userEmail);
   res.status(200).json({
     status: "success",
     data: {

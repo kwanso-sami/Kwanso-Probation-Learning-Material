@@ -1,7 +1,10 @@
 const Joi = require("joi");
 
 const updateUserSchema = Joi.object().keys({
-  name: Joi.string().required(),
+  firstName: Joi.string(),
+  lastName:Joi.string(),
+  profileImage:Joi.string(),
+  profileThumbnail:Joi.string(),
 });
 
 const getUserSchema = Joi.object().keys({
