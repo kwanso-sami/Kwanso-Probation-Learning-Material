@@ -11,14 +11,12 @@ postRouter
 
 postRouter.route("/:postId").get(postController.getPost);
 
-
 postRouter.route("/").post(authenticateUser, postController.createPost);
 
-postRouter.route("/:postId").patch(authenticateUser,postController.updatePost);
+postRouter.route("/:postId").patch(authenticateUser, postController.updatePost);
 
-postRouter.route("/:postId").delete(authenticateUser,postController.deletePost);
-
-
-
+postRouter
+  .route("/:postId")
+  .delete(authenticateUser, postController.deletePost);
 
 module.exports = postRouter;

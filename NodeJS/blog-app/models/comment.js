@@ -5,14 +5,14 @@ module.exports = (sequelize, DataTypes) => {
   class Comment extends Model {
     static associate(models) {
       Comment.belongsTo(models.Post, { foreignKey: "postId" });
-      Comment.belongsTo(models.User, { foreignKey: "userId" });
+      Comment.belongsTo(models.User, { foreignKey: "userId", as: "creator" });
 
       Comment.belongsTo(models.Comment, {
-        as: "Parent",
+        as: "parent",
         foreignKey: "parentCommentId",
       });
       Comment.hasMany(models.Comment, {
-        as: "Replies",
+        as: "replies",
         foreignKey: "parentCommentId",
       });
     }

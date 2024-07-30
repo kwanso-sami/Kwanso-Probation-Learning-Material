@@ -131,7 +131,7 @@ exports.createPost = catchAsync(async (req, res, next) => {
   } = req.body;
   const { userId } = req.user;
 
-  await service.CreateAPost({
+  const newPost = await service.CreateAPost({
     title,
     readDuration,
     body,
@@ -143,6 +143,7 @@ exports.createPost = catchAsync(async (req, res, next) => {
 
   res.status(201).json({
     status: "success",
+    data: newPost,
   });
 });
 
@@ -167,21 +168,18 @@ exports.updatePost = catchAsync(async (req, res, next) => {
   const updateFields = req.body;
   const { postId } = req.params;
 
-  await service.UpdateAPost(updateFields, postId);
+  const updatedPost = await service.UpdateAPost(updateFields, postId);
 
   res.status(200).json({
     status: "success",
+    data: updatedPost,
   });
 });
 
 exports.deletePost = catchAsync(async (req, res, next) => {
-  const { error } = deletePostSchema.validate(
-    req.params,
-
-    {
-      abortEarly: false,
-    }
-  );
+  const { error } = deletePostSchema.validate(req.params, {
+    abortEarly: false,
+  });
 
   if (error) {
     logger.error(
