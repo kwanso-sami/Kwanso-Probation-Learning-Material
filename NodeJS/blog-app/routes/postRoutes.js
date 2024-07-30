@@ -1,12 +1,24 @@
 const express = require("express");
-const router = express.Router();
+const postRouter = express.Router();
 const postController = require("../controllers/postController");
 const authenticateUser = require("../middlewares/userAuth");
 
-router.route("/").get(postController.getAllPosts);
+postRouter.route("/").get(postController.getAllPosts);
 
-router.route("/:postId").get(postController.getAPost);
+postRouter
+  .route("/user/:userId")
+  .get(authenticateUser, postController.getUserPosts);
 
-router.route("/").post(authenticateUser,postController.createAPost);
+postRouter.route("/:postId").get(postController.getPost);
 
-module.exports = router;
+
+postRouter.route("/").post(authenticateUser, postController.createPost);
+
+postRouter.route("/:postId").patch(authenticateUser,postController.updatePost);
+
+postRouter.route("/:postId").delete(authenticateUser,postController.deletePost);
+
+
+
+
+module.exports = postRouter;

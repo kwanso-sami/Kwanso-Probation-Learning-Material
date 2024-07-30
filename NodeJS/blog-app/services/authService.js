@@ -18,13 +18,12 @@ const { generateOTP, verifyOTP } = require("../utils/otpHelper");
 
 class AuthService {
   constructor() {
-    this.UserModel = User
-    this.OtpModel = OTP
+    this.UserModel = User;
+    this.OtpModel = OTP;
   }
 
   async sendOTP(email) {
     try {
-
       const oldUser = await this.UserModel.findOne({
         where: { email },
       });
@@ -59,7 +58,6 @@ class AuthService {
 
   async SignUp({ firstName, lastName, email, password, OTP: inputOTP }) {
     try {
-
       const oldUser = await this.UserModel.findOne({
         where: { email },
       });
@@ -99,18 +97,13 @@ class AuthService {
         password: encryptedPassword,
         salt,
       });
-
     } catch (err) {
       throw new APIError(`AUTH API ERROR : ${err.message}`, err.statusCode);
     }
   }
 
-
-
-
   async SignIn({ email, password: inputPassword }) {
     try {
-
       const user = await this.UserModel.findOne({
         where: { email },
       });
@@ -147,7 +140,6 @@ class AuthService {
 
   async ForgotPassword(email) {
     try {
-
       const oldUser = await this.UserModel.findOne({
         where: { email },
       });
@@ -177,16 +169,17 @@ class AuthService {
 
   async ResetPassword(userId, newPassword) {
     try {
-
       const { encryptedPassword, salt } = await generateEncryptedPassword(
         newPassword
       );
 
-      await this.UserModel.update({ password: encryptedPassword, salt }, {
-        where: { id: userId },
-        returning: true,
-      });
-
+      await this.UserModel.update(
+        { password: encryptedPassword, salt },
+        {
+          where: { id: userId },
+          returning: true,
+        }
+      );
     } catch (err) {
       throw new APIError(`AUTH API ERROR : ${err.message}`, err.statusCode);
     }
@@ -220,11 +213,9 @@ class AuthService {
       const tokenPayload = await verifyToken(currentRefreshToken);
 
       if (tokenPayload) {
-        const userId  = tokenPayload.id;
+        const userId = tokenPayload.id;
 
-        const user = await this.UserModel.findOne({
-          where: { id:userId },
-        });
+        const user = await this.UserModel.findByPk(userId);
 
         if (!user) {
           throw new APIError(
