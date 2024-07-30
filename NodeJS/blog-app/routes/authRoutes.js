@@ -1,26 +1,26 @@
 const express = require("express");
-const router = express.Router();
+const authRouter = express.Router();
 const authController = require("../controllers/authController");
 const authenticateUser = require("../middlewares/userAuth");
 
-router.route("/signup").post(authController.signup);
+authRouter.route("/signup").post(authController.signup);
 
-router.route("/login").post(authController.login);
+authRouter.route("/login").post(authController.login);
 
-router.post("/send-otp", authController.sendOTP);
+authRouter.post("/send-otp", authController.sendOTP);
 
-router.route("/forgot-password").post(authController.forgotPassword);
+authRouter.route("/forgot-password").post(authController.forgotPassword);
 
-router
+authRouter
   .route("/reset-password")
   .post(authenticateUser, authController.resetPassword);
 
-router
+authRouter
   .route("/change-password")
   .post(authenticateUser, authController.changeCurrentPassword);
 
-router.route("/refresh-token").post(authController.refreshAccessToken);
+authRouter.route("/refresh-token").post(authController.refreshAccessToken);
 
-router.route("/logout").post(authenticateUser, authController.logoutUser);
+authRouter.route("/logout").post(authenticateUser, authController.logoutUser);
 
-module.exports = router;
+module.exports = authRouter;

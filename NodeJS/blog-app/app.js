@@ -4,6 +4,7 @@ const xss = require("xss-clean");
 const cors = require("cors");
 const morgan = require("morgan");
 const express = require("express");
+const rateLimit = require("express-rate-limit");
 const cookieParser = require("cookie-parser");
 const { APIError, STATUS_CODES } = require("./utils/appError");
 const httpLogger = require("./utils/loggers/httpLogger");
@@ -30,6 +31,20 @@ if (process.env.NODE_ENV !== "prod") {
 } else {
   app.use(httpLogger);
 }
+
+// Apply the rate limiting middleware to all requests
+app.use(
+  rateLimit({
+    windowMs: 20 * 60 * 60, // 20 minutes
+    max: 50, //Limit each IP to 50 request per window (per 20 minutes)
+    standardHeaders: true, //Return rate limit info in the RateLimit-* headers
+    legacyHeaders: false, // Disable the X-RateLimit-* headers
+    message: {
+      status: "error",
+      message: "Too many requests, please try again later.",
+    },
+  })
+);
 
 //routing
 app.use("/api/v1", apiRouter);

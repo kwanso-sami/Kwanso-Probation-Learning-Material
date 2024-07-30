@@ -9,17 +9,20 @@ class PostService {
 
   async GetAllPosts(postParams) {
     try {
-      const { page, perPage, sortBy, orderBy, searchBy } = postParams;
+      const { page, perPage, sortBy, orderBy, searchBy, userId } = postParams;
 
       const offset = (page - 1) * perPage;
       const limit = perPage;
-
       const postFilter = {};
+
+      if (userId) {
+        postFilter.userId = userId;
+      }
 
       if (searchBy) {
         postFilter[Op.or] = [
           { title: { [Op.like]: `%${searchBy}%` } },
-          { "$category.category$": { [Op.like]: `%${searchBy}%` } },
+          { "$category.name$": { [Op.like]: `%${searchBy}%` } },
         ];
       }
 
@@ -47,7 +50,7 @@ class PostService {
           {
             model: Category,
             as: "category",
-            attributes: ["id", ["category", "name"]],
+            attributes: ["id", "name"],
           },
         ],
       });
@@ -64,17 +67,14 @@ class PostService {
         },
       };
     } catch (err) {
-      throw new APIError(
-        `POSTS API ERROR : ${err.message}`,
-        STATUS_CODES.INTERNAL_ERROR
-      );
+      throw new APIError(`POSTS API ERROR : ${err.message}`, err.statusCode);
     }
   }
 
-  async GetAPost({ postId: id }) {
+  async GetAPost(postId) {
     try {
       const post = await this.PostModel.findOne({
-        where: { id },
+        where: { id: postId },
         attributes: {
           exclude: ["coverThumbnail", "userId", "categoryId"],
         },
@@ -91,29 +91,46 @@ class PostService {
           {
             model: Category,
             as: "category",
-            attributes: ["id", ["category", "name"]],
+            attributes: ["id", "name"],
           },
         ],
       });
 
       return post;
     } catch (err) {
-      throw new APIError(
-        `POSTS API ERROR : ${err.message}`,
-        STATUS_CODES.INTERNAL_ERROR
-      );
+      throw new APIError(`POSTS API ERROR : ${err.message}`, err.statusCode);
     }
   }
 
   async CreateAPost(newPost) {
     try {
-  await this.PostModel.create(newPost);
-
+      await this.PostModel.create(newPost);
     } catch (err) {
-      throw new APIError(
-        `POSTS API ERROR : ${err.message}`,
-        STATUS_CODES.INTERNAL_ERROR
-      );
+      throw new APIError(`POSTS API ERROR : ${err.message}`, err.statusCode);
+    }
+  }
+
+  async UpdateAPost(updateFields, postId) {
+    try {
+      const post = await this.PostModel.findByPk(postId);
+      if (!post) {
+        throw new APIError("Post Not Found.", STATUS_CODES.NOT_FOUND);
+      }
+      await post.update(updateFields);
+    } catch (err) {
+      throw new APIError(`POSTS API ERROR : ${err.message}`, err.statusCode);
+    }
+  }
+
+  async DeleteAPost(postId) {
+    try {
+      const post = await this.PostModel.findByPk(postId);
+      if (!post) {
+        throw new APIError("Post Not Found.", STATUS_CODES.NOT_FOUND);
+      }
+      await post.destroy();
+    } catch (err) {
+      throw new APIError(`POSTS API ERROR : ${err.message}`, err.statusCode);
     }
   }
 }
