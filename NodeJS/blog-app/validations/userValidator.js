@@ -8,7 +8,7 @@ const updateUserSchema = Joi.object().keys({
 });
 
 const getUserSchema = Joi.object().keys({
-  id: Joi.string().required(),
+  userId: Joi.string().required(),
 });
 
 module.exports = {

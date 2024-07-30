@@ -6,17 +6,14 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Post.hasMany(models.Comment, { foreignKey: "postId" });
 
-
       Post.belongsTo(models.User, {
         foreignKey: "userId",
-        as: "creator", 
+        as: "creator",
       });
       Post.belongsTo(models.Category, {
         foreignKey: "categoryId",
-        as: "category", 
+        as: "category",
       });
-
-
     }
   }
 
@@ -24,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       id: {
         type: DataTypes.UUID,
-        defaultValue: uuidv4(),
+        defaultValue: uuidv4,
         primaryKey: true,
       },
       userId: {
@@ -43,9 +40,9 @@ module.exports = (sequelize, DataTypes) => {
           key: "id",
         },
         onUpdate: "CASCADE",
+        onDelete: "CASCADE",
         allowNull: false,
       },
-
       body: {
         type: DataTypes.TEXT,
         allowNull: false,
@@ -53,12 +50,12 @@ module.exports = (sequelize, DataTypes) => {
       title: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
       },
       readDuration: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-
       coverImage: {
         type: DataTypes.TEXT,
         allowNull: false,

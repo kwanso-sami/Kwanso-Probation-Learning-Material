@@ -48,7 +48,7 @@ class PostService {
       const {
         count: totalCount,
         rows: data,
-      } = await this.this.PostModel.findAndCountAll({
+      } = await this.PostModel.findAndCountAll({
         where: postFilter,
         offset: offset,
         limit: limit,

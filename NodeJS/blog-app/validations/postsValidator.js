@@ -19,7 +19,6 @@ const createPostSchema = Joi.object().keys({
   categoryId: Joi.string().required(),
   coverImage: Joi.string().required(),
   coverThumbnail: Joi.string().required(),
-  userId: Joi.string().required(),
 });
 
 const updatePostSchema = Joi.object().keys({

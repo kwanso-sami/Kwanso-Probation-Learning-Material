@@ -44,7 +44,7 @@ exports.sendOTP = catchAsync(async (req, res, next) => {
     return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
   }
 
-  const { email:userEmail } = req.body;
+  const { email: userEmail } = req.body;
   const otpCode = await service.sendOTP(userEmail);
   res.status(200).json({
     status: "success",
@@ -63,9 +63,11 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
   }
   const user = req.body;
-  const { accessToken, refreshToken, name, email, id } = await service.SignIn(
-    user
-  );
+  const {
+    accessToken,
+    refreshToken,
+    user: loggedInUser,
+  } = await service.SignIn(user);
 
   res
     .status(200)
@@ -79,9 +81,12 @@ exports.login = catchAsync(async (req, res, next) => {
           refreshToken,
         },
         user: {
-          id,
-          name,
-          email,
+          id: loggedInUser.id,
+          email: loggedInUser.id,
+          firstName: loggedInUser.firstName,
+          lastName: loggedInUser.lastName,
+          profileThumbnail: loggedInUser.profileThumbnail,
+          profileImage: loggedInUser.profileImage,
         },
       },
     });
