@@ -46,9 +46,9 @@ exports.updateUser = catchAsync(async (req, res, next) => {
   }
   const updateFields = req.body;
   const { id: userId } = req.user;
-  const data = await service.UpdateUser(updateFields, userId);
+  const updatedUser = await service.UpdateUser(updateFields, userId);
   res.status(200).json({
     status: "success",
-    data,
+    data:updatedUser,
   });
 });

@@ -5,6 +5,8 @@ const { Op, literal } = Sequelize;
 class PostService {
   constructor() {
     this.PostModel = Post;
+    this.UserModel = User;
+    this.CategoryModel = Category;
   }
 
   async GetAllPosts(postParams) {
@@ -26,10 +28,27 @@ class PostService {
         ];
       }
 
+      const includeModels = [
+        {
+          model: this.UserModel,
+          as: "creator",
+          attributes: [
+            "id",
+            [literal('CONCAT("firstName", \' \', "lastName")'), "name"],
+            "profileThumbnail",
+          ],
+        },
+        {
+          model: this.CategoryModel,
+          as: "category",
+          attributes: ["id", "name"],
+        },
+      ];
+
       const {
         count: totalCount,
         rows: data,
-      } = await this.Model.findAndCountAll({
+      } = await this.this.PostModel.findAndCountAll({
         where: postFilter,
         offset: offset,
         limit: limit,
@@ -37,22 +56,7 @@ class PostService {
         attributes: {
           exclude: ["coverImage", "userId", "categoryId"],
         },
-        include: [
-          {
-            model: User,
-            as: "creator",
-            attributes: [
-              "id",
-              [literal('CONCAT("firstName", \' \', "lastName")'), "name"],
-              "profileThumbnail",
-            ],
-          },
-          {
-            model: Category,
-            as: "category",
-            attributes: ["id", "name"],
-          },
-        ],
+        include: includeModels,
       });
 
       const totalPages = Math.ceil(totalCount / limit);
@@ -73,27 +77,28 @@ class PostService {
 
   async GetAPost(postId) {
     try {
+      const includeModels = [
+        {
+          model: User,
+          as: "creator",
+          attributes: [
+            "id",
+            [literal('CONCAT("firstName", \' \', "lastName")'), "name"],
+            "profileThumbnail",
+          ],
+        },
+        {
+          model: Category,
+          as: "category",
+          attributes: ["id", "name"],
+        },
+      ];
       const post = await this.PostModel.findOne({
         where: { id: postId },
         attributes: {
           exclude: ["coverThumbnail", "userId", "categoryId"],
         },
-        include: [
-          {
-            model: User,
-            as: "creator",
-            attributes: [
-              "id",
-              [literal('CONCAT("firstName", \' \', "lastName")'), "name"],
-              "profileThumbnail",
-            ],
-          },
-          {
-            model: Category,
-            as: "category",
-            attributes: ["id", "name"],
-          },
-        ],
+        include: includeModels,
       });
 
       return post;
@@ -104,7 +109,8 @@ class PostService {
 
   async CreateAPost(newPost) {
     try {
-      await this.PostModel.create(newPost);
+      const post = await this.PostModel.create(newPost);
+      return post;
     } catch (err) {
       throw new APIError(`POSTS API ERROR : ${err.message}`, err.statusCode);
     }
@@ -116,7 +122,8 @@ class PostService {
       if (!post) {
         throw new APIError("Post Not Found.", STATUS_CODES.NOT_FOUND);
       }
-      await post.update(updateFields);
+      const updatedPost = await post.update(updateFields);
+      return updatedPost;
     } catch (err) {
       throw new APIError(`POSTS API ERROR : ${err.message}`, err.statusCode);
     }

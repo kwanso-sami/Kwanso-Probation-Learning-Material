@@ -152,7 +152,7 @@ class AuthService {
 
       const resetToken = await signPasswordResetToken({ id: userId });
 
-      const link = `${CLIENT_URL}/password-reset?token=${resetToken}`;
+      const link = `${CLIENT_URL}/password-reset?access_token=${resetToken}`;
 
       const emailSent = await sendPasswordResetEmail(link, userEmail);
       if (!emailSent) {
