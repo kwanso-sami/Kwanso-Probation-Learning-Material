@@ -21,15 +21,12 @@ exports.getUser = catchAsync(async (req, res, next) => {
   }
 
   const { userId } = req.params;
-  const { id, firstName, lastName, email } = await service.FindUser(userId);
+  const { id, firstName, lastName, email,profileThumbnail,profileImage } = await service.FindUser(userId);
 
   res.status(200).json({
     status: "success",
     data: {
-      userID: id,
-      userFirstName: firstName,
-      userLastName: lastName,
-      userEmail: email,
+      id, firstName, lastName, email,profileThumbnail,profileImage
     },
   });
 });

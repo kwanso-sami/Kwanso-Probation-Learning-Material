@@ -23,7 +23,7 @@ exports.createComment = catchAsync(async (req, res, next) => {
   }
 
   const { body, postId, parentCommentId } = req.body;
-  const { userId } = req.user;
+  const { id: userId } = req.user;
 
   const newComment = await service.CreateAComment({
     body,
@@ -55,7 +55,7 @@ exports.getAllComments = catchAsync(async (req, res, next) => {
     perPage = 10,
     sortBy = SORT.CREATED_AT,
     orderBy = ORDER.DESC,
-    isReply=false,
+    isReply = false,
     postId,
   } = req.query;
 
@@ -65,7 +65,7 @@ exports.getAllComments = catchAsync(async (req, res, next) => {
     sortBy,
     orderBy,
     postId,
-    isReply
+    isReply,
   });
 
   res.status(200).json({

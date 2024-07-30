@@ -129,7 +129,7 @@ exports.createPost = catchAsync(async (req, res, next) => {
     coverImage,
     coverThumbnail,
   } = req.body;
-  const { userId } = req.user;
+  const {id:userId } = req.user;
 
   const newPost = await service.CreateAPost({
     title,

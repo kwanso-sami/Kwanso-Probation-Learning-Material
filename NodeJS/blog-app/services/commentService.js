@@ -23,19 +23,22 @@ class CommentService {
 
       const offset = (page - 1) * perPage;
       const limit = perPage;
-      const commentFilter = {};
+      const commentFilter = {
+        parentCommentId: null,
+      };
 
       if (postId) {
         commentFilter.postId = postId;
       }
 
+      const commentAttributes = ["id", "body", "createdAt"];
+
       const userAttributes = [
         "id",
-        [literal('CONCAT("firstName", \' \', "lastName")'), "name"],
+        "firstName",
+        "lastName",
         "profileThumbnail",
       ];
-
-      const commentAttributes = ["id", "body", "createdAt"];
 
       const includeModels = [
         {
@@ -84,6 +87,7 @@ class CommentService {
         },
       };
     } catch (err) {
+      console.log(err);
       throw new APIError(`COMMENTS API ERROR : ${err.message}`, err.statusCode);
     }
   }

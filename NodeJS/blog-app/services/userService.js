@@ -8,9 +8,8 @@ class UserService {
 
   async FindUser(userId) {
     try {
-      const user = await this.UserModel.findByPk(userId, {
-        attributes: { exclude: ['password', 'salt','createdAt','updatedAt'] }
-      });
+      const user = await this.UserModel.findByPk(userId
+      );
       if (!user) {
         throw new APIError("User Not Found", STATUS_CODES.NOT_FOUND);
       }

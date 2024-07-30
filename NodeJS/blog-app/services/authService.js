@@ -129,9 +129,7 @@ class AuthService {
       return {
         accessToken,
         refreshToken,
-        name: user.name,
-        email: user.email,
-        id: user.id,
+        user,
       };
     } catch (err) {
       throw new APIError(`AUTH API ERROR : ${err.message}`, err.statusCode);
@@ -187,6 +185,7 @@ class AuthService {
 
   async ChangeCurrentPassword(user, oldPassword, newPassword) {
     try {
+      console.log(user);
       const {
         id: userId,
         password: currentPasswordHash,
@@ -202,6 +201,7 @@ class AuthService {
       if (!isOldPasswordVerified) {
         throw new APIError("Invalid Old Password", STATUS_CODES.NOT_FOUND);
       }
+
       await this.ResetPassword(userId, newPassword);
     } catch (err) {
       throw new APIError(`USERS API ERROR : ${err.message}`, err.statusCode);

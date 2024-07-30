@@ -12,7 +12,7 @@ const getCommentsSchema = Joi.object().keys({
   perPage: Joi.number().integer(),
   sortBy: Joi.string(),
   orderBy: Joi.string(),
-  isReply:Joi.boolean()
+  isReply: Joi.boolean(),
 });
 
 module.exports = {
