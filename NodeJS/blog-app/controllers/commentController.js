@@ -1,14 +1,15 @@
 const CommentService = require("../services/commentService");
 const catchAsync = require("../utils/catchAsync");
 const logger = require("../utils/loggers/appLogger");
-const { APIError, STATUS_CODES } = require("../utils/appError");
+const { APIError } = require("../utils/appError");
 const {
   createCommentSchema,
   getCommentsSchema,
   deleteCommentSchema,
   updateCommentSchema,
 } = require("../validations/commentsValidator");
-const { SORT, ORDER } = require("../utils/constants");
+const { success } = require("../utils/apiResponse");
+const { SORT, ORDER, STATUS_CODE, ERROR } = require("../utils/constants");
 
 const service = new CommentService();
 
@@ -21,7 +22,14 @@ exports.createComment = catchAsync(async (req, res, next) => {
     logger.error(
       `Unable to validate arguments in [ENDPOINT] 'CREATE_A_COMMENT'. Error details: ${error.message}`
     );
-    return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
+
+    return next(
+      new APIError(
+        error.message,
+        STATUS_CODE.BAD_REQUEST,
+        ERROR.VALIDATION_ERROR
+      )
+    );
   }
 
   const { body, postId, parentCommentId } = req.body;
@@ -34,10 +42,9 @@ exports.createComment = catchAsync(async (req, res, next) => {
     userId,
   });
 
-  res.status(201).json({
-    status: "success",
-    data: newComment,
-  });
+  res
+    .status(STATUS_CODE.CREATED)
+    .json(success("Comment created successfully", newComment));
 });
 
 exports.getAllComments = catchAsync(async (req, res, next) => {
@@ -49,7 +56,13 @@ exports.getAllComments = catchAsync(async (req, res, next) => {
     logger.error(
       `Unable to validate arguments in [ENDPOINT] 'GET_ALL_COMMENTS'. Error details: ${error.message}`
     );
-    return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
+    return next(
+      new APIError(
+        error.message,
+        STATUS_CODE.BAD_REQUEST,
+        ERROR.VALIDATION_ERROR
+      )
+    );
   }
 
   const {
@@ -70,10 +83,9 @@ exports.getAllComments = catchAsync(async (req, res, next) => {
     withReply,
   });
 
-  res.status(200).json({
-    status: "success",
-    ...comments,
-  });
+  res
+    .status(STATUS_CODE.OK)
+    .json(success("Comments fetched successfully", comments));
 });
 
 exports.deleteComment = catchAsync(async (req, res, next) => {
@@ -85,17 +97,20 @@ exports.deleteComment = catchAsync(async (req, res, next) => {
     logger.error(
       `Unable to validate arguments in [ENDPOINT] 'DELETE_A_COMMENT'. Error details: ${error.message}`
     );
-    return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
+    return next(
+      new APIError(
+        error.message,
+        STATUS_CODE.BAD_REQUEST,
+        ERROR.VALIDATION_ERROR
+      )
+    );
   }
 
   const { commentId } = req.params;
-  const { id: userId } = req.user;
 
-  await service.DeleteAComment(userId, commentId);
+  await service.DeleteAComment(commentId);
 
-  res.status(200).json({
-    status: "success",
-  });
+  res.status(STATUS_CODE.OK).json(success("Comment deleted successfully"));
 });
 
 exports.updateComment = catchAsync(async (req, res, next) => {
@@ -113,21 +128,21 @@ exports.updateComment = catchAsync(async (req, res, next) => {
     logger.error(
       `Unable to validate arguments in [ENDPOINT] 'UPDATE_A_COMMENT'. Error details: ${error.message}`
     );
-    return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
+    return next(
+      new APIError(
+        error.message,
+        STATUS_CODE.BAD_REQUEST,
+        ERROR.VALIDATION_ERROR
+      )
+    );
   }
 
   const updateFields = req.body;
   const { commentId } = req.params;
-  const { id: userId } = req.user;
 
-  const updatedComment = await service.UpdateAComment(
-    userId,
-    updateFields,
-    commentId
-  );
+  const updatedComment = await service.UpdateAComment(updateFields, commentId);
 
-  res.status(200).json({
-    status: "success",
-    data: updatedComment,
-  });
+  res
+    .status(STATUS_CODE.OK)
+    .json(success("Comment updated successfully", updatedComment));
 });

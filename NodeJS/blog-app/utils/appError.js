@@ -1,16 +1,6 @@
-const STATUS_CODES = {
-  OK: 200,
-  CREATED: 201,
-  BAD_REQUEST: 400,
-  UNAUTHORIZED: 401,
-  FORBIDDEN: 403,
-  NOT_FOUND: 404,
-  INTERNAL_SERVER_ERROR: 500,
-  CONFLICT:409,
-};
-
+const { STATUS_CODE } = require("./constants");
 class AppError extends Error {
-  constructor(message, statusCode, isOperational, errorStack) {
+  constructor(message, statusCode, status, isOperational, errorStack) {
     if (message) {
       super(message);
     } else {
@@ -18,10 +8,10 @@ class AppError extends Error {
     }
     Object.setPrototypeOf(this, new.target.prototype);
     this.statusCode = statusCode;
+    this.status = status;
     this.isOperational = isOperational;
     this.errorStack = errorStack;
     this.timestamp = new Date().toISOString();
-    this.status = `${statusCode}`.startsWith("4") ? "fail" : "error";
     Error.captureStackTrace(this, this.constructor);
   }
 }
@@ -29,16 +19,16 @@ class AppError extends Error {
 class APIError extends AppError {
   constructor(
     message = "Internal Server Error",
-    statusCode = STATUS_CODES.INTERNAL_SERVER_ERROR,
+    statusCode = STATUS_CODE.INTERNAL_SERVER_ERROR,
+    status = "error",
     isOperational = true,
     errorStack
   ) {
-    super(message, statusCode, isOperational, errorStack);
+    super(message, statusCode, status, isOperational, errorStack);
   }
 }
 
 module.exports = {
   AppError,
   APIError,
-  STATUS_CODES,
 };

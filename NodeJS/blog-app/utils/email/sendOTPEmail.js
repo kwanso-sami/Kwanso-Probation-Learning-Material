@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 const logger = require("../loggers/appLogger");
-const { APIError, STATUS_CODES } = require("../appError");
+const { APIError } = require("../appError");
 const {
   EMAIL_USER,
   EMAIL_PASSWORD,
@@ -8,6 +8,7 @@ const {
   EMAIL_SERVICE,
   EMAIL_PORT,
 } = require("../../config");
+const { STATUS_CODE, ERROR } = require("../constants");
 
 module.exports = async function sendEmail(recipientEmail, OTP) {
   try {
@@ -47,7 +48,8 @@ module.exports = async function sendEmail(recipientEmail, OTP) {
   } catch (e) {
     throw new APIError(
       "Failed to Send OTP Email to User",
-      STATUS_CODES.INTERNAL_SERVER_ERROR
+      STATUS_CODE.INTERNAL_SERVER_ERROR,
+      ERROR.API_ERROR
     );
   }
 };

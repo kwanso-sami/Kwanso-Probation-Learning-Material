@@ -1,6 +1,6 @@
-const { APIError, STATUS_CODES } = require("../utils/appError");
-const { Comment, User, Sequelize } = require("../models");
-const { literal } = Sequelize;
+const { APIError } = require("../utils/appError");
+const { Comment, User } = require("../models");
+const { STATUS_CODE, ERROR } = require("../utils/constants");
 
 class CommentService {
   constructor() {
@@ -14,10 +14,12 @@ class CommentService {
 
       if (parentCommentId) {
         const parentComment = await this.CommentModel.findByPk(parentCommentId);
+        
         if (!parentComment) {
           throw new APIError(
             `Parent Comment Not Found`,
-            STATUS_CODES.NOT_FOUND
+            STATUS_CODE.NOT_FOUND,
+            ERROR.API_ERROR
           );
         }
       }
@@ -25,7 +27,7 @@ class CommentService {
       const comment = await this.CommentModel.create(newComment);
       return comment;
     } catch (err) {
-      throw new APIError(`COMMENTS API ERROR : ${err.message}`, err.statusCode);
+      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
     }
   }
 
@@ -106,49 +108,42 @@ class CommentService {
         },
       };
     } catch (err) {
-      console.log(err);
-      throw new APIError(`COMMENTS API ERROR : ${err.message}`, err.statusCode);
+      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
     }
   }
 
-  async DeleteAComment(userId, commentId) {
+  async DeleteAComment(commentId) {
     try {
       const comment = await this.CommentModel.findByPk(commentId);
       if (!comment) {
-        throw new APIError("Comment Not Found.", STATUS_CODES.NOT_FOUND);
-      }
-
-      if (comment.userId !== userId) {
         throw new APIError(
-          "You do not have permission to delete this comment.",
-          STATUS_CODES.FORBIDDEN
+          "Comment Not Found.",
+          STATUS_CODE.NOT_FOUND,
+          ERROR.API_ERROR
         );
       }
 
       await comment.destroy();
     } catch (err) {
-      throw new APIError(`COMMENTS API ERROR : ${err.message}`, err.statusCode);
+      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
     }
   }
 
-  async UpdateAComment(userId, updateFields, commentId) {
+  async UpdateAComment(updateFields, commentId) {
     try {
       const comment = await this.CommentModel.findByPk(commentId);
       if (!comment) {
-        throw new APIError("Comment Not Found.", STATUS_CODES.NOT_FOUND);
-      }
-
-      if (comment.userId !== userId) {
         throw new APIError(
-          "You do not have permission to update this comment.",
-          STATUS_CODES.FORBIDDEN
+          "Comment Not Found.",
+          STATUS_CODE.NOT_FOUND,
+          ERROR.API_ERROR
         );
       }
 
       const updatedComment = await comment.update(updateFields);
       return updatedComment;
     } catch (err) {
-      throw new APIError(`COMMENTS API ERROR : ${err.message}`, err.statusCode);
+      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
     }
   }
 }

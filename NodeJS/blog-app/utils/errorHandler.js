@@ -1,14 +1,12 @@
-const { AppError, STATUS_CODES } = require("./appError");
+const { AppError} = require("./appError");
 const logger = require("./loggers/appLogger");
+const { error } = require("./apiResponse");
 
 function errorHandler(err, req, res, next) {
-  // default HTTP status code and error message
-  let httpStatusCode = STATUS_CODES.INTERNAL_SERVER_ERROR;
   let message = "Internal Server Error";
 
   // if the error is a custom defined error
   if (err instanceof AppError) {
-    httpStatusCode = err.statusCode;
     message = err.message;
   } else {
     // hide the detailed error message in production
@@ -33,13 +31,7 @@ function errorHandler(err, req, res, next) {
   }
 
   // return the standard error response
-  res.status(httpStatusCode).send({
-    error: {
-      message: message,
-      statusCode: httpStatusCode,
-      timestamp: err.timestamp || undefined,
-    },
-  });
+  res.status(err.statusCode).send(error(err.status, message));
 
   return next(err);
 }

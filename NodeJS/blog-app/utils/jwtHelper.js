@@ -5,10 +5,11 @@ const {
   JWT_REFRESH_TOKEN_EXPIRE_TIME,
   JWT_ACCESS_TOKEN_EXPIRE_TIME,
 } = require("../config");
-const { APIError, STATUS_CODES } = require("./appError");
+const { APIError } = require("./appError");
+const { ERROR, STATUS_CODE } = require("./constants");
 
 module.exports = {
-  signAccessToken: async(tokenEntity) => {
+  signAccessToken: async (tokenEntity) => {
     try {
       return jwt.sign(tokenEntity, JWT_SECRET, {
         expiresIn: JWT_ACCESS_TOKEN_EXPIRE_TIME,
@@ -16,12 +17,13 @@ module.exports = {
     } catch (e) {
       throw new APIError(
         "Failed to Sign Access Token",
-        STATUS_CODES.INTERNAL_SERVER_ERROR
+        STATUS_CODE.INTERNAL_SERVER_ERROR,
+        ERROR.API_ERROR
       );
     }
   },
 
-  signRefreshToken: async(tokenEntity) => {
+  signRefreshToken: async (tokenEntity) => {
     try {
       return jwt.sign(tokenEntity, JWT_SECRET, {
         expiresIn: JWT_REFRESH_TOKEN_EXPIRE_TIME,
@@ -29,12 +31,13 @@ module.exports = {
     } catch (e) {
       throw new APIError(
         "Failed to Sign Refresh Token",
-        STATUS_CODES.INTERNAL_SERVER_ERROR
+        STATUS_CODE.INTERNAL_SERVER_ERROR,
+        ERROR.API_ERROR
       );
     }
   },
 
-  signPasswordResetToken: async(tokenEntity) => {
+  signPasswordResetToken: async (tokenEntity) => {
     try {
       return jwt.sign(tokenEntity, JWT_SECRET, {
         expiresIn: JWT_PASSWORD_RESET_TOKEN_EXPIRE_TIME,
@@ -42,12 +45,13 @@ module.exports = {
     } catch (e) {
       throw new APIError(
         "Failed to Sign Password Reset Token",
-        STATUS_CODES.INTERNAL_SERVER_ERROR
+        STATUS_CODE.INTERNAL_SERVER_ERROR,
+        ERROR.API_ERROR
       );
     }
   },
 
-  verifyToken: async(token) => {
+  verifyToken: async (token) => {
     try {
       return jwt.verify(token, JWT_SECRET, (err, res) => {
         if (err) {
@@ -58,7 +62,8 @@ module.exports = {
     } catch (e) {
       throw new APIError(
         "Failed to Verify Token",
-        STATUS_CODES.INTERNAL_SERVER_ERROR
+        STATUS_CODE.INTERNAL_SERVER_ERROR,
+        ERROR.API_ERROR
       );
     }
   },

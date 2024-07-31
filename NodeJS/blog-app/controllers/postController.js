@@ -1,14 +1,15 @@
 const PostService = require("../services/postService");
 const catchAsync = require("../utils/catchAsync");
 const logger = require("../utils/loggers/appLogger");
-const { APIError, STATUS_CODES } = require("../utils/appError");
+const { APIError } = require("../utils/appError");
 const {
   getPostsSchema,
   createPostSchema,
   updatePostSchema,
   deletePostSchema,
 } = require("../validations/postsValidator");
-const { SORT, ORDER } = require("../utils/constants");
+const { success } = require("../utils/apiResponse");
+const { SORT, ORDER, STATUS_CODE, ERROR } = require("../utils/constants");
 
 const service = new PostService();
 
@@ -21,7 +22,13 @@ exports.getAllPosts = catchAsync(async (req, res, next) => {
     logger.error(
       `Unable to validate arguments in [ENDPOINT] 'GET_ALL_POSTS'. Error details: ${error.message}`
     );
-    return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
+    return next(
+      new APIError(
+        error.message,
+        STATUS_CODE.BAD_REQUEST,
+        ERROR.VALIDATION_ERROR
+      )
+    );
   }
   const {
     page = 1,
@@ -39,10 +46,9 @@ exports.getAllPosts = catchAsync(async (req, res, next) => {
     searchBy,
   });
 
-  res.status(200).json({
-    status: "success",
-    ...posts,
-  });
+  res
+    .status(STATUS_CODE.OK)
+    .json(success("Posts fetched successfully", posts));
 });
 
 exports.getUserPosts = catchAsync(async (req, res, next) => {
@@ -60,7 +66,13 @@ exports.getUserPosts = catchAsync(async (req, res, next) => {
     logger.error(
       `Unable to validate arguments in [ENDPOINT] 'GET_POSTS_OF_USER'. Error details: ${error.message}`
     );
-    return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
+    return next(
+      new APIError(
+        error.message,
+        STATUS_CODE.BAD_REQUEST,
+        ERROR.VALIDATION_ERROR
+      )
+    );
   }
 
   const { userId } = req.params;
@@ -81,10 +93,9 @@ exports.getUserPosts = catchAsync(async (req, res, next) => {
     userId,
   });
 
-  res.status(200).json({
-    status: "success",
-    ...userPosts,
-  });
+  res
+    .status(STATUS_CODE.OK)
+    .json(success("User posts fetched successfully", userPosts));
 });
 
 exports.getPost = catchAsync(async (req, res, next) => {
@@ -96,17 +107,20 @@ exports.getPost = catchAsync(async (req, res, next) => {
     logger.error(
       `Unable to validate arguments in [ENDPOINT] 'GET_A_POST'. Error details: ${error.message}`
     );
-    return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
+    return next(
+      new APIError(
+        error.message,
+        STATUS_CODE.BAD_REQUEST,
+        ERROR.VALIDATION_ERROR
+      )
+    );
   }
 
   const { postId } = req.params;
 
   const post = await service.GetAPost(postId);
 
-  res.status(200).json({
-    status: "success",
-    data: post,
-  });
+  res.status(STATUS_CODE.OK).json(success("A post fetched successfully", post));
 });
 
 exports.createPost = catchAsync(async (req, res, next) => {
@@ -118,7 +132,13 @@ exports.createPost = catchAsync(async (req, res, next) => {
     logger.error(
       `Unable to validate arguments in [ENDPOINT] 'CREATE_A_POST'. Error details: ${error.message}`
     );
-    return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
+    return next(
+      new APIError(
+        error.message,
+        STATUS_CODE.BAD_REQUEST,
+        ERROR.VALIDATION_ERROR
+      )
+    );
   }
 
   const {
@@ -141,10 +161,9 @@ exports.createPost = catchAsync(async (req, res, next) => {
     userId,
   });
 
-  res.status(201).json({
-    status: "success",
-    data: newPost,
-  });
+  res
+    .status(STATUS_CODE.CREATED)
+    .json(success("Post created successfully", newPost));
 });
 
 exports.updatePost = catchAsync(async (req, res, next) => {
@@ -162,19 +181,24 @@ exports.updatePost = catchAsync(async (req, res, next) => {
     logger.error(
       `Unable to validate arguments in [ENDPOINT] 'UPDATE_A_POST'. Error details: ${error.message}`
     );
-    return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
+    return next(
+      new APIError(
+        error.message,
+        STATUS_CODE.BAD_REQUEST,
+        ERROR.VALIDATION_ERROR
+      )
+    );
   }
 
   const updateFields = req.body;
   const { postId } = req.params;
-  const { id: userId } = req.user;
 
-  const updatedPost = await service.UpdateAPost(userId, updateFields, postId);
 
-  res.status(200).json({
-    status: "success",
-    data: updatedPost,
-  });
+  const updatedPost = await service.UpdateAPost(updateFields, postId);
+
+  res
+    .status(STATUS_CODE.OK)
+    .json(success("Post updated successfully", updatedPost));
 });
 
 exports.deletePost = catchAsync(async (req, res, next) => {
@@ -186,24 +210,27 @@ exports.deletePost = catchAsync(async (req, res, next) => {
     logger.error(
       `Unable to validate arguments in [ENDPOINT] 'DELETE_A_POST'. Error details: ${error.message}`
     );
-    return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
+    return next(
+      new APIError(
+        error.message,
+        STATUS_CODE.BAD_REQUEST,
+        ERROR.VALIDATION_ERROR
+      )
+    );
   }
 
   const { postId } = req.params;
-  const { id: userId } = req.user;
 
-  await service.DeleteAPost(userId, postId);
 
-  res.status(200).json({
-    status: "success",
-  });
+  await service.DeleteAPost(postId);
+
+  res.status(STATUS_CODE.OK).json(success("Post deleted successfully"));
 });
 
 exports.getAllCategories = catchAsync(async (req, res, next) => {
   const postCategories = await service.GetAllCategories();
 
-  res.status(200).json({
-    status: "success",
-    data: postCategories,
-  });
+  res
+    .status(STATUS_CODE.OK)
+    .json(success("Post Categories fetched successfully", postCategories));
 });

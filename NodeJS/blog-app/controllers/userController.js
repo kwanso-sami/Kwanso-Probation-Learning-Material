@@ -1,11 +1,13 @@
 const UserService = require("../services/userService");
 const catchAsync = require("../utils/catchAsync");
 const logger = require("../utils/loggers/appLogger");
-const { APIError, STATUS_CODES } = require("../utils/appError");
+const { APIError } = require("../utils/appError");
 const {
   updateUserSchema,
   getUserSchema,
 } = require("../validations/userValidator");
+const { success } = require("../utils/apiResponse");
+const { STATUS_CODE, ERROR } = require("../utils/constants");
 
 const service = new UserService();
 
@@ -17,7 +19,13 @@ exports.getUser = catchAsync(async (req, res, next) => {
     logger.error(
       `Unable to validate arguments in [ENDPOINT] 'UPDATE_USER'. Error details: ${error.message}`
     );
-    return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
+    return next(
+      new APIError(
+        error.message,
+        STATUS_CODE.BAD_REQUEST,
+        ERROR.VALIDATION_ERROR
+      )
+    );
   }
 
   const { userId } = req.params;
@@ -30,17 +38,16 @@ exports.getUser = catchAsync(async (req, res, next) => {
     profileImage,
   } = await service.FindUser(userId);
 
-  res.status(200).json({
-    status: "success",
-    data: {
+  res.status(STATUS_CODE.OK).json(
+    success("User fetched successfully", {
       id,
       firstName,
       lastName,
       email,
       profileThumbnail,
       profileImage,
-    },
-  });
+    })
+  );
 });
 
 exports.updateUser = catchAsync(async (req, res, next) => {
@@ -51,13 +58,19 @@ exports.updateUser = catchAsync(async (req, res, next) => {
     logger.error(
       `Unable to validate arguments in [ENDPOINT] 'UPDATE_USER'. Error details: ${error.message}`
     );
-    return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
+    return next(
+      new APIError(
+        error.message,
+        STATUS_CODE.BAD_REQUEST,
+        ERROR.VALIDATION_ERROR
+      )
+    );
   }
   const updateFields = req.body;
   const { id: userId } = req.user;
   const updatedUser = await service.UpdateUser(updateFields, userId);
-  res.status(200).json({
-    status: "success",
-    data: updatedUser,
-  });
+
+  res
+    .status(STATUS_CODE.OK)
+    .json(success("User updated successfully", updatedUser));
 });

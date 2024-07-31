@@ -1,7 +1,8 @@
 const catchAsync = require("../utils/catchAsync");
-const { APIError, STATUS_CODES } = require("../utils/appError");
+const { APIError } = require("../utils/appError");
 const { verifyToken } = require("../utils/jwtHelper");
 const UserService = require("../services/userService");
+const { STATUS_CODE, ERROR } = require("../utils/constants");
 
 module.exports = catchAsync(async (req, res, next) => {
   let token;
@@ -12,24 +13,29 @@ module.exports = catchAsync(async (req, res, next) => {
   }
 
   if (!token) {
-    return next(new APIError("Token Not Found", STATUS_CODES.UNAUTHORIZED));
+    return next(
+      new APIError(
+        "Token Not Found",
+        STATUS_CODE.UNAUTHORIZED,
+        ERROR.AUTHENTICATION_ERROR
+      )
+    );
   }
 
   const tokenPayload = await verifyToken(token);
 
   if (!tokenPayload) {
     return next(
-      new APIError("Access Token Expired", STATUS_CODES.UNAUTHORIZED)
+      new APIError(
+        "Access Token Expired",
+        STATUS_CODE.UNAUTHORIZED,
+        ERROR.AUTHENTICATION_ERROR
+      )
     );
   }
   const { id: userId } = tokenPayload;
   const rootUser = await new UserService().FindUser(userId);
 
-  if (!rootUser) {
-    return next(
-      new APIError("Invalid Access Token", STATUS_CODES.UNAUTHORIZED)
-    );
-  }
   req.user = rootUser;
 
   next();
