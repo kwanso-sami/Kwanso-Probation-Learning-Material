@@ -1,0 +1,737 @@
+{
+  "info": {
+    "_postman_id": "8a0cee8f-80f9-4850-ba1b-51a9a6b3106e",
+    "name": "blog-backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "36735391"
+  },
+  "item": [
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "send-otp",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\":\"sami.shakoor788@gmail.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/v1/auth/send-otp",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "v1", "auth", "send-otp"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "signup",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"firstName\": \"muhammad\",\n    \"lastName\": \"sami\",\n    \"email\": \"sami.shakoor788@gmail.com\",\n    \"password\": \"sami12345\",\n    \"OTP\":78615\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/v1/auth/signup",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "v1", "auth", "signup"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "",
+                "value": "",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n   \"email\": \"muhammad.sami@kwanso.com\",\n    \"password\": \"sami12345\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/v1/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "v1", "auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "forgot-password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\":\"muhammad.sami@kwanso.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/v1/auth/forgot-password",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "v1", "auth", "forgot-password"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "reset-password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEwMjVkM2Q4LTk0Y2ItNDQwZi1iZjQ3LTA2YjlmMWMxOTFkOCIsImlhdCI6MTcyMjMzOTQ3OSwiZXhwIjoxNzIyMzM5Nzc5fQ.PyvIaYI0gc9vSKciL92pYPhlmt48byLvVLMPZtYkLCA",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"password\":\"sami12345\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/v1/auth/reset-password",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "v1", "auth", "reset-password"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEwMjVkM2Q4LTk0Y2ItNDQwZi1iZjQ3LTA2YjlmMWMxOTFkOCIsImlhdCI6MTcyMjMzOTUzNCwiZXhwIjoxNzIyMzQwNDM0fQ.tMdn1jFkDi_ILC8JsH32zFL5QZAPQA2PVmlKUgjZKXg",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/v1/auth/logout",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "v1", "auth", "logout"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "refresh-token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/v1/auth/refresh-token",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "v1", "auth", "refresh-token"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "change-password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEwMjVkM2Q4LTk0Y2ItNDQwZi1iZjQ3LTA2YjlmMWMxOTFkOCIsImlhdCI6MTcyMjMzOTQzMywiZXhwIjoxNzIyMzQwMzMzfQ.PK9c5yJ7TmsfS7uyD8me_UGIAwRd3R4fZHv5pmpgajs",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"oldPassword\":\"sami12345\",\n    \"newPassword\":\"sami123\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/v1/auth/change-password",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "v1", "auth", "change-password"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "users",
+      "item": [
+        {
+          "name": "get-user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5YTU1YWZlLTUzZmItNDc0NC1hM2YzLWFhOWM2MTQ5NGNjYSIsImlhdCI6MTcyMjM0NTUxNCwiZXhwIjoxNzIyMzQ2NDE0fQ.0_o9lDLCvzg5XLVoYDihpSupJ2vaQZNi0Z1FRja9als",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/v1/users/e9a55afe-53fb-4744-a3f3-aa9c61494cca",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "e9a55afe-53fb-4744-a3f3-aa9c61494cca"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update-user",
+          "request": {
+            "method": "PATCH",
+            "header": []
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "posts",
+      "item": [
+        {
+          "name": "createPost",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5YTU1YWZlLTUzZmItNDc0NC1hM2YzLWFhOWM2MTQ5NGNjYSIsImlhdCI6MTcyMjM0Nzk2OCwiZXhwIjoxNzIyMzQ4ODY4fQ.63eB0K5jjmslFACxtrBZuVd0Ia7kdqgKmkb_-WRFfys",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"title4 by user 2\",\n    \"body\": \"lorem i dolar aaaaaaaaaaaaaaaaaaaaaa\",\n    \"readDuration\": 22,\n    \"categoryId\": \"ee65d7a7-5de5-40e7-8e69-ed0c81301d99\",\n    \"coverImage\": \"no cover image\",\n    \"coverThumbnail\": \"no cover thumbnail\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/v1/posts/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "v1", "posts", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getAllPosts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/v1/posts/?page=1&perPage=10&sortBy=createdAt&orderBy=desc",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "v1", "posts", ""],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "searchBy",
+                  "value": "technology",
+                  "disabled": true
+                },
+                {
+                  "key": "perPage",
+                  "value": "10"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt"
+                },
+                {
+                  "key": "orderBy",
+                  "value": "desc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getPostsOfUser",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5YTU1YWZlLTUzZmItNDc0NC1hM2YzLWFhOWM2MTQ5NGNjYSIsImlhdCI6MTcyMjQwNTQ4OSwiZXhwIjoxNzIyNDA2Mzg5fQ.8zNjIm6rYfzGl7r9PlwGmQ77iVesIT8qtNNJUsUU8Ic",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/v1/posts/user/e9a55afe-53fb-4744-a3f3-aa9c61494cca?page=1&perPage=10&sortBy=createdAt&orderBy=desc",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": [
+                "api",
+                "v1",
+                "posts",
+                "user",
+                "e9a55afe-53fb-4744-a3f3-aa9c61494cca"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "perPage",
+                  "value": "10"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt"
+                },
+                {
+                  "key": "orderBy",
+                  "value": "desc"
+                },
+                {
+                  "key": "searchBy",
+                  "value": "lifestyle",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getAPost",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/v1/posts/889f7614-8ad6-4fcd-8f63-3d63ed2b8a67",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": [
+                "api",
+                "v1",
+                "posts",
+                "889f7614-8ad6-4fcd-8f63-3d63ed2b8a67"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "updatePost",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5YTU1YWZlLTUzZmItNDc0NC1hM2YzLWFhOWM2MTQ5NGNjYSIsImlhdCI6MTcyMjQwNDcyNywiZXhwIjoxNzIyNDA1NjI3fQ.s1onjF3_2yq4zgqgO6RaDMfuxLMQ1aVlHwfNI5oU7Tg",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\":\"EventLoop in NodeJs\",\n    \"body\": \"EventLoop is a loop\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/v1/posts/889f7614-8ad6-4fcd-8f63-3d63ed2b8a67",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": [
+                "api",
+                "v1",
+                "posts",
+                "889f7614-8ad6-4fcd-8f63-3d63ed2b8a67"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "deletePost",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5YTU1YWZlLTUzZmItNDc0NC1hM2YzLWFhOWM2MTQ5NGNjYSIsImlhdCI6MTcyMjQwNDcyNywiZXhwIjoxNzIyNDA1NjI3fQ.s1onjF3_2yq4zgqgO6RaDMfuxLMQ1aVlHwfNI5oU7Tg",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/v1/posts/1fe896b7-7e53-48de-922b-c0a6b1c424d8",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": [
+                "api",
+                "v1",
+                "posts",
+                "1fe896b7-7e53-48de-922b-c0a6b1c424d8"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getPostCategories",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU5YTU1YWZlLTUzZmItNDc0NC1hM2YzLWFhOWM2MTQ5NGNjYSIsImlhdCI6MTcyMjQwNTQ4OSwiZXhwIjoxNzIyNDA2Mzg5fQ.8zNjIm6rYfzGl7r9PlwGmQ77iVesIT8qtNNJUsUU8Ic",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/v1/posts/categories",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "v1", "posts", "categories"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "comments",
+      "item": [
+        {
+          "name": "getAllComments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/api/v1/comments/?withReply=true&postId=f125405a-ba88-4b3e-8432-5ed7578172e5&page=1&perPage=10&sortBy=createdAt&orderBy=desc",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "v1", "comments", ""],
+              "query": [
+                {
+                  "key": "withReply",
+                  "value": "true"
+                },
+                {
+                  "key": "postId",
+                  "value": "f125405a-ba88-4b3e-8432-5ed7578172e5"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "perPage",
+                  "value": "10"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt"
+                },
+                {
+                  "key": "orderBy",
+                  "value": "desc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "createComment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEwMjVkM2Q4LTk0Y2ItNDQwZi1iZjQ3LTA2YjlmMWMxOTFkOCIsImlhdCI6MTcyMjQwNTkyNCwiZXhwIjoxNzIyNDA2ODI0fQ.Mm7uQGGr_oGrBITHghwDG5zapAQsmQdXox4Wa8ZewYI",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"postId\":\"f125405a-ba88-4b3e-8432-5ed7578172e5\",\n    \"body\":\"Great Post, I learnt a lot from this post.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/v1/comments/",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "v1", "comments", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "deleteComment",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEwMjVkM2Q4LTk0Y2ItNDQwZi1iZjQ3LTA2YjlmMWMxOTFkOCIsImlhdCI6MTcyMjQwNzM4MSwiZXhwIjoxNzIyNDA5MTgxfQ.CGbkEQgOD92lM6cEYwJ16CEqTsPmUV3c_FFBeBsc6e4",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/v1/comments/a2620f2c-2f4d-4463-add7-9e3d3bb4b008",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": [
+                "api",
+                "v1",
+                "comments",
+                "a2620f2c-2f4d-4463-add7-9e3d3bb4b008"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "updateComment",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEwMjVkM2Q4LTk0Y2ItNDQwZi1iZjQ3LTA2YjlmMWMxOTFkOCIsImlhdCI6MTcyMjQwNzM4MSwiZXhwIjoxNzIyNDA5MTgxfQ.CGbkEQgOD92lM6cEYwJ16CEqTsPmUV3c_FFBeBsc6e4",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"body\": \"Great Post. Made my day!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/v1/comments/a2620f2c-2f4d-4463-add7-9e3d3bb4b008",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": [
+                "api",
+                "v1",
+                "comments",
+                "a2620f2c-2f4d-4463-add7-9e3d3bb4b008"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

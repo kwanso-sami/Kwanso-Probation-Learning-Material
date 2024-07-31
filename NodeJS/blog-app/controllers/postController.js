@@ -129,7 +129,7 @@ exports.createPost = catchAsync(async (req, res, next) => {
     coverImage,
     coverThumbnail,
   } = req.body;
-  const {id:userId } = req.user;
+  const { id: userId } = req.user;
 
   const newPost = await service.CreateAPost({
     title,
@@ -167,8 +167,9 @@ exports.updatePost = catchAsync(async (req, res, next) => {
 
   const updateFields = req.body;
   const { postId } = req.params;
+  const { id: userId } = req.user;
 
-  const updatedPost = await service.UpdateAPost(updateFields, postId);
+  const updatedPost = await service.UpdateAPost(userId, updateFields, postId);
 
   res.status(200).json({
     status: "success",
@@ -189,10 +190,20 @@ exports.deletePost = catchAsync(async (req, res, next) => {
   }
 
   const { postId } = req.params;
+  const { id: userId } = req.user;
 
-  await service.DeleteAPost(postId);
+  await service.DeleteAPost(userId, postId);
 
   res.status(200).json({
     status: "success",
+  });
+});
+
+exports.getAllCategories = catchAsync(async (req, res, next) => {
+  const postCategories = await service.GetAllCategories();
+
+  res.status(200).json({
+    status: "success",
+    data: postCategories,
   });
 });

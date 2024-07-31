@@ -21,12 +21,24 @@ exports.getUser = catchAsync(async (req, res, next) => {
   }
 
   const { userId } = req.params;
-  const { id, firstName, lastName, email,profileThumbnail,profileImage } = await service.FindUser(userId);
+  const {
+    id,
+    firstName,
+    lastName,
+    email,
+    profileThumbnail,
+    profileImage,
+  } = await service.FindUser(userId);
 
   res.status(200).json({
     status: "success",
     data: {
-      id, firstName, lastName, email,profileThumbnail,profileImage
+      id,
+      firstName,
+      lastName,
+      email,
+      profileThumbnail,
+      profileImage,
     },
   });
 });
@@ -46,6 +58,6 @@ exports.updateUser = catchAsync(async (req, res, next) => {
   const updatedUser = await service.UpdateUser(updateFields, userId);
   res.status(200).json({
     status: "success",
-    data:updatedUser,
+    data: updatedUser,
   });
 });

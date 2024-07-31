@@ -7,9 +7,14 @@ commentRouter
   .route("/")
   .post(authenticateUser, commentController.createComment);
 
-commentRouter
-  .route("/")
-  .get(commentController.getAllComments);
+commentRouter.route("/").get(commentController.getAllComments);
 
+commentRouter
+  .route("/:commentId")
+  .delete(authenticateUser, commentController.deleteComment);
+
+commentRouter
+  .route("/:commentId")
+  .patch(authenticateUser, commentController.updateComment);
 
 module.exports = commentRouter;
