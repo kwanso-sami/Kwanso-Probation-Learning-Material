@@ -1,7 +1,7 @@
 const AuthService = require("../services/authService");
 const catchAsync = require("../utils/catchAsync");
 const logger = require("../utils/loggers/appLogger");
-const { APIError, STATUS_CODES } = require("../utils/appError");
+const { APIError } = require("../utils/appError");
 const {
   signupSchema,
   loginSchema,
@@ -12,6 +12,8 @@ const {
   otpSchema,
 } = require("../validations/authValidator");
 const { cookieOptions } = require("../config");
+const { success } = require("../utils/apiResponse");
+const { STATUS_CODE, ERROR } = require("../utils/constants");
 
 const service = new AuthService();
 
@@ -23,14 +25,19 @@ exports.signup = catchAsync(async (req, res, next) => {
     logger.error(
       `Unable to validate arguments in [ENDPOINT] 'USER_SIGNUP'. Error details: ${error.message}`
     );
-    return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
+    return next(
+      new APIError(
+        error.message,
+        STATUS_CODE.BAD_REQUEST,
+        ERROR.VALIDATION_ERROR
+      )
+    );
   }
 
   const user = req.body;
   await service.SignUp(user);
-  res.status(201).json({
-    status: "success",
-  });
+
+  res.status(STATUS_CODE.CREATED).json(success("User signed up successfully"));
 });
 
 exports.sendOTP = catchAsync(async (req, res, next) => {
@@ -41,17 +48,23 @@ exports.sendOTP = catchAsync(async (req, res, next) => {
     logger.error(
       `Unable to validate arguments in [ENDPOINT] 'SEND_OTP'. Error details: ${error.message}`
     );
-    return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
+    return next(
+      new APIError(
+        error.message,
+        STATUS_CODE.BAD_REQUEST,
+        ERROR.VALIDATION_ERROR
+      )
+    );
   }
 
   const { email: userEmail } = req.body;
   const otpCode = await service.sendOTP(userEmail);
-  res.status(200).json({
-    status: "success",
-    data: {
+
+  res.status(STATUS_CODE.OK).json(
+    success("OTP Code sent successfully", {
       otpCode,
-    },
-  });
+    })
+  );
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -60,7 +73,13 @@ exports.login = catchAsync(async (req, res, next) => {
     logger.error(
       `Unable to validate arguments in [ENDPOINT] 'USER_LOGIN'. Error details: ${error.message}`
     );
-    return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
+    return next(
+      new APIError(
+        error.message,
+        STATUS_CODE.BAD_REQUEST,
+        ERROR.VALIDATION_ERROR
+      )
+    );
   }
   const user = req.body;
   const {
@@ -70,12 +89,11 @@ exports.login = catchAsync(async (req, res, next) => {
   } = await service.SignIn(user);
 
   res
-    .status(200)
+    .status(STATUS_CODE.OK)
     .cookie("accessToken", accessToken, cookieOptions)
     .cookie("refreshToken", refreshToken, cookieOptions)
-    .json({
-      status: "success",
-      data: {
+    .json(
+      success("User logged in successfully", {
         tokens: {
           accessToken,
           refreshToken,
@@ -88,8 +106,8 @@ exports.login = catchAsync(async (req, res, next) => {
           profileThumbnail: loggedInUser.profileThumbnail,
           profileImage: loggedInUser.profileImage,
         },
-      },
-    });
+      })
+    );
 });
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
@@ -100,16 +118,22 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     logger.error(
       `Unable to validate arguments in [ENDPOINT] 'FORGOT_PASSWORD'. Error details: ${error.message}`
     );
-    return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
+    return next(
+      new APIError(
+        error.message,
+        STATUS_CODE.BAD_REQUEST,
+        ERROR.VALIDATION_ERROR
+      )
+    );
   }
   const { email } = req.body;
   const passwordResetLink = await service.ForgotPassword(email);
-  res.status(200).json({
-    status: "success",
-    data: {
+
+  res.status(STATUS_CODE.OK).json(
+    success("Password reset email successfully", {
       passwordResetLink,
-    },
-  });
+    })
+  );
 });
 
 exports.resetPassword = catchAsync(async (req, res, next) => {
@@ -120,16 +144,20 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     logger.error(
       `Unable to validate arguments in [ENDPOINT] 'RESET_PASSWORD'. Error details: ${error.message}`
     );
-    return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
+    return next(
+      new APIError(
+        error.message,
+        STATUS_CODE.BAD_REQUEST,
+        ERROR.VALIDATION_ERROR
+      )
+    );
   }
 
   const { password: newPassword } = req.body;
   const { id: userId } = req.user;
   await service.ResetPassword(userId, newPassword);
 
-  res.status(200).json({
-    status: "success",
-  });
+  res.status(STATUS_CODE.OK).json(success("Password reset successfully"));
 });
 
 exports.changeCurrentPassword = catchAsync(async (req, res, next) => {
@@ -140,16 +168,20 @@ exports.changeCurrentPassword = catchAsync(async (req, res, next) => {
     logger.error(
       `Unable to validate arguments in [ENDPOINT] 'CHANGE_CURRENT_PASSWORD'. Error details: ${error.message}`
     );
-    return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
+    return next(
+      new APIError(
+        error.message,
+        STATUS_CODE.BAD_REQUEST,
+        ERROR.VALIDATION_ERROR
+      )
+    );
   }
 
   const { oldPassword, newPassword } = req.body;
   const { user } = req;
   await service.ChangeCurrentPassword(user, oldPassword, newPassword);
 
-  res.status(200).json({
-    status: "success",
-  });
+  res.status(STATUS_CODE.OK).json(success("Password changed successfully"));
 });
 
 exports.refreshAccessToken = catchAsync(async (req, res, next) => {
@@ -164,7 +196,13 @@ exports.refreshAccessToken = catchAsync(async (req, res, next) => {
     logger.error(
       `Unable to validate arguments in [ENDPOINT] 'REFRESH_ACCESS_TOKEN'. Error details: ${error.message}`
     );
-    return next(new APIError(error.message, STATUS_CODES.BAD_REQUEST));
+    return next(
+      new APIError(
+        error.message,
+        STATUS_CODE.BAD_REQUEST,
+        ERROR.VALIDATION_ERROR
+      )
+    );
   }
 
   const { newAccessToken, newRefreshToken } = await service.GenerateNewToken({
@@ -172,24 +210,23 @@ exports.refreshAccessToken = catchAsync(async (req, res, next) => {
   });
 
   res
-    .status(200)
+    .status(STATUS_CODE.OK)
     .cookie("accessToken", newAccessToken, cookieOptions)
     .cookie("refreshToken", newRefreshToken, cookieOptions)
-    .json({
-      status: "success",
-      data: {
+    .json(
+      success("Password changed successfully", {
         tokens: {
           accessToken: newAccessToken,
           refreshToken: newRefreshToken,
         },
-      },
-    });
+      })
+    );
 });
 
 exports.logoutUser = catchAsync(async (req, res, next) => {
   return res
-    .status(200)
+    .status(STATUS_CODE.OK)
     .clearCookie("accessToken", cookieOptions)
     .clearCookie("refreshToken", cookieOptions)
-    .json({ status: "success" });
+    .json(success("User logged out successfully"));
 });

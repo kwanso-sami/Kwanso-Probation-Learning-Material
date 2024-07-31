@@ -1,5 +1,6 @@
-const { APIError, STATUS_CODES } = require("./appError");
-const { OTP_LENGTH, CLIENT_URL } = require("../config");
+const { APIError } = require("./appError");
+const { OTP_LENGTH } = require("../config");
+const { ERROR, STATUS_CODE } = require("./constants");
 const otpGenerator = require("otp-generator");
 
 module.exports = {
@@ -13,7 +14,8 @@ module.exports = {
     } catch (e) {
       throw new APIError(
         "Failed to Generate OTP",
-        STATUS_CODES.INTERNAL_SERVER_ERROR
+        STATUS_CODE.INTERNAL_SERVER_ERROR,
+        ERROR.API_ERROR
       );
     }
   },
@@ -28,7 +30,8 @@ module.exports = {
     } catch (e) {
       throw new APIError(
         "Failed to Verify OTP",
-        STATUS_CODES.INTERNAL_SERVER_ERROR
+        STATUS_CODE.INTERNAL_SERVER_ERROR,
+        ERROR.API_ERROR
       );
     }
   },

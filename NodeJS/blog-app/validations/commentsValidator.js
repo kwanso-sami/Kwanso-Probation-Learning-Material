@@ -2,33 +2,39 @@ const Joi = require("joi");
 
 const createCommentSchema = Joi.object().keys({
   postId: Joi.string().required(),
-  body: Joi.string().required(),
+  body: Joi.string()
+    .trim()
+    .required(),
   parentCommentId: Joi.string(),
 });
 
 const getCommentsSchema = Joi.object().keys({
-  postId: Joi.string(),
+  postId: Joi.string().trim(),
   page: Joi.number().integer(),
   perPage: Joi.number().integer(),
-  sortBy: Joi.string(),
-  orderBy: Joi.string(),
+  sortBy: Joi.string().trim(),
+  orderBy: Joi.string().trim(),
   withReply: Joi.boolean(),
 });
 
 const deleteCommentSchema = Joi.object().keys({
-  commentId: Joi.string().required(),
+  commentId: Joi.string()
+    .trim()
+    .required(),
 });
-
 
 const updateCommentSchema = Joi.object().keys({
-  commentId: Joi.string().required(),
-  body: Joi.string(),
+  commentId: Joi.string()
+    .trim()
+    .required(),
+  body: Joi.string()
+    .trim()
+    .required(),
 });
-
 
 module.exports = {
   createCommentSchema,
   getCommentsSchema,
   deleteCommentSchema,
-  updateCommentSchema
+  updateCommentSchema,
 };

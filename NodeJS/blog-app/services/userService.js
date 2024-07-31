@@ -1,5 +1,6 @@
-const { APIError, STATUS_CODES } = require("../utils/appError");
+const { APIError } = require("../utils/appError");
 const { User } = require("../models");
+const { STATUS_CODE, ERROR } = require("../utils/constants");
 
 class UserService {
   constructor() {
@@ -8,14 +9,17 @@ class UserService {
 
   async FindUser(userId) {
     try {
-      const user = await this.UserModel.findByPk(userId
-      );
+      const user = await this.UserModel.findByPk(userId);
       if (!user) {
-        throw new APIError("User Not Found", STATUS_CODES.NOT_FOUND);
+        throw new APIError(
+          "User Not Found",
+          STATUS_CODE.NOT_FOUND,
+          ERROR.API_ERROR
+        );
       }
       return user;
     } catch (err) {
-      throw new APIError(`USERS API ERROR : ${err.message}`, err.statusCode);
+      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
     }
   }
 
@@ -27,7 +31,7 @@ class UserService {
       });
       return updatedUser[0];
     } catch (err) {
-      throw new APIError(`USERS API ERROR : ${err.message}`, err.statusCode);
+      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
     }
   }
 }

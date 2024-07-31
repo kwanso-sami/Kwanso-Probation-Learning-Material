@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
-const { APIError, STATUS_CODES } = require("./appError");
+const { APIError } = require("./appError");
+const { ERROR, STATUS_CODE } = require("./constants");
 
 module.exports = {
   generateEncryptedPassword: async (password) => {
@@ -8,10 +9,11 @@ module.exports = {
       const salt = await bcrypt.genSalt(saltRounds);
       const encryptedPassword = await bcrypt.hash(password, salt);
       return { encryptedPassword, salt };
-    } catch (e) {
+    } catch (err) {
       throw new APIError(
         "Failed to Generate Encrypted Password",
-        STATUS_CODES.INTERNAL_SERVER_ERROR
+        STATUS_CODE.INTERNAL_SERVER_ERROR,
+        ERROR.API_ERROR
       );
     }
   },
@@ -21,15 +23,23 @@ module.exports = {
     currentPasswordHash,
     currentPasswordSalt
   ) => {
-    const inputPasswordHash = await bcrypt.hash(
-      inputPassword,
-      currentPasswordSalt
-    );
+    try {
+      const inputPasswordHash = await bcrypt.hash(
+        inputPassword,
+        currentPasswordSalt
+      );
 
-    if (inputPasswordHash !== currentPasswordHash) {
-      return false;
+      if (inputPasswordHash !== currentPasswordHash) {
+        return false;
+      }
+
+      return true;
+    } catch (err) {
+      throw new APIError(
+        "Failed to verify password",
+        STATUS_CODE.INTERNAL_SERVER_ERROR,
+        ERROR.API_ERROR
+      );
     }
-
-    return true;
   },
 };

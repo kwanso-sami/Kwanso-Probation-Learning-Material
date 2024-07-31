@@ -1,6 +1,7 @@
-const { APIError, STATUS_CODES } = require("../utils/appError");
+const { APIError } = require("../utils/appError");
 const { Post, User, Category, Sequelize } = require("../models");
 const { Op, literal } = Sequelize;
+const { STATUS_CODE, ERROR } = require("../utils/constants");
 
 class PostService {
   constructor() {
@@ -11,6 +12,8 @@ class PostService {
 
   async GetAllPosts(postParams) {
     try {
+
+ 
       const { page, perPage, sortBy, orderBy, searchBy, userId } = postParams;
 
       const offset = (page - 1) * perPage;
@@ -71,7 +74,7 @@ class PostService {
         },
       };
     } catch (err) {
-      throw new APIError(`POSTS API ERROR : ${err.message}`, err.statusCode);
+      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
     }
   }
 
@@ -101,9 +104,17 @@ class PostService {
         include: includeModels,
       });
 
+      if(!post){
+        throw new APIError(
+          "Post Not Found.",
+          STATUS_CODE.NOT_FOUND,
+          ERROR.API_ERROR
+        );
+      }
+      
       return post;
     } catch (err) {
-      throw new APIError(`POSTS API ERROR : ${err.message}`, err.statusCode);
+      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
     }
   }
 
@@ -112,48 +123,40 @@ class PostService {
       const post = await this.PostModel.create(newPost);
       return post;
     } catch (err) {
-      throw new APIError(`POSTS API ERROR : ${err.message}`, err.statusCode);
+      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
     }
   }
 
-  async UpdateAPost(userId, updateFields, postId) {
+  async UpdateAPost(updateFields, postId) {
     try {
       const post = await this.PostModel.findByPk(postId);
       if (!post) {
-        throw new APIError("Post Not Found.", STATUS_CODES.NOT_FOUND);
-      }
-
-      if (post.userId !== userId) {
         throw new APIError(
-          "You do not have permission to update this post.",
-          STATUS_CODES.FORBIDDEN
+          "Post Not Found.",
+          STATUS_CODE.NOT_FOUND,
+          ERROR.API_ERROR
         );
       }
-
       const updatedPost = await post.update(updateFields);
       return updatedPost;
     } catch (err) {
-      throw new APIError(`POSTS API ERROR : ${err.message}`, err.statusCode);
+      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
     }
   }
 
-  async DeleteAPost(userId, postId) {
+  async DeleteAPost(postId) {
     try {
       const post = await this.PostModel.findByPk(postId);
       if (!post) {
-        throw new APIError("Post Not Found.", STATUS_CODES.NOT_FOUND);
-      }
-
-      if (post.userId !== userId) {
         throw new APIError(
-          "You do not have permission to delete this post.",
-          STATUS_CODES.FORBIDDEN
+          "Post Not Found.",
+          STATUS_CODE.NOT_FOUND,
+          ERROR.API_ERROR
         );
       }
-
       await post.destroy();
     } catch (err) {
-      throw new APIError(`POSTS API ERROR : ${err.message}`, err.statusCode);
+      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
     }
   }
 
@@ -164,7 +167,7 @@ class PostService {
       });
       return categories;
     } catch (err) {
-      throw new APIError(`POSTS API ERROR : ${err.message}`, err.statusCode);
+      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
     }
   }
 }

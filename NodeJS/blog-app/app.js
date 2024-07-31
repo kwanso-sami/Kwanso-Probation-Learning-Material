@@ -6,7 +6,9 @@ const morgan = require("morgan");
 const express = require("express");
 const rateLimit = require("express-rate-limit");
 const cookieParser = require("cookie-parser");
-const { APIError, STATUS_CODES } = require("./utils/appError");
+const { APIError } = require("./utils/appError");
+const { STATUS_CODE } = require("./utils/constants");
+
 const httpLogger = require("./utils/loggers/httpLogger");
 const { errorHandler } = require("./utils/errorHandler");
 require("express-validator");
@@ -52,7 +54,7 @@ app.use("/api/v1", apiRouter);
 app.all("*", (req, res, next) => {
   const err = new APIError(
     `Can't find ${req.originalUrl} on the server!`,
-    STATUS_CODES.NOT_FOUND
+    STATUS_CODE.NOT_FOUND
   );
   next(err);
 });

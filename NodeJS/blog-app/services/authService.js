@@ -1,6 +1,6 @@
 const { CLIENT_URL } = require("../config");
 const { User, OTP } = require("../models");
-const { APIError, STATUS_CODES } = require("../utils/appError");
+const { APIError} = require("../utils/appError");
 const sendPasswordResetEmail = require("../utils/email/sendPasswordResetEmail");
 const {
   signAccessToken,
@@ -8,7 +8,7 @@ const {
   signPasswordResetToken,
   verifyToken,
 } = require("../utils/jwtHelper");
-
+const { STATUS_CODE, ERROR } = require("../utils/constants");
 const {
   generateEncryptedPassword,
   verifyHashedPassword,
@@ -29,7 +29,11 @@ class AuthService {
       });
 
       if (oldUser) {
-        throw new APIError("User Already Exists.", STATUS_CODES.CONFLICT);
+        throw new APIError(
+          "User Already Exists.",
+          STATUS_CODE.CONFLICT,
+          ERROR.API_ERROR
+        );
       }
 
       let OTP = await generateOTP();
@@ -52,7 +56,7 @@ class AuthService {
 
       return OTP;
     } catch (err) {
-      throw new APIError(`AUTH API ERROR : ${err.message}`);
+      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
     }
   }
 
@@ -63,7 +67,11 @@ class AuthService {
       });
 
       if (oldUser) {
-        throw new APIError("User Already Exists.", STATUS_CODES.CONFLICT);
+        throw new APIError(
+          "User Already Exists.",
+          STATUS_CODE.CONFLICT,
+          ERROR.API_ERROR
+        );
       }
 
       const otp = await this.OtpModel.findOne({
@@ -72,7 +80,11 @@ class AuthService {
       });
 
       if (!otp) {
-        throw new APIError("OTP has been expired", STATUS_CODES.NOT_FOUND);
+        throw new APIError(
+          "OTP has been expired",
+          STATUS_CODE.NOT_FOUND,
+          ERROR.API_ERROR
+        );
       }
 
       const { OTP: actualOTP } = otp;
@@ -82,7 +94,8 @@ class AuthService {
       if (!isOTPVerified) {
         throw new APIError(
           "OTP Verification Failed!",
-          STATUS_CODES.BAD_REQUEST
+          STATUS_CODE.BAD_REQUEST,
+          ERROR.API_ERROR
         );
       }
 
@@ -98,7 +111,7 @@ class AuthService {
         salt,
       });
     } catch (err) {
-      throw new APIError(`AUTH API ERROR : ${err.message}`, err.statusCode);
+      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
     }
   }
 
@@ -109,7 +122,11 @@ class AuthService {
       });
 
       if (!user) {
-        throw new APIError("User Not Found", STATUS_CODES.NOT_FOUND);
+        throw new APIError(
+          "User Not Found",
+          STATUS_CODE.NOT_FOUND,
+          ERROR.API_ERROR
+        );
       }
 
       const { password: currentPasswordHash, salt: currentPasswordSalt } = user;
@@ -121,7 +138,11 @@ class AuthService {
       );
 
       if (!isPasswordVerified) {
-        throw new APIError("Invalid Password", STATUS_CODES.NOT_FOUND);
+        throw new APIError(
+          "Invalid Password",
+          STATUS_CODE.NOT_FOUND,
+          ERROR.API_ERROR
+        );
       }
 
       const accessToken = await signAccessToken({ id: user.id });
@@ -132,7 +153,7 @@ class AuthService {
         user,
       };
     } catch (err) {
-      throw new APIError(`AUTH API ERROR : ${err.message}`, err.statusCode);
+      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
     }
   }
 
@@ -143,7 +164,11 @@ class AuthService {
       });
 
       if (!oldUser) {
-        throw new APIError("User Not Exists.", STATUS_CODES.NOT_FOUND);
+        throw new APIError(
+          "User Not Exists.",
+          STATUS_CODE.NOT_FOUND,
+          ERROR.API_ERROR
+        );
       }
 
       const { id: userId, email: userEmail } = oldUser;
@@ -156,12 +181,13 @@ class AuthService {
       if (!emailSent) {
         throw new APIError(
           "Unable to Send Password Reset Email",
-          STATUS_CODES.INTERNAL_SERVER_ERROR
+          STATUS_CODE.INTERNAL_SERVER_ERROR,
+          ERROR.API_ERROR
         );
       }
       return link;
     } catch (err) {
-      throw new APIError(`AUTH API ERROR : ${err.message}`, err.statusCode);
+      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
     }
   }
 
@@ -179,7 +205,7 @@ class AuthService {
         }
       );
     } catch (err) {
-      throw new APIError(`AUTH API ERROR : ${err.message}`, err.statusCode);
+      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
     }
   }
 
@@ -199,12 +225,16 @@ class AuthService {
       );
 
       if (!isOldPasswordVerified) {
-        throw new APIError("Invalid Old Password", STATUS_CODES.NOT_FOUND);
+        throw new APIError(
+          "Invalid Old Password",
+          STATUS_CODE.NOT_FOUND,
+          ERROR.API_ERROR
+        );
       }
 
       await this.ResetPassword(userId, newPassword);
     } catch (err) {
-      throw new APIError(`USERS API ERROR : ${err.message}`, err.statusCode);
+      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
     }
   }
 
@@ -220,7 +250,8 @@ class AuthService {
         if (!user) {
           throw new APIError(
             "Invalid Refresh Token",
-            STATUS_CODES.UNAUTHORIZED
+            STATUS_CODE.UNAUTHORIZED,
+            ERROR.API_ERROR
           );
         }
 
@@ -234,11 +265,12 @@ class AuthService {
       } else {
         throw new APIError(
           "Current Refresh Token Expired",
-          STATUS_CODES.UNAUTHORIZED
+          STATUS_CODE.UNAUTHORIZED,
+          ERROR.API_ERROR
         );
       }
     } catch (err) {
-      throw new APIError(`USERS API ERROR : ${err.message}`, err.statusCode);
+      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
     }
   }
 }
