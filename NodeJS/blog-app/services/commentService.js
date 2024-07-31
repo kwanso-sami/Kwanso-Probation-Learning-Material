@@ -1,5 +1,6 @@
 const { APIError } = require("../utils/appError");
-const { Comment, User } = require("../models");
+const { Comment, User, Sequelize } = require("../models");
+const { literal } = Sequelize;
 const { STATUS_CODE, ERROR } = require("../utils/constants");
 
 class CommentService {
@@ -14,7 +15,7 @@ class CommentService {
 
       if (parentCommentId) {
         const parentComment = await this.CommentModel.findByPk(parentCommentId);
-        
+
         if (!parentComment) {
           throw new APIError(
             `Parent Comment Not Found`,
@@ -52,20 +53,16 @@ class CommentService {
         commentFilter.postId = postId;
       }
 
-      const commentAttributes = ["id", "body", "createdAt"];
-
-      const userAttributes = [
-        "id",
-        "firstName",
-        "lastName",
-        "profileThumbnail",
-      ];
-
       const includeModels = [
         {
           model: this.UserModel,
           as: "creator",
-          attributes: userAttributes,
+          attributes: [
+            "id",
+            "firstName",
+            "lastName",
+            "profileThumbnail",
+          ],
         },
       ];
 
@@ -73,12 +70,17 @@ class CommentService {
         includeModels.push({
           model: this.CommentModel,
           as: "replies",
-          attributes: commentAttributes,
+          attributes: [["id","replyId"], "body", "createdAt"],
           include: [
             {
               model: this.UserModel,
               as: "creator",
-              attributes: userAttributes,
+              attributes: [
+                "id",
+                "firstName",
+                "lastName",
+                "profileThumbnail",
+              ],
             },
           ],
         });
@@ -92,7 +94,8 @@ class CommentService {
         offset: offset,
         limit: limit,
         order: [[sortBy, orderBy]],
-        attributes: commentAttributes,
+        attributes: [["id","commentId"], "body", "createdAt",
+          [literal(`(SELECT COUNT(*) FROM comments AS replies WHERE replies.parentCommentId = Comment.id)`), "replyCount"]],
         include: includeModels,
       });
 
