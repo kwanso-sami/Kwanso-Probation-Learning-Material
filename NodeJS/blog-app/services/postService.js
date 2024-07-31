@@ -13,7 +13,6 @@ class PostService {
   async GetAllPosts(postParams) {
     try {
 
- 
       const { page, perPage, sortBy, orderBy, searchBy, userId } = postParams;
 
       const offset = (page - 1) * perPage;
