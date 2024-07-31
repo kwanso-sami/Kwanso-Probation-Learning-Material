@@ -9,6 +9,10 @@ postRouter
   .route("/user/:userId")
   .get(authenticateUser, postController.getUserPosts);
 
+postRouter
+  .route("/categories")
+  .get(authenticateUser, postController.getAllCategories);
+
 postRouter.route("/:postId").get(postController.getPost);
 
 postRouter.route("/").post(authenticateUser, postController.createPost);

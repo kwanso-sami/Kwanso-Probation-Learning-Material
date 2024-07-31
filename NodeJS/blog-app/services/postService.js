@@ -116,12 +116,20 @@ class PostService {
     }
   }
 
-  async UpdateAPost(updateFields, postId) {
+  async UpdateAPost(userId, updateFields, postId) {
     try {
       const post = await this.PostModel.findByPk(postId);
       if (!post) {
         throw new APIError("Post Not Found.", STATUS_CODES.NOT_FOUND);
       }
+
+      if (post.userId !== userId) {
+        throw new APIError(
+          "You do not have permission to update this post.",
+          STATUS_CODES.FORBIDDEN
+        );
+      }
+
       const updatedPost = await post.update(updateFields);
       return updatedPost;
     } catch (err) {
@@ -129,13 +137,32 @@ class PostService {
     }
   }
 
-  async DeleteAPost(postId) {
+  async DeleteAPost(userId, postId) {
     try {
       const post = await this.PostModel.findByPk(postId);
       if (!post) {
         throw new APIError("Post Not Found.", STATUS_CODES.NOT_FOUND);
       }
+
+      if (post.userId !== userId) {
+        throw new APIError(
+          "You do not have permission to delete this post.",
+          STATUS_CODES.FORBIDDEN
+        );
+      }
+
       await post.destroy();
+    } catch (err) {
+      throw new APIError(`POSTS API ERROR : ${err.message}`, err.statusCode);
+    }
+  }
+
+  async GetAllCategories() {
+    try {
+      const categories = await this.CategoryModel.findAll({
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+      });
+      return categories;
     } catch (err) {
       throw new APIError(`POSTS API ERROR : ${err.message}`, err.statusCode);
     }

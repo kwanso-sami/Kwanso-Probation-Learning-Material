@@ -35,6 +35,8 @@ const deletePostSchema = Joi.object().keys({
   postId: Joi.string().required(),
 });
 
+
+
 module.exports = {
   getPostsSchema,
   createPostSchema,

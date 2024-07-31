@@ -12,10 +12,23 @@ const getCommentsSchema = Joi.object().keys({
   perPage: Joi.number().integer(),
   sortBy: Joi.string(),
   orderBy: Joi.string(),
-  isReply: Joi.boolean(),
+  withReply: Joi.boolean(),
 });
+
+const deleteCommentSchema = Joi.object().keys({
+  commentId: Joi.string().required(),
+});
+
+
+const updateCommentSchema = Joi.object().keys({
+  commentId: Joi.string().required(),
+  body: Joi.string(),
+});
+
 
 module.exports = {
   createCommentSchema,
   getCommentsSchema,
+  deleteCommentSchema,
+  updateCommentSchema
 };
