@@ -7,6 +7,7 @@ const {
   getCommentsSchema,
   deleteCommentSchema,
   updateCommentSchema,
+  getRepliesSchema
 } = require("../validations/commentsValidator");
 const { success } = require("../utils/apiResponse");
 const { SORT, ORDER, STATUS_CODE, ERROR } = require("../utils/constants");
@@ -145,4 +146,30 @@ exports.updateComment = catchAsync(async (req, res, next) => {
   res
     .status(STATUS_CODE.OK)
     .json(success("Comment updated successfully", updatedComment));
+});
+
+
+exports.getCommentReplies = catchAsync(async (req, res, next) => {
+  const { error } = getRepliesSchema.validate(req.params, {
+    abortEarly: false,
+  });
+
+  if (error) {
+    logger.error(
+      `Unable to validate arguments in [ENDPOINT] 'GET_COMMENT_REPLIES'. Error details: ${error.message}`
+    );
+    return next(
+      new APIError(
+        error.message,
+        STATUS_CODE.BAD_REQUEST,
+        ERROR.VALIDATION_ERROR
+      )
+    );
+  }
+
+  const { commentId } = req.params;
+
+  const commentReplies = await service.GetRepliesForComment(commentId);
+
+  res.status(STATUS_CODE.OK).json(success("Replies of comment fetched successfully",commentReplies));
 });

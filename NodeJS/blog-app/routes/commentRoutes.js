@@ -17,4 +17,9 @@ commentRouter
   .route("/:commentId")
   .patch(authenticateUser, commentController.updateComment);
 
+
+commentRouter
+  .route("/:commentId/replies")
+  .get(commentController.getCommentReplies);  
+
 module.exports = commentRouter;

@@ -1,6 +1,6 @@
 const { APIError } = require("../utils/appError");
 const { Post, User, Category, Sequelize } = require("../models");
-const { Op, literal } = Sequelize;
+const { Op} = Sequelize;
 const { STATUS_CODE, ERROR } = require("../utils/constants");
 
 class PostService {
@@ -14,6 +14,15 @@ class PostService {
     try {
 
       const { page, perPage, sortBy, orderBy, searchBy, userId } = postParams;
+
+      const user = await this.UserModel.findByPk(userId);
+      if (!user) {
+        throw new APIError(
+          "User Not Found",
+          STATUS_CODE.NOT_FOUND,
+          ERROR.API_ERROR
+        );
+      }
 
       const offset = (page - 1) * perPage;
       const limit = perPage;
@@ -36,8 +45,8 @@ class PostService {
           as: "creator",
           attributes: [
             "id",
-            [literal('CONCAT("firstName", \' \', "lastName")'), "name"],
-            "profileThumbnail",
+          "fullName",
+          "profileThumbnail",
           ],
         },
         {
@@ -79,13 +88,14 @@ class PostService {
 
   async GetAPost(postId) {
     try {
+
       const includeModels = [
         {
           model: User,
           as: "creator",
           attributes: [
             "id",
-            [literal('CONCAT("firstName", \' \', "lastName")'), "name"],
+            "fullName",
             "profileThumbnail",
           ],
         },
@@ -95,6 +105,7 @@ class PostService {
           attributes: ["id", "name"],
         },
       ];
+
       const post = await this.PostModel.findOne({
         where: { id: postId },
         attributes: {

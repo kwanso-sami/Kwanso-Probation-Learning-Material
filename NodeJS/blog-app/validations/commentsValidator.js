@@ -23,6 +23,12 @@ const deleteCommentSchema = Joi.object().keys({
     .required(),
 });
 
+const getRepliesSchema = Joi.object().keys({
+  commentId: Joi.string()
+    .trim()
+    .required(),
+});
+
 const updateCommentSchema = Joi.object().keys({
   commentId: Joi.string()
     .trim()
@@ -37,4 +43,5 @@ module.exports = {
   getCommentsSchema,
   deleteCommentSchema,
   updateCommentSchema,
+  getRepliesSchema
 };

@@ -21,7 +21,7 @@ function errorHandler(err, req, res, next) {
       }
     }
   }
-  logger.error(message);
+  logger.error(err);
 
   let stackTrace = undefined;
   // return the stack trace only when
