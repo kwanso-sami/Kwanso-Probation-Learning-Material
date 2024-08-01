@@ -1,6 +1,6 @@
 const { APIError } = require("../utils/appError");
 const { Post, User, Category, Sequelize } = require("../models");
-const { Op} = Sequelize;
+const { Op } = Sequelize;
 const { STATUS_CODE, ERROR } = require("../utils/constants");
 
 class PostService {
@@ -12,23 +12,22 @@ class PostService {
 
   async GetAllPosts(postParams) {
     try {
-
       const { page, perPage, sortBy, orderBy, searchBy, userId } = postParams;
-
-      const user = await this.UserModel.findByPk(userId);
-      if (!user) {
-        throw new APIError(
-          "User Not Found",
-          STATUS_CODE.NOT_FOUND,
-          ERROR.API_ERROR
-        );
-      }
 
       const offset = (page - 1) * perPage;
       const limit = perPage;
       const postFilter = {};
 
       if (userId) {
+        const user = await this.UserModel.findByPk(userId);
+        if (!user) {
+          throw new APIError(
+            "User Not Found",
+            STATUS_CODE.NOT_FOUND,
+            ERROR.API_ERROR
+          );
+        }
+
         postFilter.userId = userId;
       }
 
@@ -43,11 +42,7 @@ class PostService {
         {
           model: this.UserModel,
           as: "creator",
-          attributes: [
-            "id",
-          "fullName",
-          "profileThumbnail",
-          ],
+          attributes: ["id", "firstName", "lastName", "profileThumbnail"],
         },
         {
           model: this.CategoryModel,
@@ -88,16 +83,11 @@ class PostService {
 
   async GetAPost(postId) {
     try {
-
       const includeModels = [
         {
           model: User,
           as: "creator",
-          attributes: [
-            "id",
-            "fullName",
-            "profileThumbnail",
-          ],
+          attributes: ["id", "firstName", "lastName", "profileThumbnail"],
         },
         {
           model: Category,
@@ -114,14 +104,14 @@ class PostService {
         include: includeModels,
       });
 
-      if(!post){
+      if (!post) {
         throw new APIError(
           "Post Not Found.",
           STATUS_CODE.NOT_FOUND,
           ERROR.API_ERROR
         );
       }
-      
+
       return post;
     } catch (err) {
       throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);

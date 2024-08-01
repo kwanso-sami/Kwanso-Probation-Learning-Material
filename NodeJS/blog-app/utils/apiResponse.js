@@ -1,14 +1,8 @@
-exports.success = (message, data) => {
-  const res = {
+exports.success = (response) => {
+  return {
     status: "success",
-    message,
+    ...response,
   };
-
-  if (data) {
-    res.response = data;
-  }
-
-  return res;
 };
 
 exports.error = (status, message) => {

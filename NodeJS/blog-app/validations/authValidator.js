@@ -36,7 +36,7 @@ const forgotPasswordSchema = Joi.object().keys({
 });
 
 const resetPasswordSchema = Joi.object().keys({
-  password: Joi.string()
+  newPassword: Joi.string()
     .min(4)
     .trim()
     .required(),

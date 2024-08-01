@@ -211,7 +211,7 @@ class AuthService {
 
   async ChangeCurrentPassword(user, oldPassword, newPassword) {
     try {
-      console.log(user);
+  
       const {
         id: userId,
         password: currentPasswordHash,

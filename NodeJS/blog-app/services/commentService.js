@@ -1,6 +1,5 @@
 const { APIError } = require("../utils/appError");
-const { Comment, User, Sequelize } = require("../models");
-const { literal } = Sequelize;
+const { Comment, User } = require("../models");
 const { STATUS_CODE, ERROR } = require("../utils/constants");
 
 class CommentService {
@@ -43,11 +42,7 @@ class CommentService {
         {
           model: this.UserModel,
           as: "creator",
-          attributes: [
-            "id",
-          "fullName", 
-          "profileThumbnail",
-          ],
+          attributes: ["id", "firstName", "lastName", "profileThumbnail"],
         },
       ];
 
@@ -55,19 +50,14 @@ class CommentService {
         includeModels.push({
           model: this.CommentModel,
           as: "replies",
-          attributes: [["id","replyId"], "body","createdAt","updatedAt"],
+          attributes: [["id", "replyId"], "body", "createdAt", "updatedAt"],
           include: [
             {
               model: this.UserModel,
               as: "creator",
-              attributes: [
-                "id",
-                "fullName", 
-                "profileThumbnail",
-              ],
+              attributes: ["id", "firstName", "lastName", "profileThumbnail"],
             },
           ],
-          order: [[sortBy, orderBy]]
         });
       }
 
@@ -79,8 +69,7 @@ class CommentService {
         offset: offset,
         limit: limit,
         order: [[sortBy, orderBy]],
-        attributes: [["id","commentId"], "body", "createdAt","updatedAt",
-          [literal(`(SELECT COUNT(*) FROM comments AS replies WHERE replies.parentCommentId = Comment.id)`), "replyCount"]],
+        attributes: [["id", "commentId"], "body", "createdAt", "updatedAt"],
         include: includeModels,
       });
 
@@ -135,36 +124,45 @@ class CommentService {
     }
   }
 
-  async GetRepliesForComment(commentId) {
+  async GetRepliesForComment(commentId, replyParams) {
     try {
       const comment = await this.CommentModel.findByPk(commentId);
       if (!comment) {
-        throw new APIError("Comment Not Found.", STATUS_CODE.NOT_FOUND, ERROR.API_ERROR);
+        throw new APIError(
+          "Comment Not Found.",
+          STATUS_CODE.NOT_FOUND,
+          ERROR.API_ERROR
+        );
       }
-  
+
+      const { sortBy, orderBy } = replyParams;
       const replies = await this.CommentModel.findAll({
         where: {
           parentCommentId: commentId,
         },
-        attributes: [["id", "replyId"], "body", "createdAt","updatedAt"],
+        order: [[sortBy, orderBy]],
+        attributes: [["id", "replyId"], "body", "createdAt", "updatedAt"],
         include: [
           {
             model: this.UserModel,
             as: "creator",
-            attributes: [ "id",
-              "fullName", 
-              "profileThumbnail",],
+            attributes: ["id", "firstName", "lastName", "profileThumbnail"],
           },
         ],
       });
+
+      if (replies.length === 0) {
+        throw new APIError(
+          "No replies found.",
+          STATUS_CODE.NOT_FOUND,
+          ERROR.API_ERROR
+        );
+      }
       return replies;
     } catch (err) {
       throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
     }
   }
-
-  
-
 }
 
 module.exports = CommentService;
