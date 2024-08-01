@@ -7,7 +7,7 @@ const {
   getCommentsSchema,
   deleteCommentSchema,
   updateCommentSchema,
-  getRepliesSchema
+  getRepliesSchema,
 } = require("../validations/commentsValidator");
 const { success } = require("../utils/apiResponse");
 const { SORT, ORDER, STATUS_CODE, ERROR } = require("../utils/constants");
@@ -15,9 +15,12 @@ const { SORT, ORDER, STATUS_CODE, ERROR } = require("../utils/constants");
 const service = new CommentService();
 
 exports.createComment = catchAsync(async (req, res, next) => {
-  const { error } = createCommentSchema.validate(req.body, {
-    abortEarly: false,
-  });
+  const { error, value: validatedParams } = createCommentSchema.validate(
+    req.body,
+    {
+      abortEarly: false,
+    }
+  );
 
   if (error) {
     logger.error(
@@ -33,7 +36,7 @@ exports.createComment = catchAsync(async (req, res, next) => {
     );
   }
 
-  const { body, postId, parentCommentId } = req.body;
+  const { body, postId, parentCommentId } = validatedParams;
   const { id: userId } = req.user;
 
   const newComment = await service.CreateAComment({
@@ -43,15 +46,21 @@ exports.createComment = catchAsync(async (req, res, next) => {
     userId,
   });
 
-  res
-    .status(STATUS_CODE.CREATED)
-    .json(success("Comment created successfully", newComment));
+  res.status(STATUS_CODE.CREATED).json(
+    success({
+      message: "Comment created successfully",
+      response: newComment,
+    })
+  );
 });
 
 exports.getAllComments = catchAsync(async (req, res, next) => {
-  const { error } = getCommentsSchema.validate(req.query, {
-    abortEarly: false,
-  });
+  const { error, value: validatedParams } = getCommentsSchema.validate(
+    req.query,
+    {
+      abortEarly: false,
+    }
+  );
 
   if (error) {
     logger.error(
@@ -73,7 +82,7 @@ exports.getAllComments = catchAsync(async (req, res, next) => {
     orderBy = ORDER.DESC,
     withReply = false,
     postId,
-  } = req.query;
+  } = validatedParams;
 
   const comments = await service.GetAllComments({
     page,
@@ -84,15 +93,21 @@ exports.getAllComments = catchAsync(async (req, res, next) => {
     withReply,
   });
 
-  res
-    .status(STATUS_CODE.OK)
-    .json(success("Comments fetched successfully", comments));
+  res.status(STATUS_CODE.OK).json(
+    success({
+      message: "Comments fetched successfully",
+      response: comments,
+    })
+  );
 });
 
 exports.deleteComment = catchAsync(async (req, res, next) => {
-  const { error } = deleteCommentSchema.validate(req.params, {
-    abortEarly: false,
-  });
+  const { error, value: validatedParams } = deleteCommentSchema.validate(
+    req.params,
+    {
+      abortEarly: false,
+    }
+  );
 
   if (error) {
     logger.error(
@@ -107,18 +122,22 @@ exports.deleteComment = catchAsync(async (req, res, next) => {
     );
   }
 
-  const { commentId } = req.params;
+  const { commentId } = validatedParams;
 
   await service.DeleteAComment(commentId);
 
-  res.status(STATUS_CODE.OK).json(success("Comment deleted successfully"));
+  res.status(STATUS_CODE.OK).json(
+    success({
+      message: "Comment deleted successfully",
+    })
+  );
 });
 
 exports.updateComment = catchAsync(async (req, res, next) => {
-  const { error } = updateCommentSchema.validate(
+  const { error, value: validatedParams } = updateCommentSchema.validate(
     {
       ...req.body,
-      commentId: req.params.commentId,
+      ...req.params,
     },
     {
       abortEarly: false,
@@ -139,20 +158,28 @@ exports.updateComment = catchAsync(async (req, res, next) => {
   }
 
   const updateFields = req.body;
-  const { commentId } = req.params;
+  const { commentId } = validatedParams;
 
   const updatedComment = await service.UpdateAComment(updateFields, commentId);
 
-  res
-    .status(STATUS_CODE.OK)
-    .json(success("Comment updated successfully", updatedComment));
+  res.status(STATUS_CODE.OK).json(
+    success({
+      message: "Comment updated successfully",
+      response: updatedComment,
+    })
+  );
 });
 
-
 exports.getCommentReplies = catchAsync(async (req, res, next) => {
-  const { error } = getRepliesSchema.validate(req.params, {
-    abortEarly: false,
-  });
+  const { error, value: validatedParams } = getRepliesSchema.validate(
+    {
+      ...req.params,
+      ...req.query,
+    },
+    {
+      abortEarly: false,
+    }
+  );
 
   if (error) {
     logger.error(
@@ -167,9 +194,21 @@ exports.getCommentReplies = catchAsync(async (req, res, next) => {
     );
   }
 
-  const { commentId } = req.params;
+  const {
+    commentId,
+    sortBy = SORT.CREATED_AT,
+    orderBy = ORDER.DESC,
+  } = validatedParams;
 
-  const commentReplies = await service.GetRepliesForComment(commentId);
+  const commentReplies = await service.GetRepliesForComment(commentId, {
+    sortBy,
+    orderBy,
+  });
 
-  res.status(STATUS_CODE.OK).json(success("Replies of comment fetched successfully",commentReplies));
+  res.status(STATUS_CODE.OK).json(
+    success({
+      message: "Replies of comment fetched successfully",
+      response: commentReplies,
+    })
+  );
 });

@@ -18,7 +18,7 @@ const { STATUS_CODE, ERROR } = require("../utils/constants");
 const service = new AuthService();
 
 exports.signup = catchAsync(async (req, res, next) => {
-  const { error } = signupSchema.validate(req.body, {
+  const { error, value: validatedParams } = signupSchema.validate(req.body, {
     abortEarly: false,
   });
   if (error) {
@@ -34,14 +34,18 @@ exports.signup = catchAsync(async (req, res, next) => {
     );
   }
 
-  const user = req.body;
+  const user = validatedParams;
   await service.SignUp(user);
 
-  res.status(STATUS_CODE.CREATED).json(success("User signed up successfully"));
+  res.status(STATUS_CODE.CREATED).json(
+    success({
+      message: "User signed up successfully",
+    })
+  );
 });
 
 exports.sendOTP = catchAsync(async (req, res, next) => {
-  const { error } = otpSchema.validate(req.body, {
+  const { error, value: validatedParams } = otpSchema.validate(req.body, {
     abortEarly: false,
   });
   if (error) {
@@ -57,18 +61,21 @@ exports.sendOTP = catchAsync(async (req, res, next) => {
     );
   }
 
-  const { email: userEmail } = req.body;
+  const { email: userEmail } = validatedParams;
   const otpCode = await service.sendOTP(userEmail);
 
   res.status(STATUS_CODE.OK).json(
-    success("OTP Code sent successfully", {
-      otpCode,
+    success({
+      message: "OTP Code sent successfully",
+      response: {otpCode},
     })
   );
 });
 
 exports.login = catchAsync(async (req, res, next) => {
-  const { error } = loginSchema.validate(req.body, { abortEarly: false });
+  const { error, value: validatedParams } = loginSchema.validate(req.body, {
+    abortEarly: false,
+  });
   if (error) {
     logger.error(
       `Unable to validate arguments in [ENDPOINT] 'USER_LOGIN'. Error details: ${error.message}`
@@ -81,7 +88,7 @@ exports.login = catchAsync(async (req, res, next) => {
       )
     );
   }
-  const user = req.body;
+  const user = validatedParams;
   const {
     accessToken,
     refreshToken,
@@ -93,27 +100,33 @@ exports.login = catchAsync(async (req, res, next) => {
     .cookie("accessToken", accessToken, cookieOptions)
     .cookie("refreshToken", refreshToken, cookieOptions)
     .json(
-      success("User logged in successfully", {
-        tokens: {
-          accessToken,
-          refreshToken,
-        },
-        user: {
-          id: loggedInUser.id,
-          email: loggedInUser.id,
-          firstName: loggedInUser.firstName,
-          lastName: loggedInUser.lastName,
-          profileThumbnail: loggedInUser.profileThumbnail,
-          profileImage: loggedInUser.profileImage,
+      success({
+        message: "User logged in successfully",
+        response: {
+          tokens: {
+            accessToken,
+            refreshToken,
+          },
+          user: {
+            id: loggedInUser.id,
+            email: loggedInUser.id,
+            firstName: loggedInUser.firstName,
+            lastName: loggedInUser.lastName,
+            profileThumbnail: loggedInUser.profileThumbnail,
+            profileImage: loggedInUser.profileImage,
+          },
         },
       })
     );
 });
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
-  const { error } = forgotPasswordSchema.validate(req.body, {
-    abortEarly: false,
-  });
+  const { error, value: validatedParams } = forgotPasswordSchema.validate(
+    req.body,
+    {
+      abortEarly: false,
+    }
+  );
   if (error) {
     logger.error(
       `Unable to validate arguments in [ENDPOINT] 'FORGOT_PASSWORD'. Error details: ${error.message}`
@@ -126,20 +139,24 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
       )
     );
   }
-  const { email } = req.body;
+  const { email } = validatedParams;
   const passwordResetLink = await service.ForgotPassword(email);
 
   res.status(STATUS_CODE.OK).json(
-    success("Password reset email successfully", {
-      passwordResetLink,
+    success({
+      message: "Password reset email successfully",
+      response: passwordResetLink,
     })
   );
 });
 
 exports.resetPassword = catchAsync(async (req, res, next) => {
-  const { error } = resetPasswordSchema.validate(req.body, {
-    abortEarly: false,
-  });
+  const { error, value: validatedParams } = resetPasswordSchema.validate(
+    req.body,
+    {
+      abortEarly: false,
+    }
+  );
   if (error) {
     logger.error(
       `Unable to validate arguments in [ENDPOINT] 'RESET_PASSWORD'. Error details: ${error.message}`
@@ -153,17 +170,24 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     );
   }
 
-  const { password: newPassword } = req.body;
+  const { newPassword } = validatedParams;
   const { id: userId } = req.user;
   await service.ResetPassword(userId, newPassword);
 
-  res.status(STATUS_CODE.OK).json(success("Password reset successfully"));
+  res.status(STATUS_CODE.OK).json(
+    success({
+      message: "Password reset successfully",
+    })
+  );
 });
 
 exports.changeCurrentPassword = catchAsync(async (req, res, next) => {
-  const { error } = changePasswordSchema.validate(req.body, {
-    abortEarly: false,
-  });
+  const { error, value: validatedParams } = changePasswordSchema.validate(
+    req.body,
+    {
+      abortEarly: false,
+    }
+  );
   if (error) {
     logger.error(
       `Unable to validate arguments in [ENDPOINT] 'CHANGE_CURRENT_PASSWORD'. Error details: ${error.message}`
@@ -177,11 +201,15 @@ exports.changeCurrentPassword = catchAsync(async (req, res, next) => {
     );
   }
 
-  const { oldPassword, newPassword } = req.body;
+  const { oldPassword, newPassword } = validatedParams;
   const { user } = req;
   await service.ChangeCurrentPassword(user, oldPassword, newPassword);
 
-  res.status(STATUS_CODE.OK).json(success("Password changed successfully"));
+  res.status(STATUS_CODE.OK).json(
+    success({
+      message: "Password changed successfully",
+    })
+  );
 });
 
 exports.refreshAccessToken = catchAsync(async (req, res, next) => {
@@ -214,10 +242,13 @@ exports.refreshAccessToken = catchAsync(async (req, res, next) => {
     .cookie("accessToken", newAccessToken, cookieOptions)
     .cookie("refreshToken", newRefreshToken, cookieOptions)
     .json(
-      success("Password changed successfully", {
-        tokens: {
-          accessToken: newAccessToken,
-          refreshToken: newRefreshToken,
+      success({
+        message: "Token Refreshed Successfully",
+        response: {
+          tokens: {
+            accessToken: newAccessToken,
+            refreshToken: newRefreshToken,
+          },
         },
       })
     );
@@ -228,5 +259,9 @@ exports.logoutUser = catchAsync(async (req, res, next) => {
     .status(STATUS_CODE.OK)
     .clearCookie("accessToken", cookieOptions)
     .clearCookie("refreshToken", cookieOptions)
-    .json(success("User logged out successfully"));
+    .json(
+      success({
+        message: "User logged out successfully",
+      })
+    );
 });

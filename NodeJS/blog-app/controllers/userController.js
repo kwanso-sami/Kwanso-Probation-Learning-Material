@@ -12,7 +12,7 @@ const { STATUS_CODE, ERROR } = require("../utils/constants");
 const service = new UserService();
 
 exports.getUser = catchAsync(async (req, res, next) => {
-  const { error } = getUserSchema.validate(req.params, {
+  const { error, value: validatedParams } = getUserSchema.validate(req.params, {
     abortEarly: false,
   });
   if (error) {
@@ -28,7 +28,7 @@ exports.getUser = catchAsync(async (req, res, next) => {
     );
   }
 
-  const { userId } = req.params;
+  const { userId } = validatedParams;
   const {
     id,
     firstName,
@@ -39,21 +39,27 @@ exports.getUser = catchAsync(async (req, res, next) => {
   } = await service.FindUser(userId);
 
   res.status(STATUS_CODE.OK).json(
-    success("User fetched successfully", {
-      id,
-      firstName,
-      lastName,
-      email,
-      profileThumbnail,
-      profileImage,
+    success({
+      message: "User fetched successfully",
+      response: {
+        id,
+        firstName,
+        lastName,
+        email,
+        profileThumbnail,
+        profileImage,
+      },
     })
   );
 });
 
 exports.updateUser = catchAsync(async (req, res, next) => {
-  const { error } = updateUserSchema.validate(req.body, {
-    abortEarly: false,
-  });
+  const { error, value: validatedParams } = updateUserSchema.validate(
+    req.body,
+    {
+      abortEarly: false,
+    }
+  );
   if (error) {
     logger.error(
       `Unable to validate arguments in [ENDPOINT] 'UPDATE_USER'. Error details: ${error.message}`
@@ -66,11 +72,15 @@ exports.updateUser = catchAsync(async (req, res, next) => {
       )
     );
   }
-  const updateFields = req.body;
+  const updateFields = validatedParams;
+
   const { id: userId } = req.user;
   const updatedUser = await service.UpdateUser(updateFields, userId);
 
-  res
-    .status(STATUS_CODE.OK)
-    .json(success("User updated successfully", updatedUser));
+  res.status(STATUS_CODE.OK).json(
+    success({
+      message: "User updated successfully",
+      response: updatedUser,
+    })
+  );
 });

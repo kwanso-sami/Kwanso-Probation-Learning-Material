@@ -27,6 +27,8 @@ const getRepliesSchema = Joi.object().keys({
   commentId: Joi.string()
     .trim()
     .required(),
+    sortBy: Joi.string().trim(),
+    orderBy: Joi.string().trim(),
 });
 
 const updateCommentSchema = Joi.object().keys({
