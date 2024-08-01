@@ -30,7 +30,7 @@ class AuthService {
 
       if (oldUser) {
         throw new APIError(
-          "User Already Exists.",
+          "User Already Exists",
           STATUS_CODE.CONFLICT,
           ERROR.API_ERROR
         );
@@ -68,7 +68,7 @@ class AuthService {
 
       if (oldUser) {
         throw new APIError(
-          "User Already Exists.",
+          "User Already Exists",
           STATUS_CODE.CONFLICT,
           ERROR.API_ERROR
         );
@@ -93,7 +93,7 @@ class AuthService {
 
       if (!isOTPVerified) {
         throw new APIError(
-          "OTP Verification Failed!",
+          "OTP Verification Failed",
           STATUS_CODE.BAD_REQUEST,
           ERROR.API_ERROR
         );
@@ -165,7 +165,7 @@ class AuthService {
 
       if (!oldUser) {
         throw new APIError(
-          "User Not Exists.",
+          "User Not Found.",
           STATUS_CODE.NOT_FOUND,
           ERROR.API_ERROR
         );
@@ -180,7 +180,7 @@ class AuthService {
       const emailSent = await sendPasswordResetEmail(link, userEmail);
       if (!emailSent) {
         throw new APIError(
-          "Unable to Send Password Reset Email",
+          "Failed to Send Password Reset Email",
           STATUS_CODE.INTERNAL_SERVER_ERROR,
           ERROR.API_ERROR
         );

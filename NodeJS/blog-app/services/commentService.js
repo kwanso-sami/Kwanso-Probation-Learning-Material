@@ -11,20 +11,6 @@ class CommentService {
 
   async CreateAComment(newComment) {
     try {
-      const { parentCommentId } = newComment;
-
-      if (parentCommentId) {
-        const parentComment = await this.CommentModel.findByPk(parentCommentId);
-
-        if (!parentComment) {
-          throw new APIError(
-            `Parent Comment Not Found`,
-            STATUS_CODE.NOT_FOUND,
-            ERROR.API_ERROR
-          );
-        }
-      }
-
       const comment = await this.CommentModel.create(newComment);
       return comment;
     } catch (err) {
@@ -59,9 +45,8 @@ class CommentService {
           as: "creator",
           attributes: [
             "id",
-            "firstName",
-            "lastName",
-            "profileThumbnail",
+          "fullName", 
+          "profileThumbnail",
           ],
         },
       ];
@@ -70,19 +55,19 @@ class CommentService {
         includeModels.push({
           model: this.CommentModel,
           as: "replies",
-          attributes: [["id","replyId"], "body", "createdAt"],
+          attributes: [["id","replyId"], "body","createdAt","updatedAt"],
           include: [
             {
               model: this.UserModel,
               as: "creator",
               attributes: [
                 "id",
-                "firstName",
-                "lastName",
+                "fullName", 
                 "profileThumbnail",
               ],
             },
           ],
+          order: [[sortBy, orderBy]]
         });
       }
 
@@ -94,7 +79,7 @@ class CommentService {
         offset: offset,
         limit: limit,
         order: [[sortBy, orderBy]],
-        attributes: [["id","commentId"], "body", "createdAt",
+        attributes: [["id","commentId"], "body", "createdAt","updatedAt",
           [literal(`(SELECT COUNT(*) FROM comments AS replies WHERE replies.parentCommentId = Comment.id)`), "replyCount"]],
         include: includeModels,
       });
@@ -149,6 +134,37 @@ class CommentService {
       throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
     }
   }
+
+  async GetRepliesForComment(commentId) {
+    try {
+      const comment = await this.CommentModel.findByPk(commentId);
+      if (!comment) {
+        throw new APIError("Comment Not Found.", STATUS_CODE.NOT_FOUND, ERROR.API_ERROR);
+      }
+  
+      const replies = await this.CommentModel.findAll({
+        where: {
+          parentCommentId: commentId,
+        },
+        attributes: [["id", "replyId"], "body", "createdAt","updatedAt"],
+        include: [
+          {
+            model: this.UserModel,
+            as: "creator",
+            attributes: [ "id",
+              "fullName", 
+              "profileThumbnail",],
+          },
+        ],
+      });
+      return replies;
+    } catch (err) {
+      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
+    }
+  }
+
+  
+
 }
 
 module.exports = CommentService;

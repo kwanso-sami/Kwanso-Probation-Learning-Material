@@ -1,4 +1,4 @@
-const { STATUS_CODE } = require("./constants");
+const { STATUS_CODE,ERROR } = require("./constants");
 class AppError extends Error {
   constructor(message, statusCode, status, isOperational, errorStack) {
     if (message) {
@@ -20,7 +20,7 @@ class APIError extends AppError {
   constructor(
     message = "Internal Server Error",
     statusCode = STATUS_CODE.INTERNAL_SERVER_ERROR,
-    status = "error",
+    status = ERROR.DEFAULT,
     isOperational = true,
     errorStack
   ) {
