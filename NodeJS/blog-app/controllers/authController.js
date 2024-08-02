@@ -67,7 +67,7 @@ exports.sendOTP = catchAsync(async (req, res, next) => {
   res.status(STATUS_CODE.OK).json(
     success({
       message: "OTP Code sent successfully",
-      response: {otpCode},
+      response: { otpCode },
     })
   );
 });

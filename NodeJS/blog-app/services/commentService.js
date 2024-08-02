@@ -1,5 +1,6 @@
 const { APIError } = require("../utils/appError");
-const { Comment, User } = require("../models");
+const { Comment, User, Sequelize } = require("../models");
+const { Op } = Sequelize;
 const { STATUS_CODE, ERROR } = require("../utils/constants");
 
 class CommentService {
@@ -31,7 +32,9 @@ class CommentService {
       const offset = (page - 1) * perPage;
       const limit = perPage;
       const commentFilter = {
-        parentCommentId: null,
+        parentCommentId: {
+          [Op.is]: null,
+        },
       };
 
       if (postId) {
