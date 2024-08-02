@@ -1,6 +1,6 @@
 const { CLIENT_URL } = require("../config");
 const { User, OTP } = require("../models");
-const { APIError} = require("../utils/appError");
+const { APIError } = require("../utils/appError");
 const sendPasswordResetEmail = require("../utils/email/sendPasswordResetEmail");
 const {
   signAccessToken,
@@ -8,7 +8,12 @@ const {
   signPasswordResetToken,
   verifyToken,
 } = require("../utils/jwtHelper");
-const { STATUS_CODE, ERROR } = require("../utils/constants");
+const {
+  STATUS_CODE,
+  ERROR_TYPE,
+  ERROR_MESSAGE,
+  ORDER,SORT
+} = require("../utils/constants");
 const {
   generateEncryptedPassword,
   verifyHashedPassword,
@@ -30,9 +35,9 @@ class AuthService {
 
       if (oldUser) {
         throw new APIError(
-          "User Already Exists",
+          ERROR_MESSAGE.USER_ALREADY_EXIST,
           STATUS_CODE.CONFLICT,
-          ERROR.API_ERROR
+          ERROR_TYPE.API_ERROR
         );
       }
 
@@ -56,7 +61,8 @@ class AuthService {
 
       return OTP;
     } catch (err) {
-      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
+      logger.error(`${ERROR_TYPE.API_ERROR}: ${err.message}`);
+      throw new APIError(err.message, err.statusCode, ERROR_TYPE.API_ERROR);
     }
   }
 
@@ -68,22 +74,22 @@ class AuthService {
 
       if (oldUser) {
         throw new APIError(
-          "User Already Exists",
+          ERROR_MESSAGE.USER_ALREADY_EXIST,
           STATUS_CODE.CONFLICT,
-          ERROR.API_ERROR
+          ERROR_TYPE.API_ERROR
         );
       }
 
       const otp = await this.OtpModel.findOne({
         where: { email },
-        order: [["createdAt", "DESC"]],
+        order: [[SORT.CREATED_AT, ORDER.DESC]],
       });
 
       if (!otp) {
         throw new APIError(
-          "OTP has been expired",
+          ERROR_MESSAGE.OTP_EXPIRED,
           STATUS_CODE.NOT_FOUND,
-          ERROR.API_ERROR
+          ERROR_TYPE.API_ERROR
         );
       }
 
@@ -93,9 +99,9 @@ class AuthService {
 
       if (!isOTPVerified) {
         throw new APIError(
-          "OTP Verification Failed",
+          ERROR_MESSAGE.OTP_VERIFICATION_FAILED,
           STATUS_CODE.BAD_REQUEST,
-          ERROR.API_ERROR
+          ERROR_TYPE.API_ERROR
         );
       }
 
@@ -111,7 +117,8 @@ class AuthService {
         salt,
       });
     } catch (err) {
-      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
+      logger.error(`${ERROR_TYPE.API_ERROR}: ${err.message}`);
+      throw new APIError(err.message, err.statusCode, ERROR_TYPE.API_ERROR);
     }
   }
 
@@ -123,9 +130,9 @@ class AuthService {
 
       if (!user) {
         throw new APIError(
-          "User Not Found",
+          ERROR_MESSAGE.USER_NOT_FOUND,
           STATUS_CODE.NOT_FOUND,
-          ERROR.API_ERROR
+          ERROR_TYPE.API_ERROR
         );
       }
 
@@ -139,9 +146,9 @@ class AuthService {
 
       if (!isPasswordVerified) {
         throw new APIError(
-          "Invalid Password",
+          ERROR_MESSAGE.INVALID_PASSWORD,
           STATUS_CODE.NOT_FOUND,
-          ERROR.API_ERROR
+          ERROR_TYPE.API_ERROR
         );
       }
 
@@ -153,7 +160,8 @@ class AuthService {
         user,
       };
     } catch (err) {
-      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
+      logger.error(`${ERROR_TYPE.API_ERROR}: ${err.message}`);
+      throw new APIError(err.message, err.statusCode, ERROR_TYPE.API_ERROR);
     }
   }
 
@@ -165,9 +173,9 @@ class AuthService {
 
       if (!oldUser) {
         throw new APIError(
-          "User Not Found.",
+          ERROR_MESSAGE.USER_NOT_FOUND,
           STATUS_CODE.NOT_FOUND,
-          ERROR.API_ERROR
+          ERROR_TYPE.API_ERROR
         );
       }
 
@@ -180,14 +188,15 @@ class AuthService {
       const emailSent = await sendPasswordResetEmail(link, userEmail);
       if (!emailSent) {
         throw new APIError(
-          "Failed to Send Password Reset Email",
+          ERROR_MESSAGE.PASSWORD_RESET_EMAIL_ERROR,
           STATUS_CODE.INTERNAL_SERVER_ERROR,
-          ERROR.API_ERROR
+          ERROR_TYPE.API_ERROR
         );
       }
       return link;
     } catch (err) {
-      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
+      logger.error(`${ERROR_TYPE.API_ERROR}: ${err.message}`);
+      throw new APIError(err.message, err.statusCode, ERROR_TYPE.API_ERROR);
     }
   }
 
@@ -205,13 +214,13 @@ class AuthService {
         }
       );
     } catch (err) {
-      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
+      logger.error(`${ERROR_TYPE.API_ERROR}: ${err.message}`);
+      throw new APIError(err.message, err.statusCode, ERROR_TYPE.API_ERROR);
     }
   }
 
   async ChangeCurrentPassword(user, oldPassword, newPassword) {
     try {
-  
       const {
         id: userId,
         password: currentPasswordHash,
@@ -226,15 +235,16 @@ class AuthService {
 
       if (!isOldPasswordVerified) {
         throw new APIError(
-          "Invalid Old Password",
+          ERROR_MESSAGE.INVALID_OLD_PASSWORD,
           STATUS_CODE.NOT_FOUND,
-          ERROR.API_ERROR
+          ERROR_TYPE.API_ERROR
         );
       }
 
       await this.ResetPassword(userId, newPassword);
     } catch (err) {
-      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
+      logger.error(`${ERROR_TYPE.API_ERROR}: ${err.message}`);
+      throw new APIError(err.message, err.statusCode, ERROR_TYPE.API_ERROR);
     }
   }
 
@@ -249,9 +259,9 @@ class AuthService {
 
         if (!user) {
           throw new APIError(
-            "Invalid Refresh Token",
+            ERROR_MESSAGE.INVALID_REFRESH_TOKEN,
             STATUS_CODE.UNAUTHORIZED,
-            ERROR.API_ERROR
+            ERROR_TYPE.API_ERROR
           );
         }
 
@@ -264,13 +274,14 @@ class AuthService {
         };
       } else {
         throw new APIError(
-          "Current Refresh Token Expired",
+          ERROR_MESSAGE.REFRESH_TOKEN_EXPIRED,
           STATUS_CODE.UNAUTHORIZED,
-          ERROR.API_ERROR
+          ERROR_TYPE.API_ERROR
         );
       }
     } catch (err) {
-      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
+      logger.error(`${ERROR_TYPE.API_ERROR}: ${err.message}`);
+      throw new APIError(err.message, err.statusCode, ERROR_TYPE.API_ERROR);
     }
   }
 }

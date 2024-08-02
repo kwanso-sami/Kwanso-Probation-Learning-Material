@@ -1,7 +1,7 @@
 const { APIError } = require("../utils/appError");
 const { Comment, User, Sequelize } = require("../models");
 const { Op } = Sequelize;
-const { STATUS_CODE, ERROR } = require("../utils/constants");
+const { STATUS_CODE, ERROR_TYPE ,ERROR_MESSAGE} = require("../utils/constants");
 
 class CommentService {
   constructor() {
@@ -9,12 +9,13 @@ class CommentService {
     this.UserModel = User;
   }
 
-  async CreateAComment(newComment) {
+  async CreateComment(newComment) {
     try {
       const comment = await this.CommentModel.create(newComment);
       return comment;
     } catch (err) {
-      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
+      logger.error(`${ERROR_TYPE.API_ERROR}: ${err.message}`);
+      throw new APIError(err.message, err.statusCode, ERROR_TYPE.API_ERROR);
     }
   }
 
@@ -81,53 +82,56 @@ class CommentService {
         },
       };
     } catch (err) {
-      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
+      logger.error(`${ERROR_TYPE.API_ERROR}: ${err.message}`);
+      throw new APIError(err.message, err.statusCode, ERROR_TYPE.API_ERROR);
     }
   }
 
-  async DeleteAComment(commentId) {
+  async DeleteComment(commentId) {
     try {
       const comment = await this.CommentModel.findByPk(commentId);
       if (!comment) {
         throw new APIError(
-          "Comment Not Found.",
+         ERROR_MESSAGE.COMMENT_NOT_FOUND,
           STATUS_CODE.NOT_FOUND,
-          ERROR.API_ERROR
+          ERROR_TYPE.API_ERROR
         );
       }
 
       await comment.destroy();
     } catch (err) {
-      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
+      logger.error(`${ERROR_TYPE.API_ERROR}: ${err.message}`);
+      throw new APIError(err.message, err.statusCode, ERROR_TYPE.API_ERROR);
     }
   }
 
-  async UpdateAComment(updateFields, commentId) {
+  async UpdateComment(updateFields, commentId) {
     try {
       const comment = await this.CommentModel.findByPk(commentId);
       if (!comment) {
         throw new APIError(
-          "Comment Not Found.",
+          ERROR_MESSAGE.COMMENT_NOT_FOUND,
           STATUS_CODE.NOT_FOUND,
-          ERROR.API_ERROR
+          ERROR_TYPE.API_ERROR
         );
       }
 
       const updatedComment = await comment.update(updateFields);
       return updatedComment;
     } catch (err) {
-      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
+      logger.error(`${ERROR_TYPE.API_ERROR}: ${err.message}`);
+      throw new APIError(err.message, err.statusCode, ERROR_TYPE.API_ERROR);
     }
   }
 
-  async GetRepliesForComment(commentId, replyParams) {
+  async GetCommentReplies(commentId, replyParams) {
     try {
       const comment = await this.CommentModel.findByPk(commentId);
       if (!comment) {
         throw new APIError(
-          "Comment Not Found.",
+          ERROR_MESSAGE.COMMENT_NOT_FOUND,
           STATUS_CODE.NOT_FOUND,
-          ERROR.API_ERROR
+          ERROR_TYPE.API_ERROR
         );
       }
 
@@ -150,14 +154,15 @@ class CommentService {
 
       if (replies.length === 0) {
         throw new APIError(
-          "No replies found.",
+          ERROR_MESSAGE.REPLIES_NOT_FOUND,
           STATUS_CODE.NOT_FOUND,
-          ERROR.API_ERROR
+          ERROR_TYPE.API_ERROR
         );
       }
       return replies;
     } catch (err) {
-      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
+      logger.error(`${ERROR_TYPE.API_ERROR}: ${err.message}`);
+      throw new APIError(err.message, err.statusCode, ERROR_TYPE.API_ERROR);
     }
   }
 }

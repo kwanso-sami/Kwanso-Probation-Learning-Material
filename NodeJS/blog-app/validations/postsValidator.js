@@ -21,9 +21,15 @@ const createPostSchema = Joi.object().keys({
   body: Joi.string()
     .trim()
     .required(),
-  categoryId: Joi.string().trim().required(),
-  coverImage: Joi.string().required(),
-  coverThumbnail: Joi.string().required(),
+  categoryId: Joi.string()
+    .trim()
+    .required(),
+  coverImage: Joi.string()
+    .base64()
+    .required(),
+  coverThumbnail: Joi.string()
+    .base64()
+    .required(),
 });
 
 const updatePostSchema = Joi.object().keys({
@@ -33,13 +39,17 @@ const updatePostSchema = Joi.object().keys({
   readDuration: Joi.number().integer(),
   body: Joi.string().trim(),
   categoryId: Joi.string().trim(),
-  coverImage: Joi.string(),
-  coverThumbnail: Joi.string(),
-  postId: Joi.string().trim().required(),
+  coverImage: Joi.string().base64(),
+  coverThumbnail: Joi.string().base64(),
+  postId: Joi.string()
+    .trim()
+    .required(),
 });
 
 const deletePostSchema = Joi.object().keys({
-  postId: Joi.string().trim().required(),
+  postId: Joi.string()
+    .trim()
+    .required(),
 });
 
 module.exports = {

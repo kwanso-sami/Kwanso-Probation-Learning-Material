@@ -7,7 +7,11 @@ const {
   getUserSchema,
 } = require("../validations/userValidator");
 const { success } = require("../utils/apiResponse");
-const { STATUS_CODE, ERROR } = require("../utils/constants");
+const {
+  STATUS_CODE,
+  ERROR_TYPE,
+  SUCCESS_MESSAGE,
+} = require("../utils/constants");
 
 const service = new UserService();
 
@@ -16,14 +20,12 @@ exports.getUser = catchAsync(async (req, res, next) => {
     abortEarly: false,
   });
   if (error) {
-    logger.error(
-      `Unable to validate arguments in [ENDPOINT] 'UPDATE_USER'. Error details: ${error.message}`
-    );
+    logger.error(`${ERROR_TYPE.VALIDATION_ERROR}: ${ERROR_TYPE.message}`);
     return next(
       new APIError(
         error.message,
         STATUS_CODE.BAD_REQUEST,
-        ERROR.VALIDATION_ERROR
+        ERROR_TYPE.VALIDATION_ERROR
       )
     );
   }
@@ -40,7 +42,7 @@ exports.getUser = catchAsync(async (req, res, next) => {
 
   res.status(STATUS_CODE.OK).json(
     success({
-      message: "User fetched successfully",
+      message: SUCCESS_MESSAGE.USER_FETCH,
       response: {
         id,
         firstName,
@@ -61,14 +63,12 @@ exports.updateUser = catchAsync(async (req, res, next) => {
     }
   );
   if (error) {
-    logger.error(
-      `Unable to validate arguments in [ENDPOINT] 'UPDATE_USER'. Error details: ${error.message}`
-    );
+    logger.error(`${ERROR_TYPE.VALIDATION_ERROR}: ${ERROR_TYPE.message}`);
     return next(
       new APIError(
         error.message,
         STATUS_CODE.BAD_REQUEST,
-        ERROR.VALIDATION_ERROR
+        ERROR_TYPE.VALIDATION_ERROR
       )
     );
   }
@@ -79,7 +79,7 @@ exports.updateUser = catchAsync(async (req, res, next) => {
 
   res.status(STATUS_CODE.OK).json(
     success({
-      message: "User updated successfully",
+      message: SUCCESS_MESSAGE.USER_UPDATED,
       response: updatedUser,
     })
   );

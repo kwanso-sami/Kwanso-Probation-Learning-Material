@@ -7,8 +7,8 @@ const updateUserSchema = Joi.object().keys({
   lastName: Joi.string()
     .max(255)
     .trim(),
-  profileImage: Joi.string(),
-  profileThumbnail: Joi.string(),
+  profileImage: Joi.string().base64(),
+  profileThumbnail: Joi.string().base64(),
 });
 
 const getUserSchema = Joi.object().keys({

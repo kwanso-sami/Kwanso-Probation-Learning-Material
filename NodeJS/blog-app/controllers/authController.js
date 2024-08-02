@@ -13,7 +13,7 @@ const {
 } = require("../validations/authValidator");
 const { cookieOptions } = require("../config");
 const { success } = require("../utils/apiResponse");
-const { STATUS_CODE, ERROR } = require("../utils/constants");
+const { STATUS_CODE, ERROR_TYPE ,SUCCESS_MESSAGE} = require("../utils/constants");
 
 const service = new AuthService();
 
@@ -22,14 +22,12 @@ exports.signup = catchAsync(async (req, res, next) => {
     abortEarly: false,
   });
   if (error) {
-    logger.error(
-      `Unable to validate arguments in [ENDPOINT] 'USER_SIGNUP'. Error details: ${error.message}`
-    );
+    logger.error(`${ERROR_TYPE.VALIDATION_ERROR}: ${ERROR_TYPE.message}`);
     return next(
       new APIError(
         error.message,
         STATUS_CODE.BAD_REQUEST,
-        ERROR.VALIDATION_ERROR
+        ERROR_TYPE.VALIDATION_ERROR
       )
     );
   }
@@ -39,7 +37,7 @@ exports.signup = catchAsync(async (req, res, next) => {
 
   res.status(STATUS_CODE.CREATED).json(
     success({
-      message: "User signed up successfully",
+      message: SUCCESS_MESSAGE.USER_SIGN_UP,
     })
   );
 });
@@ -49,14 +47,12 @@ exports.sendOTP = catchAsync(async (req, res, next) => {
     abortEarly: false,
   });
   if (error) {
-    logger.error(
-      `Unable to validate arguments in [ENDPOINT] 'SEND_OTP'. Error details: ${error.message}`
-    );
+    logger.error(`${ERROR_TYPE.VALIDATION_ERROR}: ${ERROR_TYPE.message}`);
     return next(
       new APIError(
         error.message,
         STATUS_CODE.BAD_REQUEST,
-        ERROR.VALIDATION_ERROR
+        ERROR_TYPE.VALIDATION_ERROR
       )
     );
   }
@@ -66,7 +62,7 @@ exports.sendOTP = catchAsync(async (req, res, next) => {
 
   res.status(STATUS_CODE.OK).json(
     success({
-      message: "OTP Code sent successfully",
+      message: SUCCESS_MESSAGE.OPT_SENT,
       response: { otpCode },
     })
   );
@@ -77,14 +73,12 @@ exports.login = catchAsync(async (req, res, next) => {
     abortEarly: false,
   });
   if (error) {
-    logger.error(
-      `Unable to validate arguments in [ENDPOINT] 'USER_LOGIN'. Error details: ${error.message}`
-    );
+    logger.error(`${ERROR_TYPE.VALIDATION_ERROR}: ${ERROR_TYPE.message}`);
     return next(
       new APIError(
         error.message,
         STATUS_CODE.BAD_REQUEST,
-        ERROR.VALIDATION_ERROR
+        ERROR_TYPE.VALIDATION_ERROR
       )
     );
   }
@@ -101,7 +95,7 @@ exports.login = catchAsync(async (req, res, next) => {
     .cookie("refreshToken", refreshToken, cookieOptions)
     .json(
       success({
-        message: "User logged in successfully",
+        message: SUCCESS_MESSAGE.USER_LOG_IN,
         response: {
           tokens: {
             accessToken,
@@ -128,14 +122,12 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     }
   );
   if (error) {
-    logger.error(
-      `Unable to validate arguments in [ENDPOINT] 'FORGOT_PASSWORD'. Error details: ${error.message}`
-    );
+    logger.error(`${ERROR_TYPE.VALIDATION_ERROR}: ${ERROR_TYPE.message}`);
     return next(
       new APIError(
         error.message,
         STATUS_CODE.BAD_REQUEST,
-        ERROR.VALIDATION_ERROR
+        ERROR_TYPE.VALIDATION_ERROR
       )
     );
   }
@@ -144,7 +136,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
   res.status(STATUS_CODE.OK).json(
     success({
-      message: "Password reset email successfully",
+      message: SUCCESS_MESSAGE.PASSWORD_RESET_EMAIL_SENT,
       response: passwordResetLink,
     })
   );
@@ -158,14 +150,12 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     }
   );
   if (error) {
-    logger.error(
-      `Unable to validate arguments in [ENDPOINT] 'RESET_PASSWORD'. Error details: ${error.message}`
-    );
+    logger.error(`${ERROR_TYPE.VALIDATION_ERROR}: ${ERROR_TYPE.message}`);
     return next(
       new APIError(
         error.message,
         STATUS_CODE.BAD_REQUEST,
-        ERROR.VALIDATION_ERROR
+        ERROR_TYPE.VALIDATION_ERROR
       )
     );
   }
@@ -176,7 +166,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   res.status(STATUS_CODE.OK).json(
     success({
-      message: "Password reset successfully",
+      message: SUCCESS_MESSAGE.PASSWORD_RESET,
     })
   );
 });
@@ -189,14 +179,12 @@ exports.changeCurrentPassword = catchAsync(async (req, res, next) => {
     }
   );
   if (error) {
-    logger.error(
-      `Unable to validate arguments in [ENDPOINT] 'CHANGE_CURRENT_PASSWORD'. Error details: ${error.message}`
-    );
+    logger.error(`${ERROR_TYPE.VALIDATION_ERROR}: ${ERROR_TYPE.message}`);
     return next(
       new APIError(
         error.message,
         STATUS_CODE.BAD_REQUEST,
-        ERROR.VALIDATION_ERROR
+        ERROR_TYPE.VALIDATION_ERROR
       )
     );
   }
@@ -207,7 +195,7 @@ exports.changeCurrentPassword = catchAsync(async (req, res, next) => {
 
   res.status(STATUS_CODE.OK).json(
     success({
-      message: "Password changed successfully",
+      message: SUCCESS_MESSAGE.PASSWORD_CHANGE,
     })
   );
 });
@@ -221,14 +209,12 @@ exports.refreshAccessToken = catchAsync(async (req, res, next) => {
     }
   );
   if (error) {
-    logger.error(
-      `Unable to validate arguments in [ENDPOINT] 'REFRESH_ACCESS_TOKEN'. Error details: ${error.message}`
-    );
+    logger.error(`${ERROR_TYPE.VALIDATION_ERROR}: ${ERROR_TYPE.message}`);
     return next(
       new APIError(
         error.message,
         STATUS_CODE.BAD_REQUEST,
-        ERROR.VALIDATION_ERROR
+        ERROR_TYPE.VALIDATION_ERROR
       )
     );
   }
@@ -243,7 +229,7 @@ exports.refreshAccessToken = catchAsync(async (req, res, next) => {
     .cookie("refreshToken", newRefreshToken, cookieOptions)
     .json(
       success({
-        message: "Token Refreshed Successfully",
+        message: SUCCESS_MESSAGE.TOKEN_REFRESH,
         response: {
           tokens: {
             accessToken: newAccessToken,
@@ -261,7 +247,7 @@ exports.logoutUser = catchAsync(async (req, res, next) => {
     .clearCookie("refreshToken", cookieOptions)
     .json(
       success({
-        message: "User logged out successfully",
+        message: SUCCESS_MESSAGE.USER_LOG_OUT,
       })
     );
 });

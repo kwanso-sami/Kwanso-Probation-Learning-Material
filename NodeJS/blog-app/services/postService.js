@@ -1,7 +1,7 @@
 const { APIError } = require("../utils/appError");
 const { Post, User, Category, Sequelize } = require("../models");
 const { Op } = Sequelize;
-const { STATUS_CODE, ERROR } = require("../utils/constants");
+const { STATUS_CODE, ERROR_TYPE,ERROR_MESSAGE } = require("../utils/constants");
 
 class PostService {
   constructor() {
@@ -22,9 +22,9 @@ class PostService {
         const user = await this.UserModel.findByPk(userId);
         if (!user) {
           throw new APIError(
-            "User Not Found",
+            ERROR_MESSAGE.USER_NOT_FOUND,
             STATUS_CODE.NOT_FOUND,
-            ERROR.API_ERROR
+            ERROR_TYPE.API_ERROR
           );
         }
 
@@ -76,11 +76,12 @@ class PostService {
         },
       };
     } catch (err) {
-      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
+      logger.error(`${ERROR_TYPE.API_ERROR}: ${err.message}`);
+      throw new APIError(err.message, err.statusCode, ERROR_TYPE.API_ERROR);
     }
   }
 
-  async GetAPost(postId) {
+  async GetPost(postId) {
     try {
       const userInclude = {
         model: this.UserModel,
@@ -104,57 +105,61 @@ class PostService {
 
       if (!post) {
         throw new APIError(
-          "Post Not Found.",
+          ERROR_MESSAGE.POST_NOT_FOUND,
           STATUS_CODE.NOT_FOUND,
-          ERROR.API_ERROR
+          ERROR_TYPE.API_ERROR
         );
       }
 
       return post;
     } catch (err) {
-      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
+      logger.error(`${ERROR_TYPE.API_ERROR}: ${err.message}`);
+      throw new APIError(err.message, err.statusCode, ERROR_TYPE.API_ERROR);
     }
   }
 
-  async CreateAPost(newPost) {
+  async CreatePost(newPost) {
     try {
       const post = await this.PostModel.create(newPost);
       return post;
     } catch (err) {
-      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
+      logger.error(`${ERROR_TYPE.API_ERROR}: ${err.message}`);
+      throw new APIError(err.message, err.statusCode, ERROR_TYPE.API_ERROR);
     }
   }
 
-  async UpdateAPost(updateFields, postId) {
+  async UpdatePost(updateFields, postId) {
     try {
       const post = await this.PostModel.findByPk(postId);
       if (!post) {
         throw new APIError(
-          "Post Not Found.",
+          ERROR_MESSAGE.POST_NOT_FOUND,
           STATUS_CODE.NOT_FOUND,
-          ERROR.API_ERROR
+          ERROR_TYPE.API_ERROR
         );
       }
       const updatedPost = await post.update(updateFields);
       return updatedPost;
     } catch (err) {
-      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
+      logger.error(`${ERROR_TYPE.API_ERROR}: ${err.message}`);
+      throw new APIError(err.message, err.statusCode, ERROR_TYPE.API_ERROR);
     }
   }
 
-  async DeleteAPost(postId) {
+  async DeletePost(postId) {
     try {
       const post = await this.PostModel.findByPk(postId);
       if (!post) {
         throw new APIError(
-          "Post Not Found.",
+          ERROR_MESSAGE.POST_NOT_FOUND,
           STATUS_CODE.NOT_FOUND,
-          ERROR.API_ERROR
+          ERROR_TYPE.API_ERROR
         );
       }
       await post.destroy();
     } catch (err) {
-      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
+      logger.error(`${ERROR_TYPE.API_ERROR}: ${err.message}`);
+      throw new APIError(err.message, err.statusCode, ERROR_TYPE.API_ERROR);
     }
   }
 
@@ -165,7 +170,8 @@ class PostService {
       });
       return categories;
     } catch (err) {
-      throw new APIError(err.message, err.statusCode, ERROR.API_ERROR);
+      logger.error(`${ERROR_TYPE.API_ERROR}: ${err.message}`);
+      throw new APIError(err.message, err.statusCode, ERROR_TYPE.API_ERROR);
     }
   }
 }
