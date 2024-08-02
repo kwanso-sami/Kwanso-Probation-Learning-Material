@@ -14,7 +14,6 @@ const getCommentsSchema = Joi.object().keys({
   perPage: Joi.number().integer(),
   sortBy: Joi.string().trim(),
   orderBy: Joi.string().trim(),
-  withReply: Joi.boolean(),
 });
 
 const deleteCommentSchema = Joi.object().keys({
