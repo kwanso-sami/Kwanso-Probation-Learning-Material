@@ -1,6 +1,6 @@
 const { APIError } = require("./appError");
 const { OTP_LENGTH } = require("../config");
-const { ERROR, STATUS_CODE } = require("./constants");
+const { ERROR_TYPE, STATUS_CODE, ERROR_MESSAGE } = require("./constants");
 const otpGenerator = require("otp-generator");
 
 module.exports = {
@@ -12,10 +12,11 @@ module.exports = {
         specialChars: false,
       });
     } catch (e) {
+      logger.error(`${ERROR_TYPE.API_ERROR}: ${e.message}`);
       throw new APIError(
-        "Failed to Generate OTP",
+        ERROR_MESSAGE.OTP_CREATION_ERROR,
         STATUS_CODE.INTERNAL_SERVER_ERROR,
-        ERROR.API_ERROR
+        ERROR_TYPE.API_ERROR
       );
     }
   },
@@ -28,10 +29,11 @@ module.exports = {
 
       return true;
     } catch (e) {
+      logger.error(`${ERROR_TYPE.API_ERROR}: ${e.message}`);
       throw new APIError(
-        "Failed to Verify OTP",
+        ERROR_MESSAGE.OTP_VERIFICATION_FAILED,
         STATUS_CODE.INTERNAL_SERVER_ERROR,
-        ERROR.API_ERROR
+        ERROR_TYPE.API_ERROR
       );
     }
   },

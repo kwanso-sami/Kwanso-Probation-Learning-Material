@@ -1,5 +1,4 @@
 const { AppError} = require("./appError");
-const logger = require("./loggers/appLogger");
 const { error } = require("./apiResponse");
 
 function errorHandler(err, req, res, next) {
@@ -21,7 +20,8 @@ function errorHandler(err, req, res, next) {
       }
     }
   }
-  logger.error(err);
+
+  
 
   let stackTrace = undefined;
   // return the stack trace only when

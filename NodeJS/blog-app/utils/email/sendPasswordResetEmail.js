@@ -9,7 +9,7 @@ const {
   EMAIL_SERVICE,
   EMAIL_PORT,
 } = require("../../config");
-const { STATUS_CODE, ERROR } = require("../constants");
+const { STATUS_CODE, ERROR_TYPE,ERROR_MESSAGE } = require("../constants");
 
 module.exports = async function sendEmail(link, recipientEmail) {
   try {
@@ -42,20 +42,16 @@ module.exports = async function sendEmail(link, recipientEmail) {
 
     transporter.sendMail(mailOptions, (error) => {
       if (error) {
-        logger.error(`Error occurred while sending email: ${error.message}`);
         return false;
-      } else {
-        logger.info(
-          `Password Reset Email sent successfully to ${recipientEmail}`
-        );
-      }
+      } 
     });
     return true;
   } catch (e) {
+    logger.error(`${ERROR_TYPE.API_ERROR}: ${e.message}`);
     throw new APIError(
-      "Failed to Send Reset Password Email to User",
+      ERROR_MESSAGE.PASSWORD_RESET_EMAIL_ERROR,
       STATUS_CODE.INTERNAL_SERVER_ERROR,
-      ERROR.API_ERROR
+      ERROR_TYPE.API_ERROR
     );
   }
 };

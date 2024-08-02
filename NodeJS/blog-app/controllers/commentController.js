@@ -10,7 +10,7 @@ const {
   getRepliesSchema,
 } = require("../validations/commentsValidator");
 const { success } = require("../utils/apiResponse");
-const { SORT, ORDER, STATUS_CODE, ERROR } = require("../utils/constants");
+const { SORT, ORDER, STATUS_CODE, ERROR_TYPE,SUCCESS_MESSAGE} = require("../utils/constants");
 
 const service = new CommentService();
 
@@ -23,15 +23,13 @@ exports.createComment = catchAsync(async (req, res, next) => {
   );
 
   if (error) {
-    logger.error(
-      `Unable to validate arguments in [ENDPOINT] 'CREATE_A_COMMENT'. Error details: ${error.message}`
-    );
+    logger.error(`${ERROR_TYPE.VALIDATION_ERROR}: ${ERROR_TYPE.message}`);
 
     return next(
       new APIError(
         error.message,
         STATUS_CODE.BAD_REQUEST,
-        ERROR.VALIDATION_ERROR
+        ERROR_TYPE.VALIDATION_ERROR
       )
     );
   }
@@ -39,7 +37,7 @@ exports.createComment = catchAsync(async (req, res, next) => {
   const { body, postId, parentCommentId } = validatedParams;
   const { id: userId } = req.user;
 
-  const newComment = await service.CreateAComment({
+  const newComment = await service.CreateComment({
     body,
     postId,
     parentCommentId,
@@ -48,7 +46,7 @@ exports.createComment = catchAsync(async (req, res, next) => {
 
   res.status(STATUS_CODE.CREATED).json(
     success({
-      message: "Comment created successfully",
+      message: SUCCESS_MESSAGE.COMMENT_CREATED,
       response: newComment,
     })
   );
@@ -63,14 +61,12 @@ exports.getAllComments = catchAsync(async (req, res, next) => {
   );
 
   if (error) {
-    logger.error(
-      `Unable to validate arguments in [ENDPOINT] 'GET_ALL_COMMENTS'. Error details: ${error.message}`
-    );
+    logger.error(`${ERROR_TYPE.VALIDATION_ERROR}: ${ERROR_TYPE.message}`);
     return next(
       new APIError(
         error.message,
         STATUS_CODE.BAD_REQUEST,
-        ERROR.VALIDATION_ERROR
+        ERROR_TYPE.VALIDATION_ERROR
       )
     );
   }
@@ -93,7 +89,7 @@ exports.getAllComments = catchAsync(async (req, res, next) => {
 
   res.status(STATUS_CODE.OK).json(
     success({
-      message: "Comments fetched successfully",
+      message: SUCCESS_MESSAGE.COMMENTS_FETCHED,
       response: comments,
     })
   );
@@ -108,25 +104,23 @@ exports.deleteComment = catchAsync(async (req, res, next) => {
   );
 
   if (error) {
-    logger.error(
-      `Unable to validate arguments in [ENDPOINT] 'DELETE_A_COMMENT'. Error details: ${error.message}`
-    );
+    logger.error(`${ERROR_TYPE.VALIDATION_ERROR}: ${ERROR_TYPE.message}`);
     return next(
       new APIError(
         error.message,
         STATUS_CODE.BAD_REQUEST,
-        ERROR.VALIDATION_ERROR
+        ERROR_TYPE.VALIDATION_ERROR
       )
     );
   }
 
   const { commentId } = validatedParams;
 
-  await service.DeleteAComment(commentId);
+  await service.DeleteComment(commentId);
 
   res.status(STATUS_CODE.OK).json(
     success({
-      message: "Comment deleted successfully",
+      message: SUCCESS_MESSAGE.COMMENT_DELETED,
     })
   );
 });
@@ -143,14 +137,12 @@ exports.updateComment = catchAsync(async (req, res, next) => {
   );
 
   if (error) {
-    logger.error(
-      `Unable to validate arguments in [ENDPOINT] 'UPDATE_A_COMMENT'. Error details: ${error.message}`
-    );
+    logger.error(`${ERROR_TYPE.VALIDATION_ERROR}: ${ERROR_TYPE.message}`);
     return next(
       new APIError(
         error.message,
         STATUS_CODE.BAD_REQUEST,
-        ERROR.VALIDATION_ERROR
+        ERROR_TYPE.VALIDATION_ERROR
       )
     );
   }
@@ -158,11 +150,11 @@ exports.updateComment = catchAsync(async (req, res, next) => {
   const updateFields = req.body;
   const { commentId } = validatedParams;
 
-  const updatedComment = await service.UpdateAComment(updateFields, commentId);
+  const updatedComment = await service.UpdateComment(updateFields, commentId);
 
   res.status(STATUS_CODE.OK).json(
     success({
-      message: "Comment updated successfully",
+      message: SUCCESS_MESSAGE.COMMENT_UPDATED,
       response: updatedComment,
     })
   );
@@ -180,14 +172,12 @@ exports.getCommentReplies = catchAsync(async (req, res, next) => {
   );
 
   if (error) {
-    logger.error(
-      `Unable to validate arguments in [ENDPOINT] 'GET_COMMENT_REPLIES'. Error details: ${error.message}`
-    );
+    logger.error(`${ERROR_TYPE.VALIDATION_ERROR}: ${ERROR_TYPE.message}`);
     return next(
       new APIError(
         error.message,
         STATUS_CODE.BAD_REQUEST,
-        ERROR.VALIDATION_ERROR
+        ERROR_TYPE.VALIDATION_ERROR
       )
     );
   }
@@ -198,14 +188,14 @@ exports.getCommentReplies = catchAsync(async (req, res, next) => {
     orderBy = ORDER.DESC,
   } = validatedParams;
 
-  const commentReplies = await service.GetRepliesForComment(commentId, {
+  const commentReplies = await service.GetCommentReplies(commentId, {
     sortBy,
     orderBy,
   });
 
   res.status(STATUS_CODE.OK).json(
     success({
-      message: "Replies of comment fetched successfully",
+      message: SUCCESS_MESSAGE.REPLIES_FETCHED,
       response: commentReplies,
     })
   );

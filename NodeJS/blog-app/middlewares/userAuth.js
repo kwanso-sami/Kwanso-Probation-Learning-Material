@@ -2,7 +2,7 @@ const catchAsync = require("../utils/catchAsync");
 const { APIError } = require("../utils/appError");
 const { verifyToken } = require("../utils/jwtHelper");
 const UserService = require("../services/userService");
-const { STATUS_CODE, ERROR } = require("../utils/constants");
+const { STATUS_CODE, ERROR_TYPE,ERROR_MESSAGE } = require("../utils/constants");
 
 module.exports = catchAsync(async (req, res, next) => {
   let token;
@@ -13,11 +13,12 @@ module.exports = catchAsync(async (req, res, next) => {
   }
 
   if (!token) {
+    logger.error(`${ERROR_TYPE.AUTHENTICATION_ERROR}`);
     return next(
       new APIError(
-        "Token Not Found",
+        ERROR_MESSAGE.TOKEN_NOT_FOUND,
         STATUS_CODE.UNAUTHORIZED,
-        ERROR.AUTHENTICATION_ERROR
+        ERROR_TYPE.AUTHENTICATION_ERROR
       )
     );
   }
@@ -25,11 +26,12 @@ module.exports = catchAsync(async (req, res, next) => {
   const tokenPayload = await verifyToken(token);
 
   if (!tokenPayload) {
+    logger.error(`${ERROR_TYPE.AUTHENTICATION_ERROR}`);
     return next(
       new APIError(
-        "Access Token Expired",
+        ERROR_MESSAGE.ACCESS_TOKEN_EXPIRED,
         STATUS_CODE.UNAUTHORIZED,
-        ERROR.AUTHENTICATION_ERROR
+        ERROR_TYPE.AUTHENTICATION_ERROR
       )
     );
   }
