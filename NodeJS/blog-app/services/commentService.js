@@ -1,5 +1,6 @@
 const { APIError } = require("../utils/appError");
-const { Comment, User } = require("../models");
+const { Comment, User, Sequelize } = require("../models");
+const { Op } = Sequelize;
 const { STATUS_CODE, ERROR } = require("../utils/constants");
 
 class CommentService {
@@ -19,47 +20,39 @@ class CommentService {
 
   async GetAllComments(commentParams) {
     try {
-      const {
-        page,
-        perPage,
-        sortBy,
-        orderBy,
-        postId,
-        withReply,
-      } = commentParams;
+      const { page, perPage, sortBy, orderBy, postId } = commentParams;
 
       const offset = (page - 1) * perPage;
       const limit = perPage;
+
       const commentFilter = {
-        parentCommentId: null,
+        parentCommentId: {
+          [Op.is]: null,
+        },
       };
 
       if (postId) {
         commentFilter.postId = postId;
       }
 
-      const includeModels = [
-        {
-          model: this.UserModel,
-          as: "creator",
-          attributes: ["id", "firstName", "lastName", "profileThumbnail"],
-        },
-      ];
+      const userInclude = {
+        model: this.UserModel,
+        as: "creator",
+        attributes: ["id", "firstName", "lastName", "profileThumbnail"],
+      };
 
-      if (withReply) {
-        includeModels.push({
-          model: this.CommentModel,
-          as: "replies",
-          attributes: [["id", "replyId"], "body", "createdAt", "updatedAt"],
-          include: [
-            {
-              model: this.UserModel,
-              as: "creator",
-              attributes: ["id", "firstName", "lastName", "profileThumbnail"],
-            },
-          ],
-        });
-      }
+      const replyInclude = {
+        model: this.CommentModel,
+        as: "replies",
+        attributes: [["id", "replyId"], "body", "createdAt", "updatedAt"],
+        include: [
+          {
+            model: this.UserModel,
+            as: "creator",
+            attributes: ["id", "firstName", "lastName", "profileThumbnail"],
+          },
+        ],
+      };
 
       const {
         count: totalCount,
@@ -68,9 +61,12 @@ class CommentService {
         where: commentFilter,
         offset: offset,
         limit: limit,
-        order: [[sortBy, orderBy]],
+        order: [
+          [sortBy, orderBy],
+          [this.CommentModel.associations.replies, sortBy, orderBy],
+        ],
         attributes: [["id", "commentId"], "body", "createdAt", "updatedAt"],
-        include: includeModels,
+        include: [userInclude, replyInclude],
       });
 
       const totalPages = Math.ceil(totalCount / limit);
@@ -136,19 +132,20 @@ class CommentService {
       }
 
       const { sortBy, orderBy } = replyParams;
+
+      const userInclude = {
+        model: this.UserModel,
+        as: "creator",
+        attributes: ["id", "firstName", "lastName", "profileThumbnail"],
+      };
+
       const replies = await this.CommentModel.findAll({
         where: {
           parentCommentId: commentId,
         },
         order: [[sortBy, orderBy]],
         attributes: [["id", "replyId"], "body", "createdAt", "updatedAt"],
-        include: [
-          {
-            model: this.UserModel,
-            as: "creator",
-            attributes: ["id", "firstName", "lastName", "profileThumbnail"],
-          },
-        ],
+        include: [userInclude],
       });
 
       if (replies.length === 0) {

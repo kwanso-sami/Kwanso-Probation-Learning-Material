@@ -38,18 +38,17 @@ class PostService {
         ];
       }
 
-      const includeModels = [
-        {
-          model: this.UserModel,
-          as: "creator",
-          attributes: ["id", "firstName", "lastName", "profileThumbnail"],
-        },
-        {
-          model: this.CategoryModel,
-          as: "category",
-          attributes: ["id", "name"],
-        },
-      ];
+      const userInclude = {
+        model: this.UserModel,
+        as: "creator",
+        attributes: ["id", "firstName", "lastName", "profileThumbnail"],
+      };
+
+      const categoryInclude = {
+        model: this.CategoryModel,
+        as: "category",
+        attributes: ["id", "name"],
+      };
 
       const {
         count: totalCount,
@@ -62,7 +61,7 @@ class PostService {
         attributes: {
           exclude: ["coverImage", "userId", "categoryId"],
         },
-        include: includeModels,
+        include: [userInclude, categoryInclude],
       });
 
       const totalPages = Math.ceil(totalCount / limit);
@@ -83,25 +82,24 @@ class PostService {
 
   async GetAPost(postId) {
     try {
-      const includeModels = [
-        {
-          model: User,
-          as: "creator",
-          attributes: ["id", "firstName", "lastName", "profileThumbnail"],
-        },
-        {
-          model: Category,
-          as: "category",
-          attributes: ["id", "name"],
-        },
-      ];
+      const userInclude = {
+        model: this.UserModel,
+        as: "creator",
+        attributes: ["id", "firstName", "lastName", "profileThumbnail"],
+      };
+
+      const categoryInclude = {
+        model: this.CategoryModel,
+        as: "category",
+        attributes: ["id", "name"],
+      };
 
       const post = await this.PostModel.findOne({
         where: { id: postId },
         attributes: {
           exclude: ["coverThumbnail", "userId", "categoryId"],
         },
-        include: includeModels,
+        include: [userInclude, categoryInclude],
       });
 
       if (!post) {
