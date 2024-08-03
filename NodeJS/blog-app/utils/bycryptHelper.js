@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const { APIError } = require("./appError");
+const logger = require("./loggers/appLogger");
 const { ERROR_TYPE, STATUS_CODE, ERROR_MESSAGE } = require("./constants");
 
 module.exports = {

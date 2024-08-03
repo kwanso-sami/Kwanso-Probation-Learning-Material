@@ -1,4 +1,4 @@
-const { STATUS_CODE, ERROR_TYPE} = require("./constants");
+const { STATUS_CODE, ERROR_TYPE,ERROR_MESSAGE} = require("./constants");
 class AppError extends Error {
   constructor(message, statusCode, status, isOperational, errorStack) {
     if (message) {
@@ -12,13 +12,13 @@ class AppError extends Error {
     this.isOperational = isOperational;
     this.errorStack = errorStack;
     this.timestamp = new Date().toISOString();
-    err.captureStackTrace(this, this.constructor);
+    Error.captureStackTrace(this, this.constructor);
   }
 }
 
 class APIError extends AppError {
   constructor(
-    message = ERROR_TYPE.INTERNAL_SERVER_ERROR,
+    message = ERROR_MESSAGE.INTERNAL_SERVER_ERROR,
     statusCode = STATUS_CODE.INTERNAL_SERVER_ERROR,
     status = ERROR_TYPE.DEFAULT,
     isOperational = true,

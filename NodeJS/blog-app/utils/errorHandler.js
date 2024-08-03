@@ -1,4 +1,4 @@
-const { AppError} = require("./appError");
+const { AppError } = require("./appError");
 const { error } = require("./apiResponse");
 
 function errorHandler(err, req, res, next) {
@@ -20,8 +20,6 @@ function errorHandler(err, req, res, next) {
       }
     }
   }
-
-  
 
   let stackTrace = undefined;
   // return the stack trace only when

@@ -1,6 +1,7 @@
 const { APIError } = require("./appError");
 const { OTP_LENGTH } = require("../config");
 const { ERROR_TYPE, STATUS_CODE, ERROR_MESSAGE } = require("./constants");
+const logger = require("./loggers/appLogger");
 const otpGenerator = require("otp-generator");
 
 module.exports = {

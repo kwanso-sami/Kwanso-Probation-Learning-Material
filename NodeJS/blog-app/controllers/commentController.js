@@ -71,11 +71,13 @@ exports.getAllComments = catchAsync(async (req, res, next) => {
     );
   }
 
+
   const {
     page = 1,
     perPage = 10,
     sortBy = SORT.CREATED_AT,
     orderBy = ORDER.DESC,
+    withReplies = false,
     postId,
   } = validatedParams;
 
@@ -85,6 +87,7 @@ exports.getAllComments = catchAsync(async (req, res, next) => {
     sortBy,
     orderBy,
     postId,
+    withReplies,
   });
 
   res.status(STATUS_CODE.OK).json(

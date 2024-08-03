@@ -10,6 +10,7 @@ const createCommentSchema = Joi.object().keys({
 
 const getCommentsSchema = Joi.object().keys({
   postId: Joi.string().trim(),
+  withReplies: Joi.boolean(),
   page: Joi.number().integer(),
   perPage: Joi.number().integer(),
   sortBy: Joi.string().trim(),

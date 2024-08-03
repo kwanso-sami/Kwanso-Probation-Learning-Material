@@ -1,4 +1,5 @@
 const { APIError } = require("../utils/appError");
+const logger = require("../utils/loggers/appLogger");
 const { User } = require("../models");
 const { STATUS_CODE, ERROR_TYPE,ERROR_MESSAGE } = require("../utils/constants");
 

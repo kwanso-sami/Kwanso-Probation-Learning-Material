@@ -1,4 +1,5 @@
 const { APIError } = require("../utils/appError");
+const logger = require("../utils/loggers/appLogger");
 const { Post, User, Category, Sequelize } = require("../models");
 const { Op } = Sequelize;
 const { STATUS_CODE, ERROR_TYPE,ERROR_MESSAGE } = require("../utils/constants");

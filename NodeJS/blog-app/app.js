@@ -8,7 +8,6 @@ const rateLimit = require("express-rate-limit");
 const cookieParser = require("cookie-parser");
 const { APIError } = require("./utils/appError");
 const { STATUS_CODE } = require("./utils/constants");
-
 const httpLogger = require("./utils/loggers/httpLogger");
 const { errorHandler } = require("./utils/errorHandler");
 require("express-validator");

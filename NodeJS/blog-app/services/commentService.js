@@ -1,7 +1,12 @@
 const { APIError } = require("../utils/appError");
+const logger = require("../utils/loggers/appLogger");
 const { Comment, User, Sequelize } = require("../models");
 const { Op } = Sequelize;
-const { STATUS_CODE, ERROR_TYPE ,ERROR_MESSAGE} = require("../utils/constants");
+const {
+  STATUS_CODE,
+  ERROR_TYPE,
+  ERROR_MESSAGE,
+} = require("../utils/constants");
 
 class CommentService {
   constructor() {
@@ -21,7 +26,7 @@ class CommentService {
 
   async GetAllComments(commentParams) {
     try {
-      const { page, perPage, sortBy, orderBy, postId } = commentParams;
+      const { page, perPage, sortBy, orderBy, postId, withReplies } = commentParams;
 
       const offset = (page - 1) * perPage;
       const limit = perPage;
@@ -55,6 +60,18 @@ class CommentService {
         ],
       };
 
+      const includeModels = [userInclude];
+      const orderByQuery = [[sortBy, orderBy]];
+
+      if (withReplies) {
+        includeModels.push(replyInclude);
+        orderByQuery.push([
+          this.CommentModel.associations.replies,
+          sortBy,
+          orderBy,
+        ]);
+      }
+
       const {
         count: totalCount,
         rows: data,
@@ -62,12 +79,9 @@ class CommentService {
         where: commentFilter,
         offset: offset,
         limit: limit,
-        order: [
-          [sortBy, orderBy],
-          [this.CommentModel.associations.replies, sortBy, orderBy],
-        ],
+        order: orderByQuery,
         attributes: [["id", "commentId"], "body", "createdAt", "updatedAt"],
-        include: [userInclude, replyInclude],
+        include: includeModels,
       });
 
       const totalPages = Math.ceil(totalCount / limit);
@@ -92,7 +106,7 @@ class CommentService {
       const comment = await this.CommentModel.findByPk(commentId);
       if (!comment) {
         throw new APIError(
-         ERROR_MESSAGE.COMMENT_NOT_FOUND,
+          ERROR_MESSAGE.COMMENT_NOT_FOUND,
           STATUS_CODE.NOT_FOUND,
           ERROR_TYPE.API_ERROR
         );
