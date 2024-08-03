@@ -148,7 +148,7 @@ class AuthService {
       if (!isPasswordVerified) {
         throw new APIError(
           ERROR_MESSAGE.INVALID_PASSWORD,
-          STATUS_CODE.NOT_FOUND,
+          STATUS_CODE.UNAUTHORIZED,
           ERROR_TYPE.API_ERROR
         );
       }
@@ -237,7 +237,7 @@ class AuthService {
       if (!isOldPasswordVerified) {
         throw new APIError(
           ERROR_MESSAGE.INVALID_OLD_PASSWORD,
-          STATUS_CODE.NOT_FOUND,
+          STATUS_CODE.UNAUTHORIZED,
           ERROR_TYPE.API_ERROR
         );
       }

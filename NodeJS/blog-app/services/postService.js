@@ -2,7 +2,11 @@ const { APIError } = require("../utils/appError");
 const logger = require("../utils/loggers/appLogger");
 const { Post, User, Category, Sequelize } = require("../models");
 const { Op } = Sequelize;
-const { STATUS_CODE, ERROR_TYPE,ERROR_MESSAGE } = require("../utils/constants");
+const {
+  STATUS_CODE,
+  ERROR_TYPE,
+  ERROR_MESSAGE,
+} = require("../utils/constants");
 
 class PostService {
   constructor() {
@@ -28,7 +32,6 @@ class PostService {
             ERROR_TYPE.API_ERROR
           );
         }
-
         postFilter.userId = userId;
       }
 
@@ -169,6 +172,14 @@ class PostService {
       const categories = await this.CategoryModel.findAll({
         attributes: { exclude: ["createdAt", "updatedAt"] },
       });
+
+      if (categories.length === 0) {
+        throw new APIError(
+          ERROR_MESSAGE.CATEGORIES_NOT_FOUND,
+          STATUS_CODE.NOT_FOUND,
+          ERROR_TYPE.API_ERROR
+        );
+      }
       return categories;
     } catch (err) {
       logger.error(`${ERROR_TYPE.API_ERROR}: ${err.message}`);
