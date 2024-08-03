@@ -26,7 +26,14 @@ class CommentService {
 
   async GetAllComments(commentParams) {
     try {
-      const { page, perPage, sortBy, orderBy, postId, withReplies } = commentParams;
+      const {
+        page,
+        perPage,
+        sortBy,
+        orderBy,
+        postId,
+        withReplies,
+      } = commentParams;
 
       const offset = (page - 1) * perPage;
       const limit = perPage;
@@ -61,15 +68,9 @@ class CommentService {
       };
 
       const includeModels = [userInclude];
-      const orderByQuery = [[sortBy, orderBy]];
 
       if (withReplies) {
         includeModels.push(replyInclude);
-        orderByQuery.push([
-          this.CommentModel.associations.replies,
-          sortBy,
-          orderBy,
-        ]);
       }
 
       const {
@@ -79,7 +80,7 @@ class CommentService {
         where: commentFilter,
         offset: offset,
         limit: limit,
-        order: orderByQuery,
+        order: [[sortBy, orderBy]],
         attributes: [["id", "commentId"], "body", "createdAt", "updatedAt"],
         include: includeModels,
       });

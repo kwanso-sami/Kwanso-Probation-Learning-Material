@@ -1,4 +1,3 @@
-
 module.exports = {
   ORDER: {
     ASC: "asc",
@@ -22,13 +21,14 @@ module.exports = {
   },
 
   ERROR_TYPE: {
-    DEFAULT: "ERROR",
     API_ERROR: "API ERROR",
     VALIDATION_ERROR: "Validation Error",
     AUTHENTICATION_ERROR: "Authentication Error",
+    INTERNAL_SERVER_ERROR: "Internal Server Error",
   },
 
   ERROR_MESSAGE: {
+    DEFAULT: "error",
     USER_NOT_FOUND: "User not found",
     USER_ALREADY_EXIST: "User already exists",
     INVALID_PASSWORD: "Invalid password",
@@ -51,10 +51,12 @@ module.exports = {
     ACCESS_TOKEN_SIGN_ERROR: "Failed to Sign Access Token",
     REFRESH_TOKEN_SIGN_ERROR: "Failed to Sign Refresh Token",
     PASSWORD_RESET_TOKEN_SIGN_ERROR: "Failed to Sign Password Reset Token",
-    INTERNAL_SERVER_ERROR: "Internal Server Error",
+    
   },
 
   SUCCESS_MESSAGE: {
+    DEFAULT: "Success",
+
     USER_SIGN_UP: "User signed up successfully",
     OPT_SENT: "OTP Code sent successfully",
     USER_LOG_IN: "User logged in successfully",

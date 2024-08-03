@@ -13,7 +13,11 @@ const {
 } = require("../validations/authValidator");
 const { cookieOptions } = require("../config");
 const { success } = require("../utils/apiResponse");
-const { STATUS_CODE, ERROR_TYPE ,SUCCESS_MESSAGE} = require("../utils/constants");
+const {
+  STATUS_CODE,
+  ERROR_TYPE,
+  SUCCESS_MESSAGE,
+} = require("../utils/constants");
 
 const service = new AuthService();
 

@@ -518,11 +518,6 @@
 								{
 									"key": "orderBy",
 									"value": "desc"
-								},
-								{
-									"key": "sami",
-									"value": "abc",
-									"disabled": true
 								}
 							]
 						}
@@ -539,7 +534,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEzZjI5Mzk2LWI4NzAtNGEyMy1hM2I5LTdlYWFmMTY3NTdjZCIsImlhdCI6MTcyMjU4NDMwNywiZXhwIjoxNzIyNTg2MTA3fQ.wvroklCMj61oxLTquO42PlnxU4aAWW4WX3N0XiU4sek",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEzZjI5Mzk2LWI4NzAtNGEyMy1hM2I5LTdlYWFmMTY3NTdjZCIsImlhdCI6MTcyMjY0OTQyNiwiZXhwIjoxNzIyNjUxMjI2fQ.ROumHtaAOB6kiFWutz380al6UBghBmkV7-Z2-3ZO2aA",
 								"type": "text"
 							}
 						],
@@ -726,7 +721,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/v1/comments?page=1&perPage=10&sortBy=createdAt&orderBy=desc",
+							"raw": "http://localhost:3000/api/v1/comments?page=1&perPage=10&sortBy=createdAt&orderBy=desc&withReplies=true",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -761,8 +756,7 @@
 								},
 								{
 									"key": "withReplies",
-									"value": "true",
-									"disabled": true
+									"value": "true"
 								}
 							]
 						}
@@ -877,7 +871,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/v1/comments/10712d11-6d9a-4018-9cde-3f8882c1c08b/replies?sortBy=updatedAt&orderBy=desc",
+							"raw": "http://localhost:3000/api/v1/comments/10712d11-6d9a-4018-9cde-3f8882c1c08b/replies?sortBy=updatedAt&orderBy=asc",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -897,7 +891,7 @@
 								},
 								{
 									"key": "orderBy",
-									"value": "desc"
+									"value": "asc"
 								}
 							]
 						}

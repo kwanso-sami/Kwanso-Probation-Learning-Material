@@ -188,7 +188,7 @@ exports.getCommentReplies = catchAsync(async (req, res, next) => {
   const {
     commentId,
     sortBy = SORT.CREATED_AT,
-    orderBy = ORDER.DESC,
+    orderBy = ORDER.ASC,
   } = validatedParams;
 
   const commentReplies = await service.GetCommentReplies(commentId, {
