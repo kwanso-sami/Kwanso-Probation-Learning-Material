@@ -1,4 +1,3 @@
-const { getRepliesSchema } = require("../validations/commentsValidator");
 
 module.exports = {
   ORDER: {
@@ -27,7 +26,6 @@ module.exports = {
     API_ERROR: "API ERROR",
     VALIDATION_ERROR: "Validation Error",
     AUTHENTICATION_ERROR: "Authentication Error",
-    INTERNAL_SERVER_ERROR: "Internal Server Error",
   },
 
   ERROR_MESSAGE: {
@@ -53,6 +51,7 @@ module.exports = {
     ACCESS_TOKEN_SIGN_ERROR: "Failed to Sign Access Token",
     REFRESH_TOKEN_SIGN_ERROR: "Failed to Sign Refresh Token",
     PASSWORD_RESET_TOKEN_SIGN_ERROR: "Failed to Sign Password Reset Token",
+    INTERNAL_SERVER_ERROR: "Internal Server Error",
   },
 
   SUCCESS_MESSAGE: {

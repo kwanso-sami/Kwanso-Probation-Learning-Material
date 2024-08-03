@@ -1,5 +1,4 @@
 const nodemailer = require("nodemailer");
-
 const logger = require("../loggers/appLogger");
 const { APIError } = require("../appError");
 const {

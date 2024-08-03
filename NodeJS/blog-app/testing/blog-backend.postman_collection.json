@@ -117,7 +117,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"samishakoor787@gmail.com\",\n    \"password\": \"sami12345\"\n}",
+							"raw": "{\n    \"email\": \"muhammad.sami@kwanso.com\",\n    \"password\": \"sami12345\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -485,7 +485,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/v1/posts/?page=1&searchBy=user3&perPage=10&sortBy=createdAt&orderBy=desc",
+							"raw": "http://localhost:3000/api/v1/posts/?page=1&perPage=10&sortBy=createdAt&orderBy=desc",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -504,7 +504,8 @@
 								},
 								{
 									"key": "searchBy",
-									"value": "user3"
+									"value": "user3",
+									"disabled": true
 								},
 								{
 									"key": "perPage",
@@ -517,6 +518,11 @@
 								{
 									"key": "orderBy",
 									"value": "desc"
+								},
+								{
+									"key": "sami",
+									"value": "abc",
+									"disabled": true
 								}
 							]
 						}
@@ -533,7 +539,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImE4Y2RkNzMyLWI3YWYtNDdlMS1hNDVkLTU5YWE4NTQ1NzBiOSIsImlhdCI6MTcyMjUxNzkxOCwiZXhwIjoxNzIyNTE5NzE4fQ.GP10iCh5FNcUXjsLqGdgjtzBV7F01_MnTDiI7AZRnjM",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEzZjI5Mzk2LWI4NzAtNGEyMy1hM2I5LTdlYWFmMTY3NTdjZCIsImlhdCI6MTcyMjU4NDMwNywiZXhwIjoxNzIyNTg2MTA3fQ.wvroklCMj61oxLTquO42PlnxU4aAWW4WX3N0XiU4sek",
 								"type": "text"
 							}
 						],
@@ -547,7 +553,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/v1/posts/user/a8cdd732-b7af-47e1-a45d-59aa854570b9?page=1&perPage=10&sortBy=createdAt&orderBy=desc",
+							"raw": "http://localhost:3000/api/v1/posts/user/df980b2a-2c8a-4602-a6e4-34a7346b051d?page=1&perPage=10&sortBy=createdAt&orderBy=desc",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -558,7 +564,7 @@
 								"v1",
 								"posts",
 								"user",
-								"a8cdd732-b7af-47e1-a45d-59aa854570b9"
+								"df980b2a-2c8a-4602-a6e4-34a7346b051d"
 							],
 							"query": [
 								{
@@ -688,7 +694,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImE4Y2RkNzMyLWI3YWYtNDdlMS1hNDVkLTU5YWE4NTQ1NzBiOSIsImlhdCI6MTcyMjUxNzkxOCwiZXhwIjoxNzIyNTE5NzE4fQ.GP10iCh5FNcUXjsLqGdgjtzBV7F01_MnTDiI7AZRnjM",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEzZjI5Mzk2LWI4NzAtNGEyMy1hM2I5LTdlYWFmMTY3NTdjZCIsImlhdCI6MTcyMjY0ODkxMCwiZXhwIjoxNzIyNjUwNzEwfQ.xeMbYRKp8vfzm4yHodTZclofdY_pwcR22Ztr5VmhIeU",
 								"type": "text"
 							}
 						],
@@ -720,7 +726,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/v1/comments?withReply=true&page=1&perPage=10&sortBy=createdAt&orderBy=desc",
+							"raw": "http://localhost:3000/api/v1/comments?page=1&perPage=10&sortBy=createdAt&orderBy=desc",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -732,10 +738,6 @@
 								"comments"
 							],
 							"query": [
-								{
-									"key": "withReply",
-									"value": "true"
-								},
 								{
 									"key": "postId",
 									"value": "998ed334-50f2-47fa-80a4-c100ce255188",
@@ -756,6 +758,11 @@
 								{
 									"key": "orderBy",
 									"value": "desc"
+								},
+								{
+									"key": "withReplies",
+									"value": "true",
+									"disabled": true
 								}
 							]
 						}
@@ -769,13 +776,13 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEzZjI5Mzk2LWI4NzAtNGEyMy1hM2I5LTdlYWFmMTY3NTdjZCIsImlhdCI6MTcyMjQzNTM2NiwiZXhwIjoxNzIyNDM3MTY2fQ.7h8hzdTmdBI0d2WOt6uzYu3v_7X46DKjNivFr8uBc2g",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImEzMGQ5NGI2LTYyNWYtNGQ4NS1hZTUzLTc5MTRiNjgyZmUxNCIsImlhdCI6MTcyMjUxODc5MCwiZXhwIjoxNzIyNTIwNTkwfQ.BxyXph9gLiA2YdgFPm67yFtsgxRKWULuA5X0l1y0cZY",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"postId\":\"889b830e-be31-4850-bcc4-228211f44c37\",\n    \"body\":\"Replied on a comment\",\n    \"parentCommentId\":\"58a7050d-1f01-45f5-aae3-4873d95e50a4\"\n}",
+							"raw": "{\n    \"postId\":\"2829e16d-240e-4e85-a1db-55becb84577f\",\n    \"body\":\"A first parent comment\",\n    \"parentCommentId\":\"dd3583bc-0c07-4dd0-b34b-c38b07c7598b\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -806,12 +813,12 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRmOTgwYjJhLTJjOGEtNDYwMi1hNmU0LTM0YTczNDZiMDUxZCIsImlhdCI6MTcyMjQzNTEyNywiZXhwIjoxNzIyNDM2OTI3fQ.-qGMyfHFJne0oUf-DQ_RFUZMQj5YUdppLJXpE9LJOLw",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImEzMGQ5NGI2LTYyNWYtNGQ4NS1hZTUzLTc5MTRiNjgyZmUxNCIsImlhdCI6MTcyMjUxODc5MCwiZXhwIjoxNzIyNTIwNTkwfQ.BxyXph9gLiA2YdgFPm67yFtsgxRKWULuA5X0l1y0cZY",
 								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3000/api/v1/comments/422264ec-6dc1-4a45-8cba-0b298e96ea18",
+							"raw": "http://localhost:3000/api/v1/comments/dd3583bc-0c07-4dd0-b34b-c38b07c7598b",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -821,7 +828,7 @@
 								"api",
 								"v1",
 								"comments",
-								"422264ec-6dc1-4a45-8cba-0b298e96ea18"
+								"dd3583bc-0c07-4dd0-b34b-c38b07c7598b"
 							]
 						}
 					},
@@ -834,13 +841,13 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRmOTgwYjJhLTJjOGEtNDYwMi1hNmU0LTM0YTczNDZiMDUxZCIsImlhdCI6MTcyMjQzNTEyNywiZXhwIjoxNzIyNDM2OTI3fQ.-qGMyfHFJne0oUf-DQ_RFUZMQj5YUdppLJXpE9LJOLw",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImE4Y2RkNzMyLWI3YWYtNDdlMS1hNDVkLTU5YWE4NTQ1NzBiOSIsImlhdCI6MTcyMjUxODYxMSwiZXhwIjoxNzIyNTIwNDExfQ.1V0m7gSoDlK2q2lJGX0sk2cLJRqVt1mWhodeEbEDrUI",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"body\": \"Because it helps in sending the Emails easily in NodeJS.\"\n}",
+							"raw": "{\n    \"body\": \"On the top yeah\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -848,7 +855,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/api/v1/comments/422264ec-6dc1-4a45-8cba-0b298e96ea18",
+							"raw": "http://localhost:3000/api/v1/comments/dd3583bc-0c07-4dd0-b34b-c38b07c7598b",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -858,7 +865,7 @@
 								"api",
 								"v1",
 								"comments",
-								"422264ec-6dc1-4a45-8cba-0b298e96ea18"
+								"dd3583bc-0c07-4dd0-b34b-c38b07c7598b"
 							]
 						}
 					},
@@ -870,7 +877,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/api/v1/comments/eba6a83f-7389-4412-88e0-54930eca4f9e/replies?sortBy=updatedAt&orderBy=desc",
+							"raw": "http://localhost:3000/api/v1/comments/10712d11-6d9a-4018-9cde-3f8882c1c08b/replies?sortBy=updatedAt&orderBy=desc",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -880,7 +887,7 @@
 								"api",
 								"v1",
 								"comments",
-								"eba6a83f-7389-4412-88e0-54930eca4f9e",
+								"10712d11-6d9a-4018-9cde-3f8882c1c08b",
 								"replies"
 							],
 							"query": [

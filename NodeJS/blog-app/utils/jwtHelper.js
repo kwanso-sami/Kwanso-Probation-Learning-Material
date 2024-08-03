@@ -6,6 +6,7 @@ const {
   JWT_ACCESS_TOKEN_EXPIRE_TIME,
 } = require("../config");
 const { APIError } = require("./appError");
+const logger = require("./loggers/appLogger");
 const { ERROR_TYPE, STATUS_CODE, ERROR_MESSAGE } = require("./constants");
 
 module.exports = {

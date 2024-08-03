@@ -1,6 +1,7 @@
 const { CLIENT_URL } = require("../config");
 const { User, OTP } = require("../models");
 const { APIError } = require("../utils/appError");
+const logger = require("../utils/loggers/appLogger");
 const sendPasswordResetEmail = require("../utils/email/sendPasswordResetEmail");
 const {
   signAccessToken,
