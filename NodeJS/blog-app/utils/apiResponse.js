@@ -1,6 +1,8 @@
+const {SUCCESS_MESSAGE} = require("./constants");
+
 exports.success = (response) => {
   return {
-    status: "success",
+    status: SUCCESS_MESSAGE.DEFAULT,
     ...response,
   };
 };

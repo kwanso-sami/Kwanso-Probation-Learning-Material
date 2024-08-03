@@ -18,9 +18,9 @@ class AppError extends Error {
 
 class APIError extends AppError {
   constructor(
-    message = ERROR_MESSAGE.INTERNAL_SERVER_ERROR,
+    message = ERROR_TYPE.INTERNAL_SERVER_ERROR,
     statusCode = STATUS_CODE.INTERNAL_SERVER_ERROR,
-    status = ERROR_TYPE.DEFAULT,
+    status = ERROR_MESSAGE.DEFAULT,
     isOperational = true,
     errorStack
   ) {
