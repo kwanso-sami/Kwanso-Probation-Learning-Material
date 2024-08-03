@@ -11,6 +11,7 @@ module.exports = {
   PORT: process.env.PORT,
   JWT_SECRET: process.env.JWT_SECRET,
   CLIENT_URL: process.env.CLIENT_URL,
+  SERVER_URL: process.env.SERVER_URL,
   JWT_ACCESS_TOKEN_EXPIRE_TIME: process.env.JWT_ACCESS_TOKEN_EXPIRE_TIME,
   JWT_REFRESH_TOKEN_EXPIRE_TIME: process.env.JWT_REFRESH_TOKEN_EXPIRE_TIME,
   JWT_PASSWORD_RESET_TOKEN_EXPIRE_TIME:
@@ -23,8 +24,11 @@ module.exports = {
   EMAIL_SERVICE: process.env.EMAIL_SERVICE,
   EMAIL_PORT: process.env.EMAIL_PORT,
 
-  OTP_EXPIRE_TIME:eval(process.env.OTP_EXPIRE_TIME),
-  OTP_LENGTH:process.env.OTP_LENGTH,
+  OTP_EXPIRE_TIME: eval(process.env.OTP_EXPIRE_TIME),
+  OTP_LENGTH: process.env.OTP_LENGTH,
+
+  RATE_LIMIT_WINDOW_MS: parseInt(process.env.RATE_LIMIT_WINDOW_MS),
+  RATE_LIMIT_MAX_REQUESTS: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS),
 
   dbConfig: {
     username: process.env.DB_USERNAME,

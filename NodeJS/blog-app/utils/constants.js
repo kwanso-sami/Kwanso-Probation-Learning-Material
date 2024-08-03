@@ -45,18 +45,21 @@ module.exports = {
     COMMENT_NOT_FOUND: "Comment not found",
     REPLIES_NOT_FOUND: "Comment replies not found",
     POST_NOT_FOUND: "Post not found",
+    CATEGORIES_NOT_FOUND: "Post categories not found",
     PASSWORD_VERIFICATION_ERROR: "Failed to verify password",
     GENERATE_PASSWORD_ERROR: "Failed to Generate Encrypted Password",
     TOKEN_VERIFICATION_ERROR: "Failed to verify token",
     ACCESS_TOKEN_SIGN_ERROR: "Failed to Sign Access Token",
     REFRESH_TOKEN_SIGN_ERROR: "Failed to Sign Refresh Token",
     PASSWORD_RESET_TOKEN_SIGN_ERROR: "Failed to Sign Password Reset Token",
-    
+    DB_CONNECTION_ERROR:"Failed to connect to database",
+    RATE_LIMIT_ERROR:"Too many requests, please try again later.",
+    UNCAUGHT_EXCEPTION_ERROR:"Uncaught Exception Error",
+    UNHANDLED_REJECTION_ERROR:"Unhandled Rejection Error"
   },
 
   SUCCESS_MESSAGE: {
     DEFAULT: "Success",
-
     USER_SIGN_UP: "User signed up successfully",
     OPT_SENT: "OTP Code sent successfully",
     USER_LOG_IN: "User logged in successfully",
@@ -65,16 +68,13 @@ module.exports = {
     PASSWORD_CHANGE: "Password changed successfully",
     TOKEN_REFRESH: "Token Refreshed Successfully",
     USER_LOG_OUT: "User logged out successfully",
-
     COMMENT_CREATED: "Comment created successfully",
     COMMENTS_FETCHED: "Comments fetched successfully",
     COMMENT_DELETED: "Comment deleted successfully",
     COMMENT_UPDATED: "Comment updated successfully",
     REPLIES_FETCHED: "Replies of comment fetched successfully",
-
     USER_FETCH: "User fetched successfully",
     USER_UPDATED: "User updated successfully",
-
     POSTS_FETCH: "Posts fetched successfully",
     USER_POSTS_FETCH: "User posts fetched successfully",
     POST_FETCH: "A post fetched successfully",
@@ -82,5 +82,6 @@ module.exports = {
     POST_UPDATED: "Post updated successfully",
     POST_DELETED: "Post deleted successfully",
     POST_CATEGORIES_FETCH: "Post Categories fetched successfully",
+    DB_CONNECTION_SUCCESS:"DB Connection Successful"
   },
 };
