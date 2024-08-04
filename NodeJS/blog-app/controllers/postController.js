@@ -35,21 +35,8 @@ exports.getAllPosts = catchAsync(async (req, res, next) => {
       )
     );
   }
-  const {
-    page = 1,
-    perPage = 10,
-    sortBy = SORT.CREATED_AT,
-    orderBy = ORDER.DESC,
-    searchBy,
-  } = validatedParams;
 
-  const posts = await service.GetAllPosts({
-    page,
-    perPage,
-    sortBy,
-    orderBy,
-    searchBy,
-  });
+  const posts = await service.GetAllPosts(validatedParams);
 
   res.status(STATUS_CODE.OK).json(
     success({
@@ -81,23 +68,7 @@ exports.getUserPosts = catchAsync(async (req, res, next) => {
     );
   }
 
-  const {
-    page = 1,
-    perPage = 10,
-    sortBy = SORT.CREATED_AT,
-    orderBy = ORDER.DESC,
-    searchBy,
-    userId,
-  } = validatedParams;
-
-  const userPosts = await service.GetAllPosts({
-    page,
-    perPage,
-    sortBy,
-    orderBy,
-    searchBy,
-    userId,
-  });
+  const userPosts = await service.GetAllPosts(validatedParams);
 
   res.status(STATUS_CODE.OK).json(
     success({

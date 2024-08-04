@@ -1,8 +1,9 @@
 const { AppError } = require("./appError");
 const { error } = require("./apiResponse");
+const {ERROR_TYPE}=require("./constants");
 
 function errorHandler(err, req, res, next) {
-  let message = "Internal Server Error";
+  let message = ERROR_TYPE.INTERNAL_SERVER_ERROR;
 
   // if the error is a custom defined error
   if (err instanceof AppError) {

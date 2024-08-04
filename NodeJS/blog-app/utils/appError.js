@@ -1,10 +1,10 @@
-const { STATUS_CODE, ERROR_TYPE,ERROR_MESSAGE} = require("./constants");
+const { STATUS_CODE, ERROR_TYPE, ERROR_MESSAGE } = require("./constants");
 class AppError extends Error {
   constructor(message, statusCode, status, isOperational, errorStack) {
     if (message) {
       super(message);
     } else {
-      super("A generic error occurred!");
+      super(ERROR_MESSAGE.GENERIC);
     }
     Object.setPrototypeOf(this, new.target.prototype);
     this.statusCode = statusCode;

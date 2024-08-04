@@ -10,7 +10,13 @@ const {
   getRepliesSchema,
 } = require("../validations/commentsValidator");
 const { success } = require("../utils/apiResponse");
-const { SORT, ORDER, STATUS_CODE, ERROR_TYPE,SUCCESS_MESSAGE} = require("../utils/constants");
+const {
+  SORT,
+  ORDER,
+  STATUS_CODE,
+  ERROR_TYPE,
+  SUCCESS_MESSAGE,
+} = require("../utils/constants");
 
 const service = new CommentService();
 
@@ -71,24 +77,7 @@ exports.getAllComments = catchAsync(async (req, res, next) => {
     );
   }
 
-
-  const {
-    page = 1,
-    perPage = 10,
-    sortBy = SORT.CREATED_AT,
-    orderBy = ORDER.DESC,
-    withReplies = false,
-    postId,
-  } = validatedParams;
-
-  const comments = await service.GetAllComments({
-    page,
-    perPage,
-    sortBy,
-    orderBy,
-    postId,
-    withReplies,
-  });
+  const comments = await service.GetAllComments(validatedParams);
 
   res.status(STATUS_CODE.OK).json(
     success({

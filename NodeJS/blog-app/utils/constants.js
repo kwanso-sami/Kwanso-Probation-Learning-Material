@@ -29,6 +29,7 @@ module.exports = {
 
   ERROR_MESSAGE: {
     DEFAULT: "error",
+    GENERIC:"A generic error occur",
     USER_NOT_FOUND: "User not found",
     USER_ALREADY_EXIST: "User already exists",
     INVALID_PASSWORD: "Invalid password",
