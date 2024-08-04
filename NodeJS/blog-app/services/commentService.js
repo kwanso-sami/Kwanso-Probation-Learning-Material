@@ -6,6 +6,8 @@ const {
   STATUS_CODE,
   ERROR_TYPE,
   ERROR_MESSAGE,
+  SORT,
+  ORDER,
 } = require("../utils/constants");
 
 class CommentService {
@@ -24,17 +26,15 @@ class CommentService {
     }
   }
 
-  async GetAllComments(commentParams) {
+  async GetAllComments({
+    page = 1,
+    perPage = 10,
+    sortBy = SORT.CREATED_AT,
+    orderBy = ORDER.DESC,
+    withReplies = false,
+    postId,
+  }) {
     try {
-      const {
-        page,
-        perPage,
-        sortBy,
-        orderBy,
-        postId,
-        withReplies,
-      } = commentParams;
-
       const offset = (page - 1) * perPage;
       const limit = perPage;
 

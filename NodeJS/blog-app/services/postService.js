@@ -6,6 +6,8 @@ const {
   STATUS_CODE,
   ERROR_TYPE,
   ERROR_MESSAGE,
+  SORT,
+  ORDER,
 } = require("../utils/constants");
 
 class PostService {
@@ -15,10 +17,15 @@ class PostService {
     this.CategoryModel = Category;
   }
 
-  async GetAllPosts(postParams) {
+  async GetAllPosts({
+    page = 1,
+    perPage = 10,
+    sortBy = SORT.CREATED_AT,
+    orderBy = ORDER.DESC,
+    searchBy,
+    userId,
+  }) {
     try {
-      const { page, perPage, sortBy, orderBy, searchBy, userId } = postParams;
-
       const offset = (page - 1) * perPage;
       const limit = perPage;
       const postFilter = {};
